@@ -1,0 +1,75 @@
+{
+
+  "attention_seekers": [
+    "bounce",
+    "pulse",
+    "shake",
+    "wobble",
+    "jello"
+  ],
+
+  "fading_entrances": [
+    "fadeIn",
+    "fadeInDown",
+    "fadeInDownBig",
+    "fadeInLeft",
+    "fadeInLeftBig",
+    "fadeInRight",
+    "fadeInRightBig",
+    "fadeInUp",
+    "fadeInUpBig"
+  ],
+
+  "fading_exits": [
+    "fadeOut",
+    "fadeOutDown",
+    "fadeOutDownBig",
+    "fadeOutLeft",
+    "fadeOutLeftBig",
+    "fadeOutRight",
+    "fadeOutRightBig",
+    "fadeOutUp",
+    "fadeOutUpBig"
+  ],
+
+  "flippers": [
+    "flipInX",
+    "flipInY"
+  ],
+
+  "specials": [
+    "float",
+    "floatSmall",
+    "floatLarge"
+  ],
+
+  "zooming_entrances": [
+    "zoomIn",
+    "zoomInDown",
+    "zoomInLeft",
+    "zoomInRight",
+    "zoomInUp"
+  ],
+
+  "zooming_exits": [
+    "zoomOut",
+    "zoomOutDown",
+    "zoomOutLeft",
+    "zoomOutRight",
+    "zoomOutUp"
+  ],
+
+  "sliding_entrances": [
+    "slideInDown",
+    "slideInLeft",
+    "slideInRight",
+    "slideInUp"
+  ],
+
+  "sliding_exits": [
+    "slideOutDown",
+    "slideOutLeft",
+    "slideOutRight",
+    "slideOutUp"
+  ]
+}

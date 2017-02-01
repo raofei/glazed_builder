@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+.modal.glazed {
+  input[type=text],
+  select,
+  option {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 6px;
+    background: #ededed;
+    outline: none;
+    &:focus {
+      outline: none;
+    }
+  }
+  .form-group {
+    padding-bottom: 10px;
+    position: relative;
+    input[type=text],
+    select {
+      width: auto;
+      min-width: 275px;
+    }
+    label {
+      float: left;
+      clear: both;
+      font-weight: normal;
+      color: #888;
+      width: 20%;
+    }
+    input[type=text],
+    select,
+    option {
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 6px;
+      background: #ededed;
+      outline: none;
+      width: auto;
+      &:focus {
+        outline: none;
+      }
+    }
+    .views-exposed-form .views-exposed-widget {
+      float: none;
+      padding: 0;
+    }
+    > div,
+    > p,
+    > select {
+      margin-left: 20%;
+      position: relative;
+      label {
+        width: auto;
+        clear: none;
+      }
+    }
+    .checkbox {
+      min-height: 1.8em;
+
+    }
+  }
+  .col-sm-6 {
+    .form-group {
+      label {
+        float: left;
+        width: 30%;
+        font-weight: normal;
+      }
+      > div,
+      > p,
+      > select {
+        margin-left: 30%;
+      }
+      &.background > div {
+        margin-top: 15px;
+      }
+
+    }
+  }
+  .chosen-choices .search-field input[type=text] {
+    height: 2.5em;
+  }
+}

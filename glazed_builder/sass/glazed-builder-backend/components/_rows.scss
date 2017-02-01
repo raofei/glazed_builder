@@ -1,0 +1,104 @@
+@charset "UTF-8";
+
+
+.glazed-editor .az-row:hover .az-ctnr:after,
+.az-container.glazed:hover:after {
+  content: '';
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: 2px dashed #EBEBEB;
+  outline: 2px dashed rgba(125, 125, 125, 0.4);
+}
+.glazed-editor .az-element:not(.az-row):hover:after {
+  /*  content: ' ';
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  opacity: 0.2; Removed by Jur 14-04-2015 because it conflicts with background color overlays */
+}
+
+.az-row > .controls > .popover {
+  max-width: 500px;
+  min-width: 340px;
+}
+.az-row > .controls > .popover.right {
+  margin-left: 0px;
+}
+.az-form > .controls > .popover {
+  min-width: 256px;
+}
+.popover-title {
+  text-align: center;
+}
+.row-layouts {
+  text-align: center;
+  word-wrap: normal;
+  white-space: nowrap;
+}
+.set-columns-layout:hover {
+  cursor: pointer;
+}
+
+// Row Columns Interface
+.popover .row-layouts .az-mini-container {
+  // width: 59px; // 48 px button
+  width: 47px; // 36 px button
+  /* width: 35px; */ // 24 px button
+  /* width: 23px; */ // 12 px button
+  float: left;
+  color: #555;
+  background: #fff;
+  padding: 0 !important;
+  margin: 0 !important;
+  h3.popover-title {
+    color: #555;
+  }
+  a {
+    color: #555 !important;
+    text-decoration: underline;
+  }
+  .row {
+    padding: 4px 2px 4px 2px;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #dfdfdf;
+    height: 28px;
+    &:hover {
+      background: #f3f3f3;
+      border-color: #00bb00;
+      .content {
+        // background: white;
+      }
+    }
+  }
+  [class^="col"] {
+    padding-left: 1px;
+    padding-right: 1px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .content {
+    background: #555;
+    color: silver;
+    width: 100%;
+    height: 18px;
+  }
+}
+.az-row-custom {
+  display: block;
+  clear: both;
+  width: 100%;
+}

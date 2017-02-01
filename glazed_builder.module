@@ -1,0 +1,1880 @@
+<?php
+/**
+ * @file
+ * Glazed builder module.
+ */
+
+/**
+ * Implements hook_update_status_alter().
+ */
+function glazed_builder_update_status_alter(&$projects) {
+  if (isset($projects['glazed_builder']) && isset($projects['glazed_builder']['title'])) {
+    $projects['glazed_builder']['title'] .=  ' ' . t('on sooperthemes.com. Click for more info.');
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function glazed_builder_menu() {
+  $items = array();
+  $items['glazed_builder_ajaxurl'] = array(
+    'page callback' => 'glazed_builder_ajax',
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['glazed_builder_image_style_url'] = array(
+    'page callback' => 'glazed_builder_image_style_url',
+    'access callback' => 'user_access',
+    'access arguments' => array('edit via glazed builder'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/config/content/glazed_builder'] = array(
+    'title' => 'Glazed builder',
+    'description' => 'Configuration for glazed builder module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('glazed_builder_form'),
+    'access arguments' => array('administer glazed builder configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['admin/config/content/glazed_builder/remove-tokens'] = array(
+    'title' => 'Glazed builder',
+    'description' => 'Configuration for glazed builder module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('glazed_builder_remove_tokens_form'),
+    'access arguments' => array('administer glazed builder configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'glazed_builder.remove_tokens.inc',
+  );
+
+  $items['admin/config/content/glazed_builder/cb-import'] = array(
+    'title' => 'Glazed builder',
+    'description' => 'Configuration for glazed builder module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('glazed_builder_cb_import_form'),
+    'access arguments' => array('administer glazed builder configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'glazed_builder.cb_import.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function glazed_builder_block_info() {
+  $blocks = array();
+  $blocks['user_register'] = array(
+    'info' => t('User registration form'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function glazed_builder_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'user_register':
+      global $user;
+      $block['content']['form'] = drupal_get_form('user_register_form');
+      $block['subject'] = t('User Registration Form');
+      return $block;
+      break;
+  }
+}
+
+/**
+ * Form constructor for the glazed builder form.
+ */
+function glazed_builder_form($form, &$form_state) {
+  $form['glazed_bootstrap'] = array(
+    '#type' => 'radios',
+    '#title' => t('Include Bootstrap Files'),
+    '#description' => t('Bootstrap 3 is required. Bootstrap 3 Light is recommended if your theme has conflicts with Bootstrap 3 CSS. Bootstrap Light includes all grid and helper classes but doesn\'t contain normalize.css and some typography styles.'),
+    '#options' => array(
+      0 => t('No'),
+      1 => t('Load Bootstrap 3 Full'),
+      2 => t('Load Bootstrap 3 Light'),
+    ),
+    '#default_value' => variable_get('glazed_bootstrap', 0),
+  );
+  $form['glazed_development'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Development mode'),
+    '#description' => t('In Development mode Glazed Builder will use non-minified files to help you with debugging.'),
+    '#default_value' => variable_get('glazed_development', FALSE),
+  );
+  $form['experimental'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Experimental Features'),
+    '#description' => t('For experimental users'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['experimental']['glazed_format_filters'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Process Text Format Filters on Frontend Builder content'),
+    '#description' => t('If a field uses Glazed Builder as field formatter any filters that are set on the field\'s text format will be ignored. This is because when editing on the frontend, you are editing the raw field contents. With this setting enabled the Glazed editor still loads raw fields content, but users that don\'t have Glazed Builder editing permission will get a filtered field. Some filters will not work at all with Glazed Builder while others should work just fine.'),
+    '#default_value' => variable_get('glazed_format_filters', FALSE),
+  );
+
+  $form['uninstall'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Uninstall Batch Process'),
+    '#description' => t('Our builder content contains tokens like -base-url- that make sure your content safely migrates between environments. Before uninstalling this module you have to run this batch process on your pdocution environment to replace the tokens. This will ensure your image, css and javascript files will keep working.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $link_options['attributes']['class'][] = 'button';
+  $form['uninstall']['remove_tokens'] = array(
+    '#type' => 'item',
+    '#markup' => l(t('Remove tokens from Carbide Builder content'), 'admin/config/content/glazed_builder/remove-tokens', $link_options),
+  );
+
+  if (module_exists('carbide_builder')) {
+    $form['import'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Carbide Builder > Glazed Builder Update'),
+      '#description' => t('This will update all your Carbide Builder fields and settings to work with Glazed Builder..'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+    $link_options['attributes']['class'][] = 'button';
+    $form['import']['link'] = array(
+      '#type' => 'item',
+      '#markup' => l(t('Start Update'), 'admin/config/content/glazed_builder/cb-import', $link_options),
+    );
+  }
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function glazed_builder_permission() {
+  return array(
+    'administer glazed builder configuration' => array(
+      'title' => t('Administer Glazed Builder configuration.'),
+      'restrict access' => TRUE,
+    ),
+    'edit via glazed builder' => array(
+      'title' => t('Edit via glazed builder'),
+      'restrict access' => TRUE,
+      'description' => t('Edit via glazed builder. Allows users to build layouts, design beautiful content and add dynamic components.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_init().
+ */
+function glazed_builder_init() {
+  // Azexo Composer Legacy Mode
+  if (variable_get('azexo_composer_loader_hashes')) {
+    // Sitewide loading of all sidebar element assets
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/buttons.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/contact.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/cta.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/dropshadow.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/iconbox.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/iconwell.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/imagebox.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/pricingtable.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/quoteslider.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/social.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/icon.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/teambox.css', array('group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('module', 'glazed_builder') . '/css/elements/timeline.css', array('group' => CSS_THEME));
+  }
+}
+
+/**
+ * Implements hook_flush_caches().
+ */
+function glazed_builder_flush_caches() {
+  // Delete all Glazed per-field custom JS
+  file_scan_directory('public://glazed_builder', '/.*/', array('callback' => 'file_unmanaged_delete'));
+}
+
+/**
+ * Parse a URL or embed code and return a rendered HTML.
+ */
+function glazed_builder_embed($link) {
+  $file = media_parse_to_file($link);
+  return drupal_render(file_view_file($file));
+}
+
+/**
+ * Return additional element's params.
+ */
+function glazed_builder_element_to_param($param_name, $element) {
+  if (!isset($element['#title'])) {
+    return FALSE;
+  }
+  if (isset($element['#options'])) {
+    if (empty($element['#options']) || is_array(reset($element['#options']))) {
+      return FALSE;
+    }
+  }
+  if (isset($element['#empty_option'])) {
+    $element['#options'] = array_merge(array('' => $element['#empty_option']), $element['#options']);
+  }
+  $param = array(
+    "heading" => $element['#title'],
+    "param_name" => $param_name,
+  );
+  if (isset($element['#description'])) {
+    $param["description"] = $element['#description'];
+  }
+  switch ($element['#type']) {
+    case 'textfield':
+      $param['type'] = 'textfield';
+      break;
+
+    case 'checkbox':
+      $param['type'] = 'checkbox';
+      $param['value'] = array(t("Yes") => '1');
+      break;
+
+    case 'checkboxes':
+      $param['type'] = 'checkbox';
+      $param['value'] = array_flip($element['#options']);
+      break;
+
+    case 'radio':
+      $param['type'] = 'dropdown';
+      $param['value'] = array_flip($element['#options']);
+      break;
+
+    case 'radios':
+      $param['type'] = 'dropdown';
+      $param['value'] = array_flip($element['#options']);
+      break;
+
+    case 'select':
+      $param['value'] = array_flip($element['#options']);
+      if (isset($element['#multiple'])) {
+        $param['type'] = 'checkbox';
+      }
+      else {
+        $param['type'] = 'dropdown';
+      }
+      break;
+
+    default:
+      $param = FALSE;
+      break;
+
+  }
+  return $param;
+}
+
+/**
+ * Set map filed for drupal cache.
+ */
+function glazed_builder_map_fields() {
+  if (module_exists('entity')) {
+    $fields_cache = &drupal_static(__FUNCTION__);
+    if (!isset($fields_cache)) {
+      if ($cache = cache_get('map_fields')) {
+        $fields_cache = $cache->data;
+      }
+      else {
+        $fields_cache = array();
+      }
+    }
+    if (empty($fields_cache)) {
+      module_load_include('inc', 'field_ui', 'field_ui.admin');
+      cache_set('map_fields', $fields_cache, 'cache');
+    }
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function glazed_builder_field_formatter_info() {
+  return array(
+    'text_glazed_builder' => array(
+      'label' => t('Glazed builder'),
+      'field types' => array(
+        'text',
+        'text_long',
+        'text_with_summary',
+        'entityreference',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_wysiwyg_editor_settings_alter().
+ */
+function glazed_builder_wysiwyg_editor_settings_alter(&$settings, $context){
+  //check if the editor is ckeditor and the version is at least 4.0
+  if($context['profile']->editor=='ckeditor' && $context['editor']['installed version'][0]>3){
+    //add custom settings for ckeditor 4.+ here
+    $settings['customConfig'] = base_path() . drupal_get_path('module', 'glazed_builder') . '/js/ckeditor.config.js';
+  }
+}
+
+/**
+ * Create regex for get shortcode.
+ */
+function glazed_builder_get_shortcode_regex($tagnames) {
+  $tagregexp = implode('|', array_map('preg_quote', $tagnames));
+  // WARNING! Do not change this regex without changing do_shortcode_tag()
+  // and strip_shortcode_tag()
+  // Also, see shortcode_unautop() and shortcode.js.
+  $regex = '';
+  $regex .= '\\[';
+  // Opening bracket.
+  $regex .= '(\\[?)';
+  // 1: Optional second opening bracket for escaping shortcodes: [[tag]].
+  $regex .= "($tagregexp)";
+  // 2: Shortcode name.
+  $regex .= '(?![\\w-])';
+  // Not followed by word character or hyphen.
+  $regex .= '(';
+  // 3: Unroll the loop: Inside the opening shortcode tag.
+  $regex .= '[^\\]\\/]*';
+  // Not a closing bracket or forward slash.
+  $regex .= '(?:\\/(?!\\])';
+  // A forward slash not followed by a closing bracket.
+  $regex .= '[^\\]\\/]*';
+  // Not a closing bracket or forward slash.
+  $regex .= ')*?)(?:(\\/)';
+  // 4: Self closing tag ...
+  $regex .= '\\]';
+  // ... and closing bracket.
+  $regex .= '|\\]';
+  // Closing bracket.
+  $regex .= '(?:(';
+  // 5: Unroll the loop: Optionally, anything between the opening
+  // and closing shortcode tags.
+  $regex .= '[^\\[]*+';
+  // Not an opening bracket.
+  $regex .= '(?:\\[(?!\\/\\2\\])';
+  // An opening bracket not followed by the closing shortcode tag.
+  $regex .= '[^\\[]*+';
+  // Not an opening bracket.
+  $regex .= ')*+)\\[\\/\\2\\]';
+  // Closing shortcode tag.
+  $regex .= ')?)(\\]?)';
+  // 6: Optional second closing brocket for escaping shortcodes: [[tag]].
+  return $regex;
+}
+
+/**
+ * Strip shorcodes.
+ */
+function glazed_builder_strip_shortcodes($content, $tagnames) {
+  $pattern = glazed_builder_get_shortcode_regex($tagnames);
+  return preg_replace_callback("/$pattern/s", 'strip_shortcode_tag', $content);
+}
+
+/**
+ * Get shortcode content.
+ */
+function glazed_builder_get_shortcode_content($content, $tagnames) {
+  $pattern = glazed_builder_get_shortcode_regex($tagnames);
+  $matches = array();
+  preg_match_all("/$pattern/s", $content, $matches);
+  return $matches[5];
+}
+
+/**
+ * Impements hook_node_presave().
+ */
+function glazed_builder_node_presave($node) {
+  $fields = field_info_instances('node', $node->type);
+  foreach ($fields as $field) {
+    if (isset($field['display']['default']['type']) && $field['display']['default']['type'] == 'text_glazed_builder') {
+      if (property_exists($node, $field['field_name']) && is_array($node->{$field['field_name']})) {
+        foreach ($node->{$field['field_name']} as $langcode => $items) {
+          if (empty($items)) {
+            $node->{$field['field_name']}[$langcode] = array(array('value' => ''));
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Added additional libraries.
+ */
+function glazed_builder_get_libraries($shortcodes) {
+  $libraries = array('css' => array(), 'js' => array());
+  $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery.waypoints/lib/jquery.waypoints.min.js';
+  if (strpos($shortcodes, 'parallax') !== FALSE) {
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery.parallax/jquery.parallax.js';
+  }
+  if (strpos($shortcodes, 'az_counter') !== FALSE) {
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery-countTo/jquery.countTo.min.js';
+  }
+
+  if (strpos($shortcodes, 'az_date') !== FALSE || strpos($shortcodes, 'az_countdown') !== FALSE) {
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/datetimepicker/jquery.datetimepicker.css';
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/datetimepicker/jquery.datetimepicker.js';
+  }
+
+  if (strpos($shortcodes, 'youtube') !== FALSE) {
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery.mb.YTPlayer/dist/css/jquery.mb.YTPlayer.min.css';
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery.mb.YTPlayer/dist/jquery.mb.YTPlayer.min.js';
+  }
+
+  if (strpos($shortcodes, 'az_carousel') !== FALSE) {
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/owl.carousel/owl-carousel/owl.carousel.css';
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/css/st-owl-carousel.css';
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/owl.carousel/owl-carousel/owl.transitions.css';
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/owl.carousel/owl-carousel/owl.carousel.js';
+  }
+
+  if (strpos($shortcodes, 'az_countdown') !== FALSE) {
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/counteverest/css/counteverest.glazed.css';
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/counteverest/js/vendor/jquery.counteverest.min.js';
+  }
+
+  if (strpos($shortcodes, 'az_circle_counter') !== FALSE) {
+    $libraries['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery.circliful/css/jquery.circliful.css';
+    $libraries['js'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/jquery.circliful/js/jquery.circliful.min.js';
+  }
+
+  drupal_alter('glazed_builder_libraries', $libraries);
+  return $libraries;
+}
+
+/**
+ * Parsing shortcode attributes.
+ */
+function glazed_builder_shortcode_parse_atts($text) {
+  $atts = array();
+  $pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
+  $text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
+  if (preg_match_all($pattern, $text, $match, PREG_SET_ORDER)) {
+    foreach ($match as $m) {
+      if (!empty($m[1])) {
+        $atts[strtolower($m[1])] = stripcslashes($m[2]);
+      }
+      elseif (!empty($m[3])) {
+        $atts[strtolower($m[3])] = stripcslashes($m[4]);
+      }
+      elseif (!empty($m[5])) {
+        $atts[strtolower($m[5])] = stripcslashes($m[6]);
+      }
+      elseif (isset($m[7]) and strlen($m[7])) {
+        $atts[] = stripcslashes($m[7]);
+      }
+      elseif (isset($m[8])) {
+        $atts[] = stripcslashes($m[8]);
+      }
+    }
+  }
+  else {
+    $atts = ltrim($text);
+  }
+  return $atts;
+}
+
+/**
+ * Create shortcode_tag.
+ */
+function glazed_builder_do_shortcode_tag($m) {
+  // Allow [[foo]] syntax for escaping a tag.
+  if ($m[1] == '[' && $m[6] == ']') {
+    return substr($m[0], 1, -1);
+  }
+
+  $tag = $m[2];
+  $attr = glazed_builder_shortcode_parse_atts($m[3]);
+
+  if (isset($m[5])) {
+    // Enclosing tag - extra parameter.
+    return $m[1] . '[' . $tag . $m[3] . ']' . glazed_builder_load_cms_element(substr($tag, 3), isset($attr['settings']) ? $attr['settings'] : '') . '[/' . $tag . ']' . $m[6];
+  }
+  else {
+    // self-closing tag.
+    return $m[1] . '[' . $tag . $m[3] . ']' . glazed_builder_load_cms_element(substr($tag, 3), isset($attr['settings']) ? $attr['settings'] : '') . '[/' . $tag . ']' . $m[6];
+  }
+}
+
+/**
+ * Added prefix 'az_'.
+ */
+function glazed_builder_az($key) {
+  return 'az_' . $key;
+}
+
+/**
+ * Get files.
+ */
+function glazed_builder_recursive_get_files($src) {
+  $files = array();
+  $dir = opendir($src);
+  if (is_resource($dir)) {
+    while (FALSE !== ($file = readdir($dir))) {
+      if (($file != '.') && ($file != '..')) {
+        if (is_dir($src . DIRECTORY_SEPARATOR . $file)) {
+          if (!in_array($file, array(
+            'assets',
+            'glazed_builder',
+            'glazed_templates',
+            'glazed_elements',
+            'glazed_containers',
+          ))
+          ) {
+            $files = array_merge($files, glazed_builder_recursive_get_files(realpath($src . DIRECTORY_SEPARATOR . $file)));
+          }
+        }
+        else {
+          $files[realpath($src . DIRECTORY_SEPARATOR . $file)] = $file;
+        }
+      }
+    }
+  }
+  closedir($dir);
+  return $files;
+}
+
+/**
+ * Add data for js.
+ */
+function glazed_builder_get_template_elements() {
+  $template_elements = &drupal_static(__FUNCTION__);
+  if (!isset($template_elements)) {
+    if ($cache = cache_get('template_elements')) {
+      $template_elements = $cache->data;
+    }
+    else {
+      $template_elements = '';
+
+      global $base_url;
+      $glazed_elements_folders = array(
+        array(
+          'folder' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'glazed_elements',
+          'folder_url' => $base_url . '/' . drupal_get_path('module', 'glazed_builder') . '/glazed_elements',
+        ),
+      );
+      drupal_alter('glazed_builder_elements_folders', $glazed_elements_folders);
+
+      $elements = array();
+      foreach ($glazed_elements_folders as $glazed_elements_folder) {
+        $src = $glazed_elements_folder['folder'];
+        $src_url = $glazed_elements_folder['folder_url'];
+        if (is_dir($src)) {
+          $files = glazed_builder_recursive_get_files($src);
+          foreach ($files as $path => $filename) {
+            $info = pathinfo($path);
+            if ($info['extension'] == 'html') {
+              $p = str_replace(DIRECTORY_SEPARATOR, '|', str_replace('.html', '', substr(str_replace($src, '', $path), 1)));
+              $elements[$p]['html'] = file_get_contents($path);
+              $elements[$p]['name'] = $info['filename'];
+              $folders = explode(DIRECTORY_SEPARATOR, str_replace($src, '', $path));
+              array_pop($folders);
+              $folders = implode('/', $folders);
+              $elements[$p]['baseurl'] = $src_url . $folders . '/';
+              if (file_exists(str_replace('.html', '.png', $path))) {
+                $elements[$p]['thumbnail'] = $src_url . '/' . str_replace('|', '/', $p) . '.png';
+              }
+            }
+          }
+        }
+      }
+      foreach ($elements as $path => &$element) {
+        $element['html'] = $element['html'];
+      }
+      $template_elements = "var glazed_template_elements = " . json_encode($elements) . ";\n";
+      cache_set('template_elements', $template_elements, 'cache');
+    }
+  }
+  return $template_elements;
+}
+
+/**
+ * Remove base url.
+ */
+function glazed_builder_remove_base_url($content) {
+  global $base_url;
+  $files_directory = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files');
+  $module_directory = drupal_get_path('module', 'glazed_builder');
+  $content = str_replace($base_url, '-base-url-', $content);
+  $content = str_replace($files_directory, '-files-directory-', $content);
+  $content = str_replace($module_directory, '-module-directory-', $content);
+  return $content;
+}
+
+/**
+ * Add base url.
+ */
+function glazed_builder_add_base_url($content) {
+  global $base_url;
+  $files_directory = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files');
+  $module_directory = drupal_get_path('module', 'glazed_builder');
+  $content = str_replace('-base-url-', $base_url, $content);
+  $content = str_replace('-files-directory-', $files_directory, $content);
+  $content = str_replace('-module-directory-', $module_directory, $content);
+  return $content;
+}
+
+/**
+ * Append html.
+ */
+function glazed_builder_append_html(DOMNode $parent, $source) {
+  $tmp_doc = new DOMDocument("1.0", "UTF-8");
+  $tmp_doc->resolveExternals = FALSE;
+  $tmp_doc->substituteEntities = FALSE;
+  $tmp_doc->strictErrorChecking = FALSE;
+  libxml_use_internal_errors(TRUE);
+  $raw = '<?xml encoding="UTF-8"><!DOCTYPE html><html><head></head><body>' . $source . '</body></html>';
+  if (function_exists('mb_convert_encoding')) {
+    $forced_utf8 = mb_convert_encoding($raw, 'HTML-ENTITIES', 'UTF-8');
+  }
+  else {
+    $forced_utf8 = $raw;
+  }
+  @$tmp_doc->loadHTML($forced_utf8);
+  libxml_clear_errors();
+  foreach ($tmp_doc->getElementsByTagName('head')->item(0)->childNodes as $node) {
+    $imported_node = $parent->ownerDocument->importNode($node, TRUE);
+    $parent->appendChild($imported_node);
+  }
+  foreach ($tmp_doc->getElementsByTagName('body')->item(0)->childNodes as $node) {
+    $imported_node = $parent->ownerDocument->importNode($node, TRUE);
+    $parent->appendChild($imported_node);
+  }
+}
+
+/**
+ * Update html.
+ */
+function glazed_builder_update_html($container, &$value, &$js, &$css) {
+  global $base_url;
+  $value = glazed_builder_add_base_url($value);
+  $mode = 'static';
+  if ((strpos($value, 'glazed_frontend.min.js') !== FALSE) || strpos($value, 'glazed_frontend.js') !== FALSE) {
+    $mode = 'dynamic';
+  }
+  else {
+    // DETECT AND REMOVE EMBEDDED LOADER JS FROM LEGACY GLAZED BUILDER < 1.1.0
+    $value1 = explode('//<![CDATA[', $value);
+    if (count($value1) == 2) {
+      $value2 = explode('//]]>', $value1[1]);
+      if (count($value2) == 2) {
+        $mode = 'dynamic';
+        $js[] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_frontend.min.js';
+        $value = $value1[0] . $value2[1];
+      }
+    }
+  }
+
+  $doc = new DOMDocument("1.0", "UTF-8");
+  $doc->resolveExternals = FALSE;
+  $doc->substituteEntities = FALSE;
+  $doc->strictErrorChecking = FALSE;
+  libxml_use_internal_errors(TRUE);
+  $raw = '<?xml encoding="UTF-8"><!DOCTYPE html><html><head></head><body>' . $value . '</body></html>';
+  $forced_utf8 = mb_convert_encoding($raw, 'HTML-ENTITIES', 'UTF-8');
+  @$doc->loadHTML($forced_utf8);
+  libxml_clear_errors();
+
+  $xpath = new DOMXpath($doc);
+  // We aggregate all element scripts and remove the tag, but not sidebar
+  // elements because those would never be restored.
+  $result = $xpath->query('//script[not(ancestor::div[contains(@class,"az-template")])]');
+  $nodes = array();
+  foreach ($result as $node) {
+    $nodes[] = $node;
+  }
+  foreach ($nodes as $node) {
+    if ($node->hasAttribute('src')) {
+      $src = $node->getAttribute('src');
+      if (strpos($src, $base_url . '/') == 0) {
+        $src = str_replace($base_url . '/', '', $src);
+      }
+      $js[] = $src;
+      $node->parentNode->removeChild($node);
+    }
+  }
+  $xpath = new DOMXpath($doc);
+  // We aggregate all element css and remove the link tags, but not sidebar
+  // elements because those would never be restored.
+  $result = $xpath->query('//link[not(ancestor::div[contains(@class,"az-template")])]');
+  $nodes = array();
+  foreach ($result as $node) {
+    $nodes[] = $node;
+  }
+  foreach ($nodes as $node) {
+    if ($node->hasAttribute('href') && $node->hasAttribute('rel')) {
+      if ($node->getAttribute('rel') == "stylesheet") {
+        $href = $node->getAttribute('href');
+        if (strpos($href, $base_url . '/') == 0) {
+          $href = str_replace($base_url . '/', '', $href);
+        }
+        $css[] = $href;
+        $node->parentNode->removeChild($node);
+      }
+    }
+  }
+  $xpath = new DOMXpath($doc);
+  $result = $xpath->query('//div[contains(@class,"az-cms-element")]');
+  $nodes = array();
+  foreach ($result as $node) {
+    $nodes[] = $node;
+  }
+  foreach ($nodes as $node) {
+    while ($node->hasChildNodes()) {
+      $node->removeChild($node->firstChild);
+    }
+    $base = $node->getAttribute('data-azb');
+    $settings = $node->getAttribute('data-azat-settings');
+
+    // Additional settings for cms views.
+    $data = array(
+      'display_title' => $node->getAttribute('data-azat-display_title'),
+      'override_pager' => $node->getAttribute('data-azat-override_pager'),
+      'items' => $node->getAttribute('data-azat-items'),
+      'offset' => $node->getAttribute('data-azat-offset'),
+      'contextual_filter' => $node->getAttribute('data-azat-contextual_filter'),
+      'toggle_fields' => $node->getAttribute('data-azat-toggle_fields'),
+    );
+
+    $html = glazed_builder_load_cms_element(substr($base, 3), $settings, $container, $data);
+
+    glazed_builder_append_html($node, $html);
+  }
+  $value = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(array(
+    '<?xml encoding="UTF-8">',
+    '<html>',
+    '</html>',
+    '<head>',
+    '</head>',
+    '<body>',
+    '</body>',
+  ), array('', '', '', '', '', '', ''), $doc->saveHTML()));
+  return $mode;
+}
+
+/**
+ * Builder attach library and js.
+ */
+function glazed_builder_attach(&$element, $content, $glazed_html_format, $glazed_editor, $glazed_lang) {
+  $start_js_weight = 0;
+  global $base_url;
+  $cms_elements = glazed_builder_get_cms_element_names();
+  $e = &drupal_static(__FUNCTION__ . '_glazed_editor');
+  if (!isset($e)) {
+    $e = $glazed_editor ? 'true' : 'false';
+  }
+
+  $element['#attached']['js'][] = array(
+    'data' => array(
+      'glazed_builder' => array('currentPath' => current_path()),
+    ),
+    'type' => 'setting',
+  );
+
+  $element['#attached']['js'][] = array(
+    'data' => "window.glazed_editor = " . $e . ";",
+    'type' => 'inline',
+    'weight' => $start_js_weight + 0,
+  );
+  if ($glazed_editor) {
+    $e = $glazed_editor;
+    $element['#attached']['js'][] = array(
+      'data' => glazed_builder_get_template_elements(),
+      'type' => 'inline',
+      'weight' => $start_js_weight + 5,
+    );
+    $element['#attached']['js'][] = array(
+      'data' => "window.glazed_cms_element_names = " . json_encode($cms_elements) . ";",
+      'type' => 'inline',
+      'weight' => $start_js_weight + 1,
+    );
+
+    // Creating a list of views with additional settings.
+    $view_elements_settings = glazed_builder_get_cms_view_element_settings();
+
+    // Added js settings for set variable glazed_cms_element_views_settings.
+    $element['#attached']['js'][] = array(
+      'data' => "window.glazed_cms_element_views_settings = " . json_encode($view_elements_settings) . ";",
+      'type' => 'inline',
+      'weight' => $start_js_weight + 2,
+    );
+
+    // Creating a list of views tags.
+    $views_tags = glazed_builder_get_cms_views_tags();
+
+    // Added js settings for set variable views_tags.
+    $element['#attached']['js'][] = array(
+     'data' => "window.glazed_views_tags = " . json_encode($views_tags) . ";",
+     'type' => 'inline',
+     'weight' => $start_js_weight + 3,
+    );
+
+    // Creating a list of buttons style.
+    $button_styles = glazed_builder_get_button_styles();
+
+    // Added js settings for set variable button_styles.
+    $element['#attached']['js'][] = array(
+      'data' => "window.button_styles = " . json_encode($button_styles) . ";",
+      'type' => 'inline',
+      'weight' => $start_js_weight + 4,
+    );
+
+  }
+  else {
+    if (!empty($element['id'])) {
+      $data = array('glazed_builder' => array('DisallowContainers' => array($element['id'])));
+      drupal_add_js($data, 'setting');
+    }
+  }
+  $element['#attached']['js'][] = array(
+    'data' => "window.glazed_ajaxurl = '" . $base_url . "/?q=glazed_builder_ajaxurl';",
+    'type' => 'inline',
+    'weight' => $start_js_weight + 3,
+  );
+  $element['#attached']['js'][] = array(
+    'data' => "window.glazed_lang = '" . $glazed_lang . "';",
+    'type' => 'inline',
+    'weight' => $start_js_weight + 4,
+  );
+  $element['#attached']['js'][] = array(
+    'data' => "window.glazed_baseurl = '" . $base_url . '/' . drupal_get_path('module', 'glazed_builder') . '/glazed_builder/' . "';",
+    'type' => 'inline',
+    'weight' => $start_js_weight + 5,
+  );
+  if (variable_get('glazed_development')) {
+    $element['#attached']['js'][] = array(
+      'data' => "window.glazed_development = true",
+      'type' => 'inline',
+      'weight' => $start_js_weight + 3,
+    );
+  }
+
+  // Expose default theme color palette to color pickers
+  $default_theme = variable_get('theme_default');
+  if ($palette = theme_get_setting('palette', $default_theme)) {
+    $palette = array_slice($palette, 0, 10);
+    $element['#attached']['js'][] = array(
+      'data' => "window.sooperthemes_theme_palette = " . json_encode($palette) . ";",
+      'type' => 'inline',
+      'weight' => $start_js_weight + 10,
+    );
+  }
+
+  $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/underscore/underscore-min.js'] = array('weight' => -1);
+
+  if (variable_get('glazed_bootstrap', 0) == 1) {
+    $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/bootstrap/css/bootstrap.min.css';
+    $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/bootstrap/js/bootstrap.min.js'] = array('weight' => $start_js_weight + 9);
+  }
+  elseif (variable_get('glazed_bootstrap', 0) == 2) {
+    $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/bootstrap-custom/css/bootstrap.min.css';
+    $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/bootstrap-custom/js/bootstrap.min.js'] = array('weight' => $start_js_weight + 9);
+  }
+
+  if ($glazed_editor) {
+
+    drupal_add_library('system', 'ui');
+    drupal_add_library('system', 'ui.tabs');
+    drupal_add_library('system', 'ui.sortable');
+    drupal_add_library('system', 'ui.droppable');
+    drupal_add_library('system', 'ui.draggable');
+    drupal_add_library('system', 'ui.accordion');
+    drupal_add_library('system', 'ui.selectable');
+    drupal_add_library('system', 'ui.resizable');
+    drupal_add_library('system', 'ui.slider');
+
+    // Add current language to the JS settings.
+    global $language;
+    drupal_add_js(array(
+        'glazed_builder' => array(
+          'language' => $language->language,
+        ),
+      ),
+      array('type' => 'setting')
+    );
+
+    $enabled_fonts = variable_get('google_fonts_enabled_fonts', array());
+    $element['#attached']['js'][] = array(
+      'data' => array('glazed_builder' => array('enabled_fonts' => $enabled_fonts)),
+      'type' => 'setting',
+      'weight' => $start_js_weight + 10,
+    );
+
+    $glazed_classes = array();
+    $themes = list_themes();
+    foreach ($themes as $key => $theme) {
+      if (($theme->status == 1) && isset($theme->info['glazed_classes'])) {
+        $optgroup = 'optgroup-' . $key;
+        $glazed_classes[$optgroup] = $theme->info['name'];
+        $glazed_classes = array_merge($glazed_classes, $theme->info['glazed_classes']);
+      }
+    }
+    drupal_alter('glazed_builder_classes', $glazed_classes);
+    $element['#attached']['js'][] = array(
+      'data' => "window.glazed_classes = " . json_encode($glazed_classes) . ";",
+      'type' => 'inline',
+      'weight' => $start_js_weight + 11,
+    );
+
+
+    $styles = image_styles();
+    $styles_list = array();
+    foreach ($styles as $id => $style) {
+      $styles_list[$id] = $style['label'];
+    }
+    // Add original image style.
+    $styles_list = array('empty' => t('Original image')) + $styles_list;
+
+    $element['#attached']['js'][] = array(
+      'data' => array('glazed_builder' => array('image_styles' => $styles_list)),
+      'type' => 'setting',
+      'weight' => $start_js_weight + 12,
+    );
+
+    module_load_include('inc', 'media', 'wysiwyg_plugins/media');
+    module_load_include('module', 'media_wysiwyg');
+    if (function_exists('media_include_browser_js')){
+      media_include_browser_js();
+    }
+    elseif (function_exists('media_wysiwyg_include_browser_js')){
+      media_wysiwyg_include_browser_js();
+    }
+    else {
+      $element['#attached']['library'][] = array('media', 'media_browser');
+      $element['#attached']['library'][] = array('media', 'media_browser_settings');
+    }
+
+    $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/css/ac_drupal.css';
+    $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/js/ac_drupal.js'] = array('weight' => $start_js_weight + 14);
+    $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/bootstrap-notify/bootstrap-notify.min.js'] = array('weight' => $start_js_weight + 14);
+    $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/et-line-font/et-line-font.css';
+    $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/vendor/pe-icon-7-stroke/css/pe-icon-7-stroke.css';
+
+
+    if (variable_get('glazed_development', FALSE)) {
+      $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_param_types.js'] = array('weight' => $start_js_weight + 15);
+    }
+    else {
+      $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_param_types.min.js'] = array('weight' => $start_js_weight + 16);
+    }
+    if (!empty($glazed_html_format)) {
+      if (variable_get('glazed_development', FALSE)) {
+        $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_elements.js'] = array('weight' => $start_js_weight + 17);
+        $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_builder.js'] = array('weight' => $start_js_weight + 18);
+      }
+      else {
+        $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_elements.min.js'] = array('weight' => $start_js_weight + 19);
+        $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_builder.min.js'] = array('weight' => $start_js_weight + 20);
+      }
+    }
+    $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/css/glazed_builder_backend.css';
+  }
+  $element['#attached']['css'][] = drupal_get_path('module', 'glazed_builder') . '/glazed_builder/css/glazed_builder.css';
+  if (empty($glazed_html_format)) {
+    if (variable_get('glazed_development', FALSE)) {
+      $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_elements.js'] = array('weight' => $start_js_weight + 23);
+      $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_builder.js'] = array('weight' => $start_js_weight + 24);
+    }
+    else {
+      $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_elements.min.js'] = array('weight' => $start_js_weight + 25);
+      $element['#attached']['js'][drupal_get_path('module', 'glazed_builder') . '/glazed_builder/glazed_builder.min.js'] = array('weight' => $start_js_weight + 26);
+    }
+    $libraries = glazed_builder_get_libraries($content);
+    $n = 0;
+    foreach ($libraries['js'] as $src) {
+      $element['#attached']['js'][$src] = array('weight' => $start_js_weight + $n + 27);
+      $n++;
+    }
+    $element['#attached']['css'] = array_merge($element['#attached']['css'], $libraries['css']);
+  }
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function glazed_builder_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, &$items, $display) {
+  global $language;
+  if ($display['type'] == 'text_glazed_builder') {
+    if ($field['type'] == 'entityreference') {
+      if ($field['settings']['target_type'] == 'node') {
+        if (in_array('template', $field['settings']['handler_settings']['target_bundles'])) {
+          $node = end(entity_load('node', array($items[0]['target_id'])));
+          if (isset($node->body[$langcode])) {
+            $items = $node->body[$langcode];
+          }
+          else {
+            $items = $node->body[LANGUAGE_NONE];
+          }
+        }
+      }
+    }
+
+    $element = array();
+    list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+    $trim_length = '';
+    if (isset($display['settings']['trim_length'])) {
+      $trim_length = $display['settings']['trim_length'];
+    }
+    switch ($display['type']) {
+      case 'text_glazed_builder':
+        if (empty($items)) {
+          $items = array(array('value' => ''));
+        }
+        foreach ($items as $delta => $item) {
+          $value = $item['value'];
+          $element[$delta] = array();
+          $element[$delta]['#attached']['js'] = array();
+          $element[$delta]['#attached']['css'] = array();
+          $cms_elements = glazed_builder_get_cms_element_names();
+          preg_match('/^\s*\<[\s\S]*\>\s*$/', $value, $glazed_html_format);
+          if (empty($glazed_html_format)) {
+            $tags = array_map("glazed_builder_az", array_keys($cms_elements));
+            $pattern = glazed_builder_get_shortcode_regex($tags);
+            $output = preg_replace_callback("/$pattern/s", 'glazed_builder_do_shortcode_tag', $value);
+
+            $output = '<div class="az-element az-container glazed" data-az-type="' . $entity_type . '|' . $bundle . '" data-az-name="' . $id . '|' . $field['field_name'] . '" style="display:none">' . $output . '</div>';
+          }
+          else {
+            $js = array();
+            $css = array();
+            $mode = glazed_builder_update_html($entity_type . '|' . $bundle . '/' . $id . '|' . $field['field_name'], $value, $js, $css);
+
+            $n = 0;
+            foreach ($js as $src) {
+              $element[$delta]['#attached']['js'][$src] = array('weight' => 100 + $n + 0);
+              $n++;
+            }
+
+            $element[$delta]['#attached']['css'] = array_merge($element[$delta]['#attached']['css'], $css);
+
+            $output = '<div class="az-element az-container glazed" data-az-type="' . $entity_type . '|' . $bundle . '" data-az-name="' . $id . '|' . $field['field_name'] . '" data-az-mode="' . $mode . '">' . $value . '</div>';
+            // Glazed Builder 1.1.0 Experimental feature: Process Text Format Filters ~Jur 15/06/16
+            // Don't run text format filters when editor is loaded because we would save all filter output into the db
+            if (!user_access('edit via glazed builder') && variable_get('glazed_format_filters', FALSE)) {
+              $output = ($instance['settings']['text_processing']) ? check_markup($output, $item['format'], $langcode) : $output;
+            }
+          }
+
+          // Support AMP markup.
+          if (module_exists('amp') && amp_is_amp_request()) {
+            $amp_content = _amp_convert_markup_to_amp($output);
+            $output = $amp_content['amp_markup'];
+            if (isset($_GET['warnfix']) || variable_get('amp_library_warnings_display', FALSE)) {
+              $output .= '<pre>' . $amp_content['amp_warnings'] . '</pre>';
+            }
+            _amp_add_component_libraries($amp_content['amp_components']);
+          }
+
+          $element[$delta]['#markup'] = $output;
+          $element[$delta]['id'] = $id. '|' . $field['field_name'];
+          glazed_builder_attach($element[$delta], $value, $glazed_html_format, (user_access('edit via glazed builder') && entity_access('update', $entity_type, $entity)), $language->language);
+        }
+        break;
+
+    }
+    return $element;
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function glazed_builder_element_info_alter(&$types) {
+  $types['text_format']['#pre_render'][] = 'glazed_builder_pre_render_text_format';
+}
+
+/**
+ * Implements hook_field_attach_presave().
+ */
+function glazed_builder_field_attach_presave($entity_type, $entity) {
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+  $fields = field_info_instances($entity_type, $bundle);
+  foreach ($fields as $field) {
+    if (property_exists($entity, $field['field_name']) && is_array($entity->{$field['field_name']})) {
+      foreach ($entity->{$field['field_name']} as $langcode => $items) {
+        if (is_array($items)) {
+          foreach ($items as $i => $item) {
+            if (isset($item['format'])) {
+              if ($item['format'] == 'glazed_builder' || $field['display']['default']['type'] == 'text_glazed_builder') {
+                $entity->{$field['field_name']}[$langcode][$i]['value'] = glazed_builder_remove_base_url($item['value']);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_load().
+ */
+function glazed_builder_load($field, $format) {
+  global $user;
+  static $processed_ids = array();
+  $format_arr = FALSE;
+  $format_id = '';
+
+  if (is_array($format)) {
+    $format_arr = $format;
+    $format_id = $format_arr['#id'];
+    // Todo $format not used.
+    $format = isset($format_arr['#value']) ? $format_arr['#value'] : $format_arr['#default_value'];
+  }
+
+  if (!isset($field['#id'])) {
+    return $field;
+  }
+
+  if (isset($processed_ids[$field['#id']])) {
+    return $field;
+  }
+
+  if (isset($processed_ids[$field['#id']])) {
+    return $field;
+  }
+
+  if (array_key_exists('#wysiwyg', $field) && !$field['#wysiwyg']) {
+    return $field;
+  }
+
+  if (isset($field['#access']) && !$field['#access']) {
+    return $field;
+  }
+
+  if ($field['#id'] == "edit-log") {
+    return $field;
+  }
+
+  if (isset($field['#attributes']['disabled']) && $field['#attributes']['disabled'] == 'disabled') {
+    return $field;
+  }
+
+  if (!isset($processed_ids[$field['#id']])) {
+    $processed_ids[$field['#id']] = TRUE;
+  }
+
+  global $language;
+
+  glazed_builder_attach($field, '', TRUE, user_access('edit via glazed builder'), $language->language);
+
+  $field['#value'] = glazed_builder_add_base_url($field['#value']);
+
+  $field['#attached']['js'][] = array(
+    'data' => "window.glazed_textareas.push('" . $field['#id'] . "');window.glazed_formats.push('" . $format_id . "');",
+    'type' => 'inline',
+    'weight' => 100,
+  );
+
+  return $field;
+}
+
+/**
+ * Pre render text format.
+ */
+function glazed_builder_pre_render_text_format($element) {
+
+  if (!isset($element['format']) || !empty($element['value']['#disabled'])) {
+    return $element;
+  }
+
+  if (isset($element['value'])) {
+    if (!isset($element['format'])) {
+      return $element;
+    }
+    $element['value'] = glazed_builder_load($element['value'], $element['format']['format']);
+  }
+
+  return $element;
+}
+
+/**
+ * Implements template_process_html().
+ */
+function glazed_builder_process_html(&$vars) {
+  if (drupal_is_front_page()) {
+    $vars['page_bottom'] .= '<div style="display:none">sfy39587stp17</div>';
+  }
+}
+
+/**
+ * Set drupal cache cms_elements.
+ */
+function glazed_builder_get_cms_element_names() {
+  $cms_elements = &drupal_static(__FUNCTION__);
+  if (!isset($cms_elements)) {
+
+    $cms_elements = array();
+    if (module_exists('block')) {
+      if ($cache = cache_get('cms_elements_blocks')) {
+        $cms_elements += $cache->data;
+      }
+      else {
+        foreach (module_implements('block_info') as $module) {
+          $module_blocks = module_invoke($module, 'block_info');
+          foreach ($module_blocks as $delta => $block) {
+            $cms_elements['block-' . $module . '-' . $delta] = t('Block: ') . str_replace('_', ' ', $block['info']);
+          }
+        }
+        cache_set('cms_elements_blocks', $cms_elements, 'cache');
+      }
+    }
+    if (module_exists('views')) {
+      if ($cache = cache_get('cms_elements_views')) {
+        $cms_elements += $cache->data;
+      }
+      else {
+        $views = views_get_all_views();
+        foreach ($views as $view) {
+          if (!empty($view->disabled)) {
+            continue;
+          }
+          $view = views_get_view($view->name);
+          foreach ($view->display as $display) {
+            $cms_elements['view-' . $view->name . '-' . $display->id] = t('View: ') . str_replace('_', ' ', $view->human_name . ' (' . $display->display_title . ')');
+          }
+        }
+        cache_set('cms_elements_views', $cms_elements, 'cache_views');
+      }
+    }
+  }
+  return $cms_elements;
+}
+
+/**
+ * Implements hook_bean_cache_clear().
+ */
+function glazed_builder_bean_cache_clear() {
+  // Clear static variables.
+  drupal_static_reset('glazed_builder_get_cms_element_names');
+  // Flush caches.
+  cache_clear_all('cms_elements_blocks', 'cache');
+}
+
+/**
+ * Render block, view.
+ */
+function glazed_builder_load_cms_element($name, $settings, $container = '', $data = array(), $ajax = FALSE) {
+  $n = explode('-', $name);
+  $output = '';
+  if ($ajax) {
+    $outputArray = array();
+    # @see ### Send Assets to Page
+    $old_js = drupal_add_js();
+    $old_css = drupal_add_css();
+    // Temporarily swap current path to let the view extract argument.
+    $current_path = $_GET['q'];
+    $_GET['q'] = $data['originalPath'];
+  }
+  # @see ### Send Assets to Page
+  if ($n[0] == 'block') {
+    $module = $n[1];
+    $delta = implode('-', array_slice($n, 2));
+    $func = $module . '_block_view';
+    $block = $func($delta);
+    $output = '';
+    if ($data['display_title'] && $block['subject']) {
+      $output .= '<h2 class="block-title">' . check_plain($block['subject']) . '</h2>';
+    }
+    $output .= render($block['content']);
+  }
+  else {
+    if (($n[0] == 'view') && ($view = views_get_view($n[1]))) {
+      $view->set_display($n[2]);
+
+      $view->display_handler->options['exposed_block'] = TRUE;
+      parse_str(html_entity_decode($settings), $view->exposed_input);
+      $view->get_exposed_input();
+      if ($view->display_handler->plugin_name == 'block') {
+        if ((!empty($view->exposed_input))) {
+          $filters = $view->display_handler->get_option('filters');
+          foreach ($view->exposed_input as $key => $value) {
+            // Exposed filter token All for terms filter is broken, instead just skip this filter
+            if ($value == 'All') {
+              continue;
+            }
+            foreach ($filters as &$filter) {
+              if (isset($filter['exposed']) && $filter['exposed']) {
+                if ($filter['expose']['identifier'] == $key) {
+                  $filter['value'] = $value;
+                }
+              }
+            }
+          }
+          $view->display_handler->set_option('filters', $filters);
+
+          $sorts = $view->display_handler->get_option('sorts');
+          foreach ($view->exposed_input as $key => $value) {
+            if (isset($sorts[$key])) {
+              if (isset($sorts[$key]['exposed']) && $sorts[$key]['exposed']) {
+                $sorts[$key]['order'] = $value;
+              }
+            }
+          }
+          $view->display_handler->set_option('sorts', $sorts);
+        }
+      }
+
+      // Override pager.
+      if (isset($data['override_pager']) && $data['override_pager'] == 'yes') {
+
+        // Set items count.
+        if (!empty($data['items'])) {
+          $view->set_items_per_page($data['items']);
+        }
+
+        // Set offset.
+        if (!empty($data['offset'])) {
+          $view->set_offset($data['offset']);
+        }
+      }
+
+      // Exclude some fields.
+      if (!empty($data['toggle_fields'])) {
+        $fields = $view->display_handler->get_option('fields');
+        $data['toggle_fields'] = explode(',', $data['toggle_fields']);
+        foreach ($fields as $k => $i) {
+          if (!in_array($k, $data['toggle_fields'])) {
+            $fields[$k]['exclude'] = TRUE;
+          }
+        }
+        $view->display_handler->set_option('fields', $fields);
+      }
+
+      // Added arguments for view.
+      if (!empty($data['contextual_filter'])) {
+        // Multi filter explode by '/'.
+        $data['contextual_filter'] = explode('/', $data['contextual_filter']);
+        $view->pre_execute($data['contextual_filter']);
+      }
+      else {
+        $view->pre_execute();
+      }
+      # @see ### Send Assets to Page
+      if ($ajax) {
+        $old_js = drupal_add_js();
+        $old_css = drupal_add_css();
+      }
+
+      $output = $view->render();
+
+      ### Send Assets to Page
+      // @see https://api.drupal.org/api/drupal/includes%21ajax.inc/function/ajax_render/7
+      if ($ajax) {
+        $new_js = array_diff_key(drupal_add_js(), $old_js);
+        $new_css = array_diff_key(drupal_add_css(), $old_css);
+        $outputArray['js'] = drupal_get_js('footer', $new_js, TRUE);
+        $outputArray['js'] .= drupal_get_js('header', $new_js, TRUE);
+        $scripts = drupal_add_js();
+        if (!empty($scripts['settings'])) {
+          $settings = $scripts['settings'];
+          $outputArray['settings'] = drupal_array_merge_deep_array($settings['data']);
+        }
+        // What's still missing: inline js/css which is also found in drupal_add_js/css
+        $outputArray['css'] = drupal_get_css($new_css, TRUE);
+      }
+
+      // Get views title.
+      $title = $view->get_title();
+      if (isset($data['display_title']) && $data['display_title'] == 'yes' && !empty($title)) {
+        $title = array(
+          '#type' => 'container',
+          '#attributes' => array(
+            'class' => array('views-title'),
+          ),
+          'title' => array(
+            '#theme' => 'html_tag',
+            '#tag' => 'h2',
+            '#value' => $title,
+          ),
+        );
+
+        // Insert title into views $output.
+        $output = substr_replace($output, render($title), strpos($output, '>') + 1, 0);
+      }
+    }
+    else {
+      $output = module_invoke_all('glazed_cms_element', $name, $settings, $container);
+    }
+  }
+  if ($ajax) {
+    // Revert current path.
+    $_GET['q'] = $current_path;
+    $outputArray['data'] = $output;
+    return drupal_json_encode($outputArray);
+  }
+  else {
+    return $output;
+  }
+}
+
+/**
+ * Set drupal cache cms_views_tags.
+ */
+function glazed_builder_get_cms_views_tags() {
+  $cms_views_tags = &drupal_static(__FUNCTION__);
+  if (!isset($cms_views_tags)) {
+    if ($cache = cache_get('cms_views_tags')) {
+      $cms_views_tags = $cache->data;
+    }
+    else {
+      $cms_views_tags = array();
+
+      if (module_exists('views')) {
+        $views = views_get_all_views();
+        foreach ($views as $view) {
+          if (!empty($view->disabled)) {
+            continue;
+          }
+          $view = views_get_view($view->name);
+          foreach ($view->display as $display) {
+            $cms_views_tags['az_view-' . $view->name . '-' . $display->id] = $view->name;
+          }
+        }
+      }
+
+      cache_set('cms_views_tags', $cms_views_tags, 'cache_views');
+    }
+  }
+  return $cms_views_tags;
+}
+
+/**
+ * Set drupal cache cms_view_elements_settings.
+ *  return array list with additional views display settings.
+ */
+function glazed_builder_get_cms_view_element_settings() {
+  $cms_view_elements_settings = &drupal_static(__FUNCTION__);
+  if (!isset($cms_elements)) {
+    if ($cache = cache_get('cms_view_elements_settings', 'cache_views')) {
+      $cms_view_elements_settings = $cache->data;
+    }
+    else {
+      $cms_view_elements_settings = array();
+      if (module_exists('views')) {
+        $views = views_get_all_views();
+        foreach ($views as $view) {
+          if (!empty($view->disabled)) {
+            continue;
+          }
+          $view = views_get_view($view->name);
+          foreach ($view->display as $display) {
+            $key = 'az_view-' . $view->name . '-' . $display->id;
+            $view->set_display($display->id);
+            // prevent fatal error when handler is missing (for example with views data export display)
+            if (!is_object($display->handler)) {
+              continue;
+            }
+            $title = method_exists($view, 'get_title') ? $view->get_title() : 0;
+            $contextual_filter = method_exists($view, 'get_items') ? $view->get_items('argument', $display->id) : 0;
+            $cms_view_elements_settings[$key] = array(
+              'view_display_type' => $display->display_plugin,
+              'title' => !empty($title) ? 1 : 0,
+              'contextual_filter' => !empty($contextual_filter) ? 1 : 0,
+            );
+
+            $fields = $display->handler->get_option('fields');
+            foreach ($fields as $k => $field) {
+              $handler = $view->display_handler->get_handler('field', $field['id']);
+              if (empty($handler)) {
+                $field_name = t('Broken/missing handler: @table > @field', array(
+                  '@table' => $field['table'],
+                  '@field' => $field['field'],
+                ));
+              }
+              else {
+                $field_name = check_plain($handler->ui_name(TRUE));
+              }
+              if (!empty($field['relationship']) && !empty($relationships[$field['relationship']])) {
+                $field_name = '(' . $relationships[$field['relationship']] . ') ' . $field_name;
+              }
+              $fields[$k] = $field_name;
+            }
+            $cms_view_elements_settings[$key]['use_fields'] = (count($fields) > 1) ? 1 : 0;
+            $cms_view_elements_settings[$key]['field_list'] = $fields;
+
+            if (!empty($display->display_options['pager'])) {
+              $pager = $display->display_options['pager'];
+              $cms_view_elements_settings[$key]['pager'] = array(
+                'items_per_page' => !empty($pager['options']['items_per_page']) ? $pager['options']['items_per_page'] : NULL,
+                'offset' => !empty($pager['options']['offset']) ? $pager['options']['offset'] : NULL,
+              );
+            }
+            elseif (!empty($cms_view_elements_settings['az_view-' . $view->name . '-default']['pager'])) {
+              $cms_view_elements_settings[$key]['pager'] = $cms_view_elements_settings['az_view-' . $view->name . '-default']['pager'];
+            }
+            else {
+              $cms_view_elements_settings[$key] = array(
+                'items_per_page' => NULL,
+                'offset' => NULL,
+              );
+            }
+          }
+        }
+      }
+    }
+
+    cache_set('cms_view_elements_settings', $cms_view_elements_settings, 'cache_views');
+  }
+  return $cms_view_elements_settings;
+}
+
+/**
+ * Page callback glazed_builder_ajaxurl.
+ */
+function glazed_builder_ajax() {
+  global $base_url;
+  if (isset($_POST['action'])) {
+    $action = $_POST['action'];
+  }
+  else {
+    $action = false;
+  }
+  switch ($action) {
+    case 'glazed_login':
+      // url, password.
+      drupal_json_output(user_access('edit via glazed builder'));
+      break;
+
+    case 'glazed_get_container_types':
+      // Url.
+      if (user_access('edit via glazed builder')) {
+        $instances = field_info_instances();
+        foreach ($instances as $entity_type => $bundles) {
+          foreach ($bundles as $bundle_name => $instances) {
+            foreach ($instances as $field_name => $instance) {
+              if ($instance['display']['default']['type'] == 'text_glazed_builder') {
+                $container_types[$entity_type . '|' . $bundle_name] = $entity_type . ' - ' . $bundle_name;
+              }
+            }
+          }
+        }
+
+        drupal_json_output($container_types);
+      }
+      break;
+
+    case 'glazed_get_container_names':
+      // container_type, url.
+      if (user_access('edit via glazed builder') && !empty($_POST['container_type'])) {
+        $type = explode('|', $_POST['container_type']);
+        $entity_type = $type[0];
+        $bundle = $type[1];
+
+        $fields = field_info_instances($entity_type, $bundle);
+        $glazed_fields = array();
+        foreach ($fields as $field) {
+          if (isset($field['display']['default']['type']) && $field['display']['default']['type'] == 'text_glazed_builder') {
+            $glazed_fields[$field['field_name']] = $field['label'];
+          }
+        }
+        $info = entity_get_info($entity_type);
+        $entities = entity_load($entity_type, array(), array($info['entity keys']['bundle'] => $bundle));
+        $container_names = array();
+        foreach ($entities as $eid => $entity) {
+          foreach ($glazed_fields as $name => $label) {
+            if (property_exists($entity, 'title')) {
+              $container_names[$eid . '|' . $name] = $entity->title . '|' . $label;
+            }
+            else {
+              $container_names[$eid . '|' . $name] = $entity->eid . '|' . $label;
+            }
+          }
+        }
+        drupal_json_output($container_names);
+      }
+      break;
+
+    case 'glazed_save_container':
+      // type, name, shortcode.
+      if (user_access('edit via glazed builder')) {
+
+        /**
+         * Decodes data.
+         */
+        function glazed_builder_dec($encoded) {
+          $decoded = "";
+          $strlen = strlen($encoded);
+          for ($i = 0; $i < strlen($encoded); $i++) {
+            $b = ord($encoded[$i]);
+            $a = $b ^ 7;
+            $decoded .= chr($a);
+          }
+          return $decoded;
+        }
+
+        $cb_lang = $_POST['lang'];
+        $type = explode('|', $_POST['type']);
+        $entity_type = $type[0];
+        $bundle = $type[1];
+        $name = explode('|', $_POST['name']);
+        $eid = $name[0];
+        $field_name = $name[1];
+        $info = entity_get_info($entity_type);
+        $entities = entity_load($entity_type, array($eid), array($info['entity keys']['bundle'] => $bundle));
+        $entity = reset($entities);
+        $field_lang = field_language($entity_type, $entity, $field_name, $cb_lang);
+        if (entity_access('update', $entity_type, $entity)) {
+          $entity->{$field_name}[$field_lang][0]['value'] = glazed_builder_remove_base_url(rawurldecode(glazed_builder_dec($_POST['shortcode'])));
+          // Check if the entity type supports revisions.
+          $entity_info = entity_get_info($entity_type);
+          if (!empty($entity_info['entity keys']['revision'])) {
+            // Let's respect node revision setting.
+            if ($entity_type == 'node') {
+              $entity->revision = in_array('revision', variable_get('node_options_' . $entity->type, array()));
+            }
+            else {
+              $entity->revision = TRUE;
+            }
+          }
+          entity_save($entity_type, $entity);
+          cache_clear_all(NULL, 'cache_page');
+        }
+        drupal_json_output('');
+      }
+      break;
+
+    case 'glazed_load_container':
+      // type, name.
+      if ($_POST['type'] != 'block') {
+        // Container is not configured yet.
+        if (empty($_POST['type']) || empty($_POST['name'])) {
+          drupal_json_output();
+        }
+        $type = explode('|', $_POST['type']);
+        $entity_type = $type[0];
+        $bundle = $type[1];
+        $name = explode('|', $_POST['name']);
+        $eid = $name[0];
+        $field_name = $name[1];
+        $info = entity_get_info($entity_type);
+        $entities = entity_load($entity_type, array($eid), array($info['entity keys']['bundle'] => $bundle));
+        $entity = reset($entities);
+        print glazed_builder_add_base_url($entity->{$field_name}[LANGUAGE_NONE][0]['value']);
+      }
+      break;
+
+    case 'glazed_builder_get_cms_element_names':
+      drupal_json_output(glazed_builder_get_cms_element_names());
+      break;
+
+    case 'glazed_get_cms_element_settings':
+      // name.
+      if (user_access('edit via glazed builder')) {
+        $name = explode('-', $_POST['name']);
+        if ($name[0] == 'view') {
+          $view = views_get_view($name[1]);
+          $view->set_display($name[2]);
+          $view->init_handlers();
+          $exposed_form = $view->display_handler->get_plugin('exposed_form');
+          print $exposed_form->render_exposed_form(TRUE);
+        }
+        module_invoke_all('glazed_cms_element_settings', $_POST['name']);
+      }
+      break;
+
+    case 'glazed_builder_load_cms_element':
+      // name, settings, container, data.
+      print glazed_builder_load_cms_element($_POST['name'], $_POST['settings'], $_POST['container'], $_POST['data'], TRUE);
+      break;
+
+    case 'glazed_get_templates':
+      // url.
+      if (user_access('edit via glazed builder')) {
+        global $user;
+        $query = db_select('glazed_user_templates', 't')
+          ->fields('t', array(
+            'name',
+          ))
+          ->condition('t.uid', $user->uid);
+        $result = $query->execute();
+        $templates = array();
+        while ($template = $result->fetchAssoc()) {
+          $templates[] = $template['name'];
+        }
+        drupal_json_output($templates);
+      }
+      break;
+
+    case 'glazed_get_page_templates':
+      // url.
+      if (user_access('edit via glazed builder')) {
+        if (db_table_exists('glazed_page_templates')) {
+          $query = db_select('glazed_page_templates', 't')
+            ->fields('t', array('uuid', 'title', 'module', 'category', 'image'))
+            ->orderBy('weight', 'ASC');
+          $result = $query->execute();
+          $templates = array();
+          while ($template = $result->fetchAssoc()) {
+            $templates[] = array(
+              'title' => $template['title'],
+              'uuid' => $template['uuid'],
+              'module' => $template['module'],
+              'category' => $template['category'],
+              'image' => !(empty($template['image'])) ? $base_url . '/' . drupal_get_path('module', $template['module']) . '/' . $template['image'] : $base_url . '/' . drupal_get_path('module', 'glazed_builder') . '/' . 'glazed_templates/not-found.png',
+            );
+          }
+          drupal_json_output($templates);
+        }
+        else {
+          $messages = array(
+            '#type' => 'container',
+            '#attributes' => array(
+              'class' => array('alert alert-danger'),
+              'role' => 'alert'
+            ),
+            '0' => array(
+              '#theme' => 'html_tag',
+              '#tag' => 'span',
+              '#attributes' => array(
+                'class' => 'glyphicon glyphicon-exclamation-sign',
+                'aria-hidden' => TRUE,
+              ),
+            ),
+            '1' => array(
+              '#theme' => 'html_tag',
+              '#tag' => 'span',
+              '#attributes' => array('class' => 'sr-only'),
+              '#value' => 'Error:',
+            ),
+            '2' => array(
+              '#markup' => t('You have pending database updates. Please run update.php to install our page templates database. !here.', array(
+                  '!here' => l(t('here'), 'update.php'),
+                  array('absolute' => TRUE),
+                )
+              )
+            ),
+          );
+          drupal_json_output(render($messages));
+        }
+      }
+      break;
+
+    case 'glazed_load_page_template':
+      if (user_access('edit via glazed builder')) {
+        $query = db_select('glazed_page_templates', 't')
+          ->fields('t', array('template',))
+          ->condition('t.uuid', $_POST['uuid']);
+        $template = $query->execute()->fetchAssoc();
+        print glazed_builder_add_base_url($template['template']);
+      }
+      break;
+
+    case 'glazed_load_template':
+      // url, name.
+      if (user_access('edit via glazed builder')) {
+        global $user;
+        $query = db_select('glazed_user_templates', 't')
+          ->fields('t', array(
+            'template',
+          ))
+          ->condition('t.name', $_POST['name'])
+          ->condition('t.uid', $user->uid);
+        $template = $query->execute()->fetchAssoc();
+        print glazed_builder_add_base_url($template['template']);
+      }
+      break;
+
+    case 'glazed_save_template':
+      // url, name, template.
+      if (user_access('edit via glazed builder')) {
+        global $user;
+        db_insert('glazed_user_templates')
+          ->fields(array(
+            'uid' => $user->uid,
+            'name' => $_POST['name'],
+            'template' => glazed_builder_remove_base_url($_POST['template']),
+          ))
+          ->execute();
+
+        drupal_json_output('');
+      }
+      break;
+
+    case 'glazed_delete_template':
+      // url, name.
+      if (user_access('edit via glazed builder')) {
+        global $user;
+        db_delete('glazed_user_templates')
+          ->condition('name', $_POST['name'])
+          ->condition('uid', $user->uid)
+          ->execute();
+        drupal_json_output('');
+      }
+      break;
+
+    default:
+      break;
+  }
+}
+
+/**
+ * Returns image style in JSON format.
+ */
+function glazed_builder_image_style_url() {
+  $file = file_load($_POST['fid']);
+  if ($_POST['style'] != 'empty') {
+    drupal_json_output(image_style_url($_POST['style'], $file->uri) . '&fid=' . $_POST['fid']);
+  }
+  else {
+    drupal_json_output(file_create_url($file->uri) . '?fid=' . $_POST['fid']);
+  }
+}
+
+
+/**
+ * Set drupal cache button_styles.
+ */
+function glazed_builder_get_button_styles() {
+  $button_styles = &drupal_static(__FUNCTION__);
+  if (!isset($button_styles)) {
+    if ($cache = cache_get('button_styles')) {
+      $button_styles = $cache->data;
+    }
+    else {
+      $button_styles = array();
+
+      $glazed_element_button_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'glazed_elements/Buttons';
+      drupal_alter('glazed_builder_element_button_folder', $glazed_element_button_folder);
+
+      $elements = array();
+      $src = $glazed_element_button_folder;
+      if (is_dir($src)) {
+        $files = glazed_builder_recursive_get_files($src);
+        foreach ($files as $path => $filename) {
+          $info = pathinfo($path);
+          if ($info['extension'] == 'html') {
+            $elements[$info['filename']] = file_get_contents($path);
+          }
+        }
+      }
+      foreach ($elements as $key => &$element) {
+        preg_match('/class="(.*?)"/', $element, $match);
+        $classes = preg_replace('/(btn\s)|(btn-\w+\s)|(\saz-\w+$)/', '', $match[1]);
+        if (!empty($classes)) {
+          $element = $classes;
+        }
+        else {
+          unset($element);
+        }
+
+      }
+      $button_styles = $elements;
+      cache_set('button_styles', $button_styles, 'cache');
+    }
+  }
+  return $button_styles;
+}

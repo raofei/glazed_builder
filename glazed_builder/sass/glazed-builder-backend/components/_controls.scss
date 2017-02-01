@@ -1,0 +1,246 @@
+@charset "UTF-8";
+
+// CONTROL BUTTONS
+
+.glazed-editor.glazed.az-container {
+  //overflow: visible;
+  // margin-top: 34px !important;
+  // > .controls {
+  //   top: -34px !important;
+  // }
+}
+
+// Controls Styling
+
+.az-element .controls {
+  line-height: 1.2em;
+  border: none;
+  border-radius: 4px;
+  transition: opacity .2s ease-out;
+  transition-delay: 0s;
+  opacity: 0;
+  display: none;
+  background: #fcfcfc;
+  position: relative;
+  &::after {
+    border-radius: 3px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 3px 10px 0 rgba(50, 50, 50, 0.23);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .7s ease-in-out;
+  }
+  .control {
+    display: inline-block;
+    float: none;
+    border: none;
+    border-radius: 0;
+    padding: 6px 12px;
+    height: 32px;
+    top: auto;
+    margin: 0;
+    &:first-child {
+      border-radius: 4px;
+    }
+    &:last-child {
+      border-radius: 4px;
+    }
+    &.btn-default {
+      background: #fcfcfc;
+      color: #555;
+      &:hover, &:focus {
+        background: #ddd;
+      }
+    }
+    &.drag-and-drop {
+      cursor: move;
+      text-transform: uppercase;
+      &::before {
+        margin-right: 3px;
+      }
+    }
+  }
+  &.btn-group-xs {
+    .control {
+      padding: 8px;
+      border-left: none;
+      border-right: none;
+      font-size: 12px;
+      line-height: 14px;
+      &.default {
+        background: #aaa;
+        color: #eee;
+      }
+    }
+    .control-label {
+      position: relative;
+      top: -2px;
+    }
+  }
+}
+
+// Controls positioning
+.az-element > .controls {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3500;
+  display: none;
+  text-align: center;
+  word-wrap: normal;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+}
+.az-element--controls-top-left > .controls {
+  left: 0px;
+  // top: -26px!important;
+  top: 0;
+  transform: none;
+}
+// Not just Clearfix, "." makes it a collapsing margin breaker
+div.az-container:before,
+div.glazed-editor div.az-wizard:before,
+div.glazed-editor div.az-ctnr:before,
+div.glazed-editor div.az-element.az-row:before,
+div.glazed-editor div.az-element.az-section:before,
+div.glazed-editor div.az-element.az-grid ul:before,
+div.glazed-editor div.az-tabs .tab-content:before,
+div.glazed-editor div.az-accordion.az-element:before {
+  content: ".";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: visible;
+  overflow: hidden;
+}
+
+// Main Builder Buttons
+.az-container > .controls {
+  position: absolute;
+  right: 0;
+  left: auto;
+  opacity: 1;
+  // top: -39px;
+  // transform: none;
+  &::after {
+    opacity: 1;
+  }
+}
+.az-container > .controls > .control:first-child {
+  width: 41px;
+  background: #01b0ef url('../images/glazed-builder-logo.png') no-repeat left center / 54px;
+  background-size: 220%;
+  cursor: default;
+  position: relative;
+  text-indent: -99999px;
+  overflow: hidden;
+  transition: width .2s ease-out, background .2s ease-out;
+  transition-delay: .6s;
+  &:hover {
+    width: 100px;
+    background: #01b0ef url('../images/glazed-builder-logo.png') no-repeat center center / 54px;
+    background-size: 80%;
+  }
+}
+
+// Nest Container Main Buttons
+.glazed-editor .az-container {
+  top: 0;
+}
+.az-container .az-container > .controls > .control:first-child {
+  cursor: move;
+}
+
+// This class is removed when you click the eye icon in main buttons
+.glazed-editor {
+  .az-element .controls {
+    display: block !important;
+  }
+  .az-element {
+    margin-top: 28px!important;
+  }
+  .az-column {
+    margin-top: 0!important;
+    .az-column {
+      margin-top: 28px;
+    }
+  }
+  .az-slide {
+    margin-top: 0!important;
+  }
+  // .az-section > .container .az-row {
+  //   margin-top: 0!important;
+  // }
+  // .az-section .az-section > .container .az-row {
+  //   margin-top: 28px!important;
+  // }
+
+  // Element Button styling
+  .az-element > .controls:hover {
+    z-index: 3501;
+  }
+}
+// Show controls
+.az-container:hover > .controls,
+.glazed-editor .controls--show {
+  display: block;
+  opacity: 1;
+  transition: opacity .2 ease-in-out;
+  transition-delay: 0s;
+  &::after {
+    opacity: 1;
+  }
+}
+.az-row > .controls {
+  transition: none!important;
+}
+
+
+// Disabled Functions
+.control.toggle-animations,
+.control.copy,
+.control.paste {
+  display: none!important;
+}
+
+.glyphicon {
+  font-family: 'Glyphicons Halflings' !important;
+}
+.controls .glyphicon {
+  font-family: inherit!important
+}
+.glyphicon:before,
+.glyphicon::before {
+  font-family: "Glyphicons Halflings"!important;
+}
+
+// indicate columns can be dragged horiztonally to swap them
+.az-column > .controls.btn-group-xs {
+  .btn.drag-and-drop {
+    cursor: col-resize;
+  }
+}
+.az-tabs a[role=tab] {
+  cursor: col-resize;
+}
+
+
+// Make sure stuff is visible/clickable
+.az-separator {
+  min-height: 1px;
+}
+.az-container.glazed {
+  min-height: 50px;
+}
+
+.az-highlight {
+  z-index: 10000 !important;
+}
+.az-highlight .controls {
+  display: block !important;
+}

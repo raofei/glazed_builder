@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+#az-editor-tabs .style {
+  .settings {
+    margin-top: 44px;
+  }
+  .layout {
+    padding-top: 0;
+    input {
+      position: absolute;
+      text-align: center;
+      padding: 3px 0;
+      height: 24px;
+      width: 34px;
+      margin: 0;
+      border: 1px solid transparent;
+      font-size: 12px;
+      line-height: 12px;
+      background: #aaa;
+      color: #fff;
+    }
+    .margin,
+    .border,
+    .padding,
+    .content {
+      margin: 44px;
+      position: relative;
+      border: 5px solid transparent;
+    }
+    .margin {
+      background: #fff;
+      border: 1px dashed #bbb;
+    }
+    .border {
+      background: #eee;
+    }
+    .padding {
+      background: #f9f9f9;
+    }
+
+    input[name="margin_top"],
+    input[name="border_top_width"],
+    input[name="padding_top"] {
+      top: 11px;
+      left: 50%;
+      margin-left: -17px;
+    }
+    input[name="margin_right"],
+    input[name="border_right_width"],
+    input[name="padding_right"] {
+      top: 50%;
+      right: 5px;
+      margin-top: -12px;
+    }
+    input[name="margin_bottom"],
+    input[name="border_bottom_width"],
+    input[name="padding_bottom"] {
+      bottom: 11px;
+      left: 50%;
+      margin-left: -17px;
+    }
+    input[name="margin_left"],
+    input[name="border_left_width"],
+    input[name="padding_left"] {
+      top: 50%;
+      left: 5px;
+      margin-top: -12px;
+    }
+    label {
+      display: inline-block;
+      position: absolute;
+      font-size: 11px;
+      line-height: 9px;
+      top: 6px;
+      left: 5px;
+      color: #2C2C2C;
+      margin: 0;
+      padding: 0;
+    }
+    .content {
+      border: none;
+      height: 50px;
+      padding: 0px;
+      text-align: center;
+      font-size: 10px;
+      line-height: 11px;
+      box-sizing: border-box;
+    }
+  }
+}
+

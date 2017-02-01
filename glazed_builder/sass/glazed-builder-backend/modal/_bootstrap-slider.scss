@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+.modal.glazed .modal-content {
+    // BOOTSTRAP SLIDER
+    .slider {
+      position: relative;
+      display: block;
+    }
+    .slider-handle {
+      background: #000;
+    }
+    .slider + input.form-control {
+      display: block !important;
+      min-width: 50px;
+      width: 50px;
+      position: absolute;
+      left: 225px;
+      top: 0;
+      margin-top: -7px;
+    }
+}
