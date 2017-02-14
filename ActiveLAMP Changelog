@@ -1,0 +1,27 @@
+# Change Log
+
+##Update to Glazed Builder 1.1.0 - 2017-2-13
+
+### Added / Adjusted
+
+#### /glazed_elements/XPRIZE/*
+- XPRIZE elements to be used as templates (9b70908)
+
+#### /glazed_builder/glazed_builder.js / Regenerated glazed_builder.min.js
+- decodeURI causing issues with the XPRIZE templates, comment left in code (7db0bc0:988-989)
+- Ability for content narrow in the carbide_builder (7db0bc0:7331-7336)
+
+#### js/ac_drupal
+- Ability for content narrow in the ckeditor settings (fac3692)
+
+#### carbide_builder/build/carbide-builder/out.js
+- Ability for content narrow in the carbide_builder (b9487c1)
+
+#### carbide_builder/build/carbide-param-types/elements/textarea.js
+- Ability for content narrow in the carbide_builder textarea (f991138)
+
+#### carbide_builder/carbide-param-types.js / Regenerated .min.js
+- Ability for content narrow in the carbide_builder textarea (0766f80)
+
+#### sass/social.scss / Regenerated .css
+- fa-link and fa-rss for social buttons (ce35665)
