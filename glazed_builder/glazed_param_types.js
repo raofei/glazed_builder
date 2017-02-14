@@ -1399,6 +1399,12 @@
             attributes: {
               'class': 'btn btn-default'
             }
+          }, {
+            name: 'Content Narrow',
+            element: 'div',
+            attributes: {
+              'class': 'content-narrow'
+            }
           }, ];
 
           var palette = [];
