@@ -1,0 +1,39 @@
+.quote-1 {
+  width: 100%;
+  color: #000;
+}
+.quote-inner-container {
+  width: 30%;
+  margin: 0 10%;
+}
+
+.number-container {
+  float: left;
+  width: 5%;
+  margin: 0px;
+}
+.item-container {
+  float: left; width: 25%; margin: 5px
+}
+
+/* ONE COLUMN */
+@media only screen and (max-width: 991px) {
+  body {
+    -webkit-text-size-adjust: 80%;
+  }
+  .info { width: 70%;}
+  .info-title {
+    font-size: 225%;
+  }
+  .quote-1 {
+    top:70%; width: 80%; margin: 10%;
+  }
+  .quote-2 {
+
+  }
+  .quote-inner-container {
+    width: 100%;
+    margin: 0;
+  }
+
+}

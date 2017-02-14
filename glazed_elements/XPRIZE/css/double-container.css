@@ -1,0 +1,34 @@
+.obstacle-title {
+  font-size: 400%; color: #bab798; margin: 0; -webkit-margin-before: 0; -webkit-margin-after: 0; line-height: .8;
+}
+
+.obstacle-container {
+  width: 90%; margin-left:5%;
+}
+
+@media only screen and (max-width: 1300px) and (min-width: 1200px) {
+  .obstacle-title {
+    font-size: 350%;
+  }
+}
+
+/* ONE COLUMN */
+@media only screen and (max-width: 991px) {
+  .item-container {
+    clear: right;
+    width: 55%;
+  }
+
+
+  .quote-1 h3, .obstacle-container h3 {
+    font-size:140% !important;
+  }
+
+  .obstacle-title {
+    font-size: 325%;
+  }
+
+  .obstacle-container {
+    width: 90%; margin: 0 5%;
+  }
+}

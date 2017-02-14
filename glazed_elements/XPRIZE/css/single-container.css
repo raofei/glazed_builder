@@ -1,0 +1,45 @@
+.ie p.team-name, .ie p.team-location {
+  margin: 0;
+}
+
+.ie p.team-location {
+  margin-bottom: 10px;
+}
+.column-container {
+  padding:0; line-height: 0; position: relative;
+}
+
+.single-container {
+  text-align: center; font-size: 18px; position: absolute; width: 100%; line-height: 1; color: #fff;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%)
+}
+
+.episode-number {
+  color: #e4db52;
+  -webkit-margin-after: .5em;
+  font-size: .9em;
+}
+
+.team-name {
+  -webkit-margin-after: 0;
+  -webkit-margin-before: 0;
+  color: #cdcdcd;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  font-size: 1.5em;
+  font-family: 'futura-pt', FuturaStdHeavy;
+  font-weight: 500;
+}
+
+.team-location {
+  -webkit-margin-before: 0;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #cdcdcd;
+  font-size: .8em;
+  font-family: 'futura-pt', FuturaStdMedium;
+  font-weight: 500;
+}
