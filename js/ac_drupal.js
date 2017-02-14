@@ -303,6 +303,7 @@
         { name: 'Small', element: 'small' },
         { name: 'Button Primary', element: 'div', attributes: { 'class': 'btn btn-primary' } },
         { name: 'Button Default', element: 'div', attributes: { 'class': 'btn btn-default' } },
+        { name: 'Content Narrow', element: 'div', attributes: { 'class': 'content-narrow'  } },
       ];
 
       // Load pallets from theme settings.
