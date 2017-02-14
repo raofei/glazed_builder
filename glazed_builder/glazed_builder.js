@@ -985,7 +985,8 @@
   function glazed_get_elements(callback) {
     if ('glazed_template_elements' in window) {
       for (var name in window.glazed_template_elements) {
-        window.glazed_template_elements[name].html = decodeURIComponent(window.glazed_template_elements[name].html);
+        //window.glazed_template_elements[name].html = decodeURIComponent(window.glazed_template_elements[name].html);
+        window.glazed_template_elements[name].html = window.glazed_template_elements[name].html;
       }
       callback(window.glazed_template_elements);
       return;
@@ -7326,6 +7327,12 @@
             element: 'div',
             attributes: {
               'class': 'btn btn-default'
+            }
+          }, {
+            name: 'Content Narrow',
+            element: 'div',
+            attributes: {
+              'class': 'content-narrow'
             }
           }, ];
 
