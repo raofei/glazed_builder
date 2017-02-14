@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAGE,gCAA4B,CAC1B,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CACb,SAAS,CAAE,WAAW,CAExB,iCAA6B,CAC3B,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CACb,SAAS,CAAE,YAAY",
+"sources": ["../../sass/elements/separator.scss"],
+"names": [],
+"file": "separator.css"
+}
