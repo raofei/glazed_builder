@@ -25,3 +25,6 @@
 
 #### sass/social.scss / Regenerated .css
 - fa-link and fa-rss for social buttons (ce35665)
+
+#### glazed_builder/vendor/bootstrap-custom/css/bootstrap.css / Regenerated min.css
+- Removed the breadcrumb styles (fbb1938)
