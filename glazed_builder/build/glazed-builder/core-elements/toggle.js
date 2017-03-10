@@ -39,7 +39,7 @@
           'el_class'] + '" style="' + this.attrs['style'] + '"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#' +
         this.parent.id + '" href="#' + this.id + '">' + this.attrs['title'] + '</a></h4></div><div id="' +
         this.id + '" class="panel-collapse collapse"><div class="panel-body az-ctnr"></div></div></div>');
-      this.dom_content_element = $(this.dom_element).find('.panel-body');
+      this.dom_content_element = this.dom_element.find('.panel-body');
       ToggleElement.baseclass.prototype.render.apply(this, arguments);
     },
   });

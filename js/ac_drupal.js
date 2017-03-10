@@ -15,7 +15,7 @@
   function glazed_builder_select(options, input) {
     var single_select = '<select>';
     for (var key in options) {
-      single_select = single_select + '<option value="' + key + '">"' + options[key] + '"</option>';
+      single_select = single_select + '<option value="' + key + '">' + options[key] + '</option>';
     }
     single_select = single_select + '</select>';
     $(input).css('display', 'none');
@@ -40,7 +40,7 @@
         $(input).val($(this).val());
       });
     });
-    $(select).parent().find('.chosen-container').width('100%');
+    $(select).parent().find('.chosen-container').width('260px');
     return select;
   }
 
@@ -49,12 +49,13 @@
     $(input).css('display', 'none');
     $(input).wrap('<div class="ac-select-image"></div>');
     var image_styles_input = $('<input type="text" name="image_style" style="display: none">').prependTo($(input).closest('.ac-select-image'));
-    $(input).closest('.ac-select-image').prepend('<label>' + Drupal.t('Resize Image') + '</label>');
+    $(input).closest('.ac-select-image').prepend('<label style="width: 100%;">' + Drupal.t('Resize Image') + '</label>');
     $(input).closest('.ac-select-image').prepend('<ul class="preview"></ul>');
     $(input).closest('.ac-select-image').prepend('<button class="ac-select-image btn btn-default">' + Drupal.t('Select Image') + '</button>');
     $(input).closest('.ac-select-image').once('mediaBrowserLaunch', function () {
       Drupal.media.popups.getDialogOptions = function () {
         return {
+          title: Drupal.t('Media browser'),
           buttons: {},
           dialogClass: 'media-wrapper',
           modal: true,
@@ -244,7 +245,7 @@
           $fileInput.trigger('change');
         }, globalOptions);
         e.preventDefault();
-        $(mediaIframe).load(function () {
+        $(mediaIframe).on("load", function() {
           var zindex = parseInt($('#az-editor-modal').css('z-index'));
           $(mediaIframe).parent().css('z-index', zindex + 1);
           $(mediaIframe).contents().find('[aria-controls="media-tab-youtube"]').remove();

@@ -52,7 +52,7 @@
       var element = this;
       var images = this.attrs['images'].split(',');
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-images-carousel carousel ' +
-        'slide ' + this.attrs['el_class'] + '" data-ride="carousel" style="' + this.attrs['style'] +
+        'slide ' + this.get_el_classes() + '" data-ride="carousel" style="' + this.attrs['style'] +
         '"></div>');
       var hide = this.attrs['hide'].split(',');
       if ($.inArray('pagination_control', hide) < 0) {
@@ -60,23 +60,23 @@
         for (var i = 0; i < images.length; i++) {
           $(indicators).append('<li data-target="#' + this.id + '" data-slide-to="' + i + '"></li>');
         }
-        $(this.dom_element).append(indicators);
+        this.dom_element.append(indicators);
       }
 
       var inner = $('<div class="carousel-inner"></div>');
       for (var i = 0; i < images.length; i++) {
         var item = $('<img class="item" style="width:100%" src="' + images[i] + '" alt="' + this.attrs['alt'] + '" title="' + this.attrs['title'] + '">').appendTo(inner);
       }
-      $(this.dom_element).append(inner);
+      this.dom_element.append(inner);
       if ($.inArray('prev_next_buttons', hide) < 0) {
         var controls = $('<a class="left carousel-control" href="#' + this.id +
           '" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a class="right carousel-control" href="#' +
           this.id + '" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>');
-        $(this.dom_element).append(controls);
+        this.dom_element.append(controls);
       }
 
-      $(this.dom_element).find('.carousel-indicators li:first').addClass(p + 'active');
-      $(this.dom_element).find('.carousel-inner .item:first').addClass(p + 'active');
+      this.dom_element.find('.carousel-indicators li:first').addClass(p + 'active');
+      this.dom_element.find('.carousel-inner .item:first').addClass(p + 'active');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },

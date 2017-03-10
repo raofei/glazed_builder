@@ -224,10 +224,7 @@ glazedElements.prototype.try_render_unknown_elements=function () {
       }
     }
 function BaseElement(parent, position) {
-    if (glazed_frontend)
-      this.id = _.uniqueId('f');
-    else
-      this.id = _.uniqueId('b');
+    this.id = Math.random().toString(36).substr(2, 5);
     if (parent != null) {
       this.parent = parent;
       if (typeof position === 'boolean') {
@@ -276,29 +273,39 @@ BaseElement.prototype.get_hover_style=function () {
       else
         return '';
     }
+BaseElement.prototype.get_el_classes=function () {
+      var classes = this.attrs['el_class'];
+      if (this.attrs['shadow'] > 0) {
+        classes = classes + ' ' + 'glazed-shadow-' + this.attrs['shadow'];
+      }
+      if (this.attrs['hover_shadow'] > 0) {
+        classes = classes + ' ' + 'glazed-shadow-hover-' + this.attrs['hover_shadow'];
+      }
+      return classes;
+    }
 BaseElement.prototype.showed=function ($) {
       if ('pos_left' in this.attrs && this.attrs['pos_left'] != '')
-        $(this.dom_element).css("left", this.attrs['pos_left']);
+        this.dom_element.css("left", this.attrs['pos_left']);
       if ('pos_right' in this.attrs && this.attrs['pos_right'] != '')
-        $(this.dom_element).css("right", this.attrs['pos_right']);
+        this.dom_element.css("right", this.attrs['pos_right']);
       if ('pos_top' in this.attrs && this.attrs['pos_top'] != '')
-        $(this.dom_element).css("top", this.attrs['pos_top']);
+        this.dom_element.css("top", this.attrs['pos_top']);
       if ('pos_bottom' in this.attrs && this.attrs['pos_bottom'] != '')
-        $(this.dom_element).css("bottom", this.attrs['pos_bottom']);
+        this.dom_element.css("bottom", this.attrs['pos_bottom']);
       if ('pos_width' in this.attrs && this.attrs['pos_width'] != '')
-        $(this.dom_element).css("width", this.attrs['pos_width']);
+        this.dom_element.css("width", this.attrs['pos_width']);
       if ('pos_height' in this.attrs && this.attrs['pos_height'] != '')
-        $(this.dom_element).css("height", this.attrs['pos_height']);
+        this.dom_element.css("height", this.attrs['pos_height']);
       if ('pos_zindex' in this.attrs && this.attrs['pos_zindex'] != '')
-        $(this.dom_element).css("z-index", this.attrs['pos_zindex']);
+        this.dom_element.css("z-index", this.attrs['pos_zindex']);
       if ('hover_style' in this.attrs && this.attrs['hover_style'] != '') {
         $('head').find('#hover-style-' + this.id).remove();
         $('head').append(this.get_hover_style());
-        $(this.dom_element).addClass('hover-style-' + this.id);
+        this.dom_element.addClass('hover-style-' + this.id);
       }
     }
 BaseElement.prototype.render=function ($) {
-      $(this.dom_element).attr('data-az-id', this.id);
+      this.dom_element.attr('data-az-id', this.id);
     }
 BaseElement.prototype.recursive_render=function () {
       for (var i = 0; i < this.children.length; i++) {
@@ -337,7 +344,7 @@ BaseElement.prototype.replace_render=function () {
     }
 BaseElement.prototype.update_dom=function () {
       this.detach_children();
-      $(this.dom_element).remove();
+      this.dom_element.remove();
       this.parent.detach_children();
       this.render($);
       this.attach_children();
@@ -601,26 +608,26 @@ AnimatedElement.prototype.set_in_timeout=function () {
       var element = this;
       element.in_timeout = setTimeout(function() {
         element.clear_animation();
-        $(element.dom_element).css('opacity', '');
-        $(element.dom_element).removeClass('animated');
-        $(element.dom_element).removeClass(element.attrs['an_in']);
-        $(element.dom_element).removeClass(element.attrs['an_out']);
+        element.dom_element.css('opacity', '');
+        element.dom_element.removeClass('animated');
+        element.dom_element.removeClass(element.attrs['an_in']);
+        element.dom_element.removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).addClass('animated');
+        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          $(element.dom_element).addClass('infinite');
+          element.dom_element.addClass('infinite');
         }
-        $(element.dom_element).addClass(element.attrs['an_in']);
+        element.dom_element.addClass(element.attrs['an_in']);
         element.animation_in = true;
       }, Math.round(element.attrs['an_in_delay']));
     }
 AnimatedElement.prototype.start_in_animation=function () {
       var element = this;
-      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
+      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_in'] != '') {
           if (element.animated) {
             if (element.animation_out) {
@@ -648,26 +655,26 @@ AnimatedElement.prototype.set_out_timeout=function () {
       var element = this;
       element.out_timeout = setTimeout(function() {
         element.clear_animation();
-        $(element.dom_element).css('opacity', '');
-        $(element.dom_element).removeClass('animated');
-        $(element.dom_element).removeClass(element.attrs['an_in']);
-        $(element.dom_element).removeClass(element.attrs['an_out']);
+        element.dom_element.css('opacity', '');
+        element.dom_element.removeClass('animated');
+        element.dom_element.removeClass(element.attrs['an_in']);
+        element.dom_element.removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).addClass('animated');
+        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          $(element.dom_element).addClass('infinite');
+          element.dom_element.addClass('infinite');
         }
-        $(element.dom_element).addClass(element.attrs['an_out']);
+        element.dom_element.addClass(element.attrs['an_out']);
         element.animation_out = true;
       }, Math.round(element.attrs['an_out_delay']));
     }
 AnimatedElement.prototype.start_out_animation=function () {
       var element = this;
-      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
+      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_out'] != '') {
           if (element.animated) {
             if (element.animation_in) {
@@ -694,28 +701,28 @@ AnimatedElement.prototype.start_out_animation=function () {
 AnimatedElement.prototype.clear_animation=function () {
       if (this.animation_in) {
         if (this.hidden_before_in) {
-          $(this.dom_element).css('opacity', '1');
+          this.dom_element.css('opacity', '1');
         }
         if (this.hidden_after_in) {
-          $(this.dom_element).css('opacity', '0');
+          this.dom_element.css('opacity', '0');
         }
       }
       if (this.animation_out) {
         if (this.hidden_before_in) {
-          $(this.dom_element).css('opacity', '0');
+          this.dom_element.css('opacity', '0');
         }
         if (this.hidden_after_in) {
-          $(this.dom_element).css('opacity', '1');
+          this.dom_element.css('opacity', '1');
         }
       }
-      if ($(this.dom_element).hasClass('animated')) {
-        $(this.dom_element).css('animation-duration', '');
-        $(this.dom_element).css('-webkit-animation-duration', '');
-        $(this.dom_element).removeClass('animated');
+      if (this.dom_element.hasClass('animated')) {
+        this.dom_element.css('animation-duration', '');
+        this.dom_element.css('-webkit-animation-duration', '');
+        this.dom_element.removeClass('animated');
         this.animated = false;
-        $(this.dom_element).removeClass('infinite');
-        $(this.dom_element).removeClass(this.attrs['an_in']);
-        $(this.dom_element).removeClass(this.attrs['an_out']);
+        this.dom_element.removeClass('infinite');
+        this.dom_element.removeClass(this.attrs['an_in']);
+        this.dom_element.removeClass(this.attrs['an_out']);
         this.animation_in = false;
         this.animation_out = false;
       }
@@ -761,10 +768,10 @@ AnimatedElement.prototype.animation=function () {
       element.hidden_before_in = _.indexOf(element.attrs['an_hidden'].split(','), 'before_in') >= 0;
       element.hidden_after_in = _.indexOf(element.attrs['an_hidden'].split(','), 'after_in') >= 0;
       if (element.hidden_before_in) {
-        $(element.dom_element).css('opacity', '0');
+        element.dom_element.css('opacity', '0');
       }
       if (element.hidden_after_in) {
-        $(element.dom_element).css('opacity', '1');
+        element.dom_element.css('opacity', '1');
       }
 
       var parent_number = element.attrs['an_parent'];
@@ -801,7 +808,7 @@ AnimatedElement.prototype.animation=function () {
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  $(element.dom_element).waypoint(function(direction) {
+                  element.dom_element.waypoint(function(direction) {
                     if (!element.animated) {
                       element.start_in_animation();
                     }
@@ -849,7 +856,7 @@ AnimatedElement.prototype.showed=function ($) {
     }
 AnimatedElement.prototype.render=function ($) {
       if ('an_name' in this.attrs && this.attrs['an_name'] != '') {
-        $(this.dom_element).attr('data-an-name', this.attrs['an_name']);
+        this.dom_element.attr('data-an-name', this.attrs['an_name']);
       }
       AnimatedElement.baseclass.prototype.render.apply(this, arguments);
     }
@@ -881,16 +888,16 @@ SectionElement.prototype.showed=function ($) {
             ],
             loaded: 'waypoint' in $.fn && 'parallax' in $.fn,
             callback: function() {
-              $(element.dom_element).waypoint(function(direction) {
-                var background_position = $(element.dom_element).css('background-position');
+              element.dom_element.waypoint(function(direction) {
+                var background_position = element.dom_element.css('background-position');
                 var match = background_position.match(/([\w%]*) [\w%]/);
                 if (match == null)
                   var v = '50%';
                 else
                   var v = match[1];
-                $(element.dom_element).css('background-attachment', element.attrs['parallax_mode']);
-                $(element.dom_element).css('background-position', v + ' 0');
-                $(element.dom_element).parallax(v, element.attrs['parallax_speed'] / 100);
+                element.dom_element.css('background-attachment', element.attrs['parallax_mode']);
+                element.dom_element.css('background-position', v + ' 0');
+                element.dom_element.parallax(v, element.attrs['parallax_speed'] / 100);
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -902,7 +909,7 @@ SectionElement.prototype.showed=function ($) {
           });
           break;
         case 'fixed':
-          $(element.dom_element).css('background-attachment', 'fixed');
+          element.dom_element.css('background-attachment', 'fixed');
           break;
         case 'youtube':
           function youtube_parser(url) {
@@ -925,14 +932,14 @@ SectionElement.prototype.showed=function ($) {
             ],
             loaded: 'waypoint' in $.fn && 'mb_YTPlayer' in $.fn,
             callback: function() {
-              $(element.dom_element).waypoint(function(direction) {
-                $(element.dom_element).attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
-                    'video_youtube']) + "',containment:'#" + element.id +
+              element.dom_element.waypoint(function(direction) {
+                element.dom_element.attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
+                    'video_youtube']) + "',containment:'[data-az-id=" + element.id + "]" +
                   "', showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
                   mute.toString() + ", startAt:" + element.attrs['video_start'] + ", stopAt:" +
-                  element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'default'}");
-                $(element.dom_element).mb_YTPlayer();
-                $(element.dom_element).playYTP();
+                  element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'highres'}");
+                element.dom_element.mb_YTPlayer();
+                element.dom_element.playYTP();
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -994,7 +1001,7 @@ ContainerElement.prototype.showed=function ($) {
           path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
           loaded: 'waypoint' in $.fn,
           callback: function() {
-            $(element.dom_element).waypoint(function(direction) {
+            element.dom_element.waypoint(function(direction) {
               if (!element.rendered) {
                 element.rendered = true;
                 element.load_container();
@@ -1021,10 +1028,10 @@ ContainerElement.prototype.load_container=function () {
               $(shortcode).appendTo(element.dom_content_element);
               $(element.dom_content_element).find('> script').detach().appendTo('head');
               $(element.dom_content_element).find('> link[href]').detach().appendTo('head');
-              $(element.dom_element).css('display', '');
-              $(element.dom_element).addClass('glazed');
+              element.dom_element.css('display', '');
+              element.dom_element.addClass('glazed');
               element.parse_html(element.dom_content_element);
-              $(element.dom_element).attr('data-az-id', element.id);
+              element.dom_element.attr('data-az-id', element.id);
               element.html_content = true;
               for (var i = 0; i < element.children.length; i++) {
                 element.children[i].recursive_render();
@@ -1045,7 +1052,7 @@ ContainerElement.prototype.load_container=function () {
                 element.loaded_container = element.attrs['container'];
                 element.parse_shortcode(shortcode);
 
-                $(element.dom_element).attr('data-az-id', element.id);
+                element.dom_element.attr('data-az-id', element.id);
                 if (window.glazed_editor) {
                   element.show_controls();
                   element.update_sortable();
@@ -1079,7 +1086,7 @@ ContainerElement.prototype.update_dom=function () {
     }
 ContainerElement.prototype.render=function ($) {
       this.dom_element = $('<div class="az-element az-container"><div class="az-ctnr"></div></div>');
-      this.dom_content_element = $(this.dom_element).find('.az-ctnr');
+      this.dom_content_element = this.dom_element.find('.az-ctnr');
       ContainerElement.baseclass.prototype.render.apply(this, arguments);
     }
 ContainerElement.prototype.recursive_render=function () {
@@ -1125,11 +1132,11 @@ LayersElement.prototype.showed=function ($) {
         }
 
         $(window).on('resize.az_layers' + element.id, function() {
-          var width = $(element.dom_element).width();
+          var width = element.dom_element.width();
           if (!('o_width' in element.attrs) || element.attrs['o_width'] == '')
             element.attrs['o_width'] = width;
           var ratio = width / element.attrs['o_width'];
-          $(element.dom_element).css('font-size', ratio * 100 + '%');
+          element.dom_element.css('font-size', ratio * 100 + '%');
           $(element.dom_content_element).css('height', element.attrs['height'] * ratio + 'px');
           update_font_sizes(element, ratio);
         });
@@ -1146,10 +1153,10 @@ register_animated_element('az_tabs', true, TabsElement);
 TabsElement.prototype.params=[{"param_name":"az_dirrection","value":"","safe":true},{"param_name":"an_start","value":"","safe":true},{"param_name":"an_in","value":"","safe":true},{"param_name":"an_out","value":"","safe":true},{"param_name":"an_hidden","value":"","safe":true},{"param_name":"an_infinite","value":"","safe":true},{"param_name":"an_offset","value":"100","safe":true},{"param_name":"an_duration","value":"1000","safe":true},{"param_name":"an_in_delay","value":"0","safe":true},{"param_name":"an_out_delay","value":"0","safe":true},{"param_name":"an_parent","value":"1","safe":true},{"param_name":"an_name","value":"","safe":true},{"param_name":"el_class","value":"","safe":true},{"param_name":"style","value":"","safe":true},{"param_name":"hover_style","value":"","safe":true},{"param_name":"pos_left","value":"","safe":true},{"param_name":"pos_right","value":"","safe":true},{"param_name":"pos_top","value":"","safe":true},{"param_name":"pos_bottom","value":"","safe":true},{"param_name":"pos_width","value":"","safe":true},{"param_name":"pos_height","value":"","safe":true},{"param_name":"pos_zindex","value":"","safe":true}];
 TabsElement.prototype.showed=function ($) {
       TabsElement.baseclass.prototype.showed.apply(this, arguments);
-      $(this.dom_element).find('ul.nav-tabs li:first a')[fp + 'tab']('show');
+      this.dom_element.find('ul.nav-tabs li:first a')[fp + 'tab']('show');
     }
 TabsElement.prototype.render=function ($) {
-      this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.attrs['el_class'] + this.attrs['az_dirrection'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.get_el_classes() + this.attrs['az_dirrection'] + '" style="' + this.attrs[
         'style'] + '"></div>');
       var menu = '<ul class="nav nav-tabs" role="tablist">';
       for (var i = 0; i < this.children.length; i++) {
@@ -1157,7 +1164,7 @@ TabsElement.prototype.render=function ($) {
           i].attrs['title'] + '</a></li>';
       }
       menu += '</ul>';
-      $(this.dom_element).append(menu);
+      this.dom_element.append(menu);
       var content = '<div id="' + this.id + '" class="tab-content"></div>';
       this.dom_content_element = $(content).appendTo(this.dom_element);
       TabsElement.baseclass.prototype.render.apply(this, arguments);
@@ -1169,7 +1176,7 @@ register_element('az_tab', true, TabElement);
 TabElement.prototype.params=[{"param_name":"title","value":"Title","safe":true},{"param_name":"el_class","value":"","safe":true},{"param_name":"style","value":"","safe":true},{"param_name":"hover_style","value":"","safe":true},{"param_name":"pos_left","value":"","safe":true},{"param_name":"pos_right","value":"","safe":true},{"param_name":"pos_top","value":"","safe":true},{"param_name":"pos_bottom","value":"","safe":true},{"param_name":"pos_width","value":"","safe":true},{"param_name":"pos_height","value":"","safe":true},{"param_name":"pos_zindex","value":"","safe":true}];
 TabElement.prototype.render=function ($) {
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-ctnr az-tab tab-pane ' +
-        this.attrs['el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+        this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       TabElement.baseclass.prototype.render.apply(this, arguments);
     }
@@ -1183,19 +1190,19 @@ register_animated_element('az_accordion', true, AccordionElement);
 AccordionElement.prototype.params=[{"param_name":"collapsed","value":"","safe":true},{"param_name":"an_start","value":"","safe":true},{"param_name":"an_in","value":"","safe":true},{"param_name":"an_out","value":"","safe":true},{"param_name":"an_hidden","value":"","safe":true},{"param_name":"an_infinite","value":"","safe":true},{"param_name":"an_offset","value":"100","safe":true},{"param_name":"an_duration","value":"1000","safe":true},{"param_name":"an_in_delay","value":"0","safe":true},{"param_name":"an_out_delay","value":"0","safe":true},{"param_name":"an_parent","value":"1","safe":true},{"param_name":"an_name","value":"","safe":true},{"param_name":"el_class","value":"","safe":true},{"param_name":"style","value":"","safe":true},{"param_name":"hover_style","value":"","safe":true},{"param_name":"pos_left","value":"","safe":true},{"param_name":"pos_right","value":"","safe":true},{"param_name":"pos_top","value":"","safe":true},{"param_name":"pos_bottom","value":"","safe":true},{"param_name":"pos_width","value":"","safe":true},{"param_name":"pos_height","value":"","safe":true},{"param_name":"pos_zindex","value":"","safe":true}];
 AccordionElement.prototype.showed=function ($) {
       AccordionElement.baseclass.prototype.showed.apply(this, arguments);
-      $(this.dom_element).find('> .az-toggle > .in').removeClass(p + 'in');
-      $(this.dom_element).find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
+      this.dom_element.find('> .az-toggle > .in').removeClass(p + 'in');
+      this.dom_element.find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
         'toggle': false,
         'parent': '#' + this.id
       });
-      $(this.dom_element).find('> .az-toggle > .collapse:first')[fp + 'collapse']({
+      this.dom_element.find('> .az-toggle > .collapse:first')[fp + 'collapse']({
         'toggle': this.attrs['collapsed'] != 'yes',
         'parent': '#' + this.id
       });
     }
 AccordionElement.prototype.render=function ($) {
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-accordion panel-group ' +
-        this.attrs['el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+        this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       AccordionElement.baseclass.prototype.render.apply(this, arguments);
     }
@@ -1212,7 +1219,7 @@ ToggleElement.prototype.render=function ($) {
           'el_class'] + '" style="' + this.attrs['style'] + '"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#' +
         this.parent.id + '" href="#' + this.id + '">' + this.attrs['title'] + '</a></h4></div><div id="' +
         this.id + '" class="panel-collapse collapse"><div class="panel-body az-ctnr"></div></div></div>');
-      this.dom_content_element = $(this.dom_element).find('.panel-body');
+      this.dom_content_element = this.dom_element.find('.panel-body');
       ToggleElement.baseclass.prototype.render.apply(this, arguments);
     }
 function CarouselElement(parent, position) {
@@ -1268,7 +1275,7 @@ CarouselElement.prototype.showed=function ($) {
         path: 'vendor/owl.carousel/owl-carousel/owl.carousel.js',
         loaded: 'owlCarousel' in $.fn,
         callback: function() {
-          //$(element.controls).detach();
+          //element.controls.detach();
           var owl_carousel_refresh = function(owl) {
             var userItems = null;
             if ('userItems' in owl)
@@ -1351,12 +1358,12 @@ CarouselElement.prototype.showed=function ($) {
           }
           $('head').find('#carousel-style-' + element.id).remove();
           $('head').append(get_carousel_style(element));
-          //$(element.dom_element).prepend(element.controls);
+          //element.dom_element.prepend(element.controls);
         }
       });
     }
 CarouselElement.prototype.render=function ($) {
-      this.dom_element = $('<div id="' + this.id + '" class="az-element az-carousel ' + this.attrs['el_class'] +
+      this.dom_element = $('<div id="' + this.id + '" class="az-element az-carousel ' + this.get_el_classes() +
         '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = $('<div></div>').appendTo(this.dom_element);
       CarouselElement.baseclass.prototype.render.apply(this, arguments);
@@ -1371,7 +1378,7 @@ SlideElement.prototype.render=function ($) {
       var type = 'panel-default';
       if (this.parent.attrs['type'] != '')
         type = this.parent.attrs['type'];
-      this.dom_element = $('<div class="az-element az-slide az-ctnr ' + this.attrs['el_class'] + ' clearfix" style="' + this.attrs['style'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-slide az-ctnr ' + this.get_el_classes() + ' clearfix" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       SlideElement.baseclass.prototype.render.apply(this, arguments);
     }
@@ -1412,8 +1419,8 @@ showed: function ($) {
         ],
         loaded: 'waypoint' in $.fn && 'circliful' in $.fn,
         callback: function() {
-          $(element.dom_element).waypoint(function(direction) {
-            $(element.dom_element).find('#' + element.id).once().circliful();
+          element.dom_element.waypoint(function(direction) {
+            element.dom_element.find('#' + element.id).once().circliful();
           }, {
             offset: '100%',
             handler: function(direction) {
@@ -1434,7 +1441,7 @@ render: function ($) {
       else {
         var circliful_icon = '';
       }
-      this.dom_element = $('<div class="az-element az-circle-counter ' + this.attrs['el_class'] + '" style="' +
+      this.dom_element = $('<div class="az-element az-circle-counter ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"><div id="' + this.id + '" data-dimension="' + this.attrs['dimension'] +
         '" data-text="' + this.attrs['text'] + '" data-info="' + this.attrs['info'] + '" data-width="' + this
           .attrs['width'] + '" data-fontsize="' + this.attrs['fontsize'] + '" data-type="' + this.attrs['type'] +
@@ -1492,7 +1499,7 @@ showed: function ($) {
                 secondsWrapper: '.ce-seconds .ce-flip-back',
                 wrapDigits: false,
                 onChange: function() {
-                  countEverestFlipAnimate($(element.dom_element).find('.ce-countdown .ce-col>div'),
+                  countEverestFlipAnimate(element.dom_element.find('.ce-countdown .ce-col>div'),
                     this);
                 }
               }
@@ -1533,15 +1540,15 @@ showed: function ($) {
               options = {
                 leftHandZeros: false,
                 onChange: function() {
-                  drawCircle($(element.dom_element).find('#ce-days').get(0), this.days, 365);
-                  drawCircle($(element.dom_element).find('#ce-hours').get(0), this.hours, 24);
-                  drawCircle($(element.dom_element).find('#ce-minutes').get(0), this.minutes, 60);
-                  drawCircle($(element.dom_element).find('#ce-seconds').get(0), this.seconds, 60);
+                  drawCircle(element.dom_element.find('#ce-days').get(0), this.days, 365);
+                  drawCircle(element.dom_element.find('#ce-hours').get(0), this.hours, 24);
+                  drawCircle(element.dom_element.find('#ce-minutes').get(0), this.minutes, 60);
+                  drawCircle(element.dom_element.find('#ce-seconds').get(0), this.seconds, 60);
                 }
               }
               break;
             case 'style10':
-              var $countdown = $(element.dom_element).find('.ce-countdown');
+              var $countdown = element.dom_element.find('.ce-countdown');
               var firstCalculation = true;
               options = {
                 leftHandZeros: true,
@@ -1653,7 +1660,7 @@ showed: function ($) {
             case 'date':
               var d = Date.parseDate(element.attrs['date'], 'd.m.Y');
               if (d != null)
-                $(element.dom_element).countEverest($.extend(options, {
+                element.dom_element.countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -1662,7 +1669,7 @@ showed: function ($) {
             case 'date_time':
               var d = Date.parseDate(element.attrs['date_time'], 'd.m.Y H');
               if (d != null)
-                $(element.dom_element).countEverest($.extend(options, {
+                element.dom_element.countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -1673,7 +1680,7 @@ showed: function ($) {
               var d = new Date();
               d.setHours(element.attrs['time']);
               if (d != null)
-                $(element.dom_element).countEverest($.extend(options, {
+                element.dom_element.countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -1697,7 +1704,7 @@ showed: function ($) {
                   elapsed = elapsed - Math.floor(k) * interval;
                   var delta = interval - elapsed;
                   var d = new Date(current.getTime() + delta);
-                  $(element.dom_element).countEverest($.extend(options, {
+                  element.dom_element.countEverest($.extend(options, {
                     day: d.getDate(),
                     month: d.getMonth() + 1,
                     year: d.getFullYear(),
@@ -1713,7 +1720,7 @@ showed: function ($) {
                 }
                 else {
                   var d = new Date(saved.getTime() + interval);
-                  $(element.dom_element).countEverest($.extend(options, {
+                  element.dom_element.countEverest($.extend(options, {
                     day: d.getDate(),
                     month: d.getMonth() + 1,
                     year: d.getFullYear(),
@@ -1738,12 +1745,12 @@ showed: function ($) {
 params: [{"param_name":"countdown_style","value":""},{"param_name":"counter_scope","value":""},{"param_name":"date","value":""},{"param_name":"date_time","value":""},{"param_name":"time","value":""},{"param_name":"reset_hours","value":""},{"param_name":"reset_minutes","value":""},{"param_name":"reset_seconds","value":""},{"param_name":"referrer","value":""},{"param_name":"restart","value":""},{"param_name":"saved","value":""},{"param_name":"display","value":""},{"param_name":"an_start","value":""},{"param_name":"an_in","value":""},{"param_name":"an_out","value":""},{"param_name":"an_hidden","value":""},{"param_name":"an_infinite","value":""},{"param_name":"an_offset","value":"100"},{"param_name":"an_duration","value":"1000"},{"param_name":"an_in_delay","value":"0"},{"param_name":"an_out_delay","value":"0"},{"param_name":"an_parent","value":"1"},{"param_name":"an_name","value":""},{"param_name":"el_class","value":""},{"param_name":"style","value":""},{"param_name":"hover_style","value":""},{"param_name":"pos_left","value":""},{"param_name":"pos_right","value":""},{"param_name":"pos_top","value":""},{"param_name":"pos_bottom","value":""},{"param_name":"pos_width","value":""},{"param_name":"pos_height","value":""},{"param_name":"pos_zindex","value":""}],
 frontend_render: true,
 render: function ($) {
-      this.dom_element = $('<div class="az-element az-countdown ' + this.attrs['el_class'] + '" style="' + this
+      this.dom_element = $('<div class="az-element az-countdown ' + this.get_el_classes() + '" style="' + this
           .attrs['style'] + '"></div>');
       var countdown = $('<div class="ce-countdown"></div>').appendTo(this.dom_element);
       switch (this.attrs['countdown_style']) {
         case 'style1':
-          $(this.dom_element).addClass('ce-countdown--theme-1');
+          this.dom_element.addClass('ce-countdown--theme-1');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col"><span class="ce-days"></span> <span class="ce-days-label"></span></div>');
@@ -1760,7 +1767,7 @@ render: function ($) {
             );
           break;
         case 'style6':
-          $(this.dom_element).addClass('ce-countdown--theme-6 clearfix');
+          this.dom_element.addClass('ce-countdown--theme-6 clearfix');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col col-md-3"><div class="ce-days"><div class="ce-flip-wrap"><div class="ce-flip-front bg-primary"></div><div class="ce-flip-back bg-primary"></div></div></div><span class="ce-days-label"></span></div>'
@@ -1779,7 +1786,7 @@ render: function ($) {
             );
           break;
         case 'style9':
-          $(this.dom_element).addClass('ce-countdown--theme-9');
+          this.dom_element.addClass('ce-countdown--theme-9');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-circle"><canvas id="ce-days" width="408" height="408"></canvas><div class="ce-circle__values"><span class="ce-digit ce-days"></span><span class="ce-label ce-days-label"></span></div></div>'
@@ -1798,7 +1805,7 @@ render: function ($) {
             );
           break;
         case 'style10':
-          $(this.dom_element).addClass('ce-countdown--theme-10');
+          this.dom_element.addClass('ce-countdown--theme-10');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-unit-wrap"><div class="ce-days"></div><span class="ce-days-label"></span></div>');
@@ -1816,7 +1823,7 @@ render: function ($) {
             );
           break;
         case 'style12':
-          $(this.dom_element).addClass('ce-countdown--theme-12');
+          this.dom_element.addClass('ce-countdown--theme-12');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col"><div class="ce-days ce-digits"></div> <span class="ce-days-label"></span></div>'
@@ -1861,8 +1868,8 @@ showed: function ($) {
         ],
         loaded: 'waypoint' in $.fn && 'countTo' in $.fn,
         callback: function() {
-          $(element.dom_element).waypoint(function(direction) {
-            $(element.dom_element).find('#' + element.id).countTo({
+          element.dom_element.waypoint(function(direction) {
+            element.dom_element.find('#' + element.id).countTo({
               from: Math.round(element.attrs['start']),
               to: Math.round(element.attrs['end']),
               speed: Math.round(element.attrs['speed']),
@@ -1880,7 +1887,7 @@ showed: function ($) {
             },
           });
           $(document).trigger('scroll');
-          //        $(element.dom_element).waypoint({
+          //        element.dom_element.waypoint({
           //          handler: function() {
           //          }
           //        });
@@ -1903,7 +1910,7 @@ frontend_render: true,
 render: function ($) {
       var id = this.id;
       var element = this;
-      this.dom_element = $('<div class="az-element az-image ' + this.attrs['el_class'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-image ' + this.get_el_classes() + '"></div>');
       function render_image(value, style, width, height, alt, title) {
         if ($.isNumeric(width))
           width = width + 'px';
@@ -1927,7 +1934,7 @@ render: function ($) {
         );
       $(img).appendTo(this.dom_element);
       if (this.attrs['link'] != '') {
-        $(this.dom_element).find('img').each(function() {
+        this.dom_element.find('img').each(function() {
           $(this).wrap('<a href="' + element.attrs['link'] + '" target="' + element.attrs['link_target'] +
             '"></a>');
         });

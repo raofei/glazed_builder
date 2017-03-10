@@ -30,8 +30,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         AccordionElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         $('<span title="' + title("Add toggle") + '" class="control add-toggle btn btn-default glyphicon glyphicon-plus-sign" > </span>').appendTo(this.controls)
           .click({
             object: this
@@ -74,19 +74,19 @@
     },
     showed: function($) {
       AccordionElement.baseclass.prototype.showed.apply(this, arguments);
-      $(this.dom_element).find('> .az-toggle > .in').removeClass(p + 'in');
-      $(this.dom_element).find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
+      this.dom_element.find('> .az-toggle > .in').removeClass(p + 'in');
+      this.dom_element.find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
         'toggle': false,
         'parent': '#' + this.id
       });
-      $(this.dom_element).find('> .az-toggle > .collapse:first')[fp + 'collapse']({
+      this.dom_element.find('> .az-toggle > .collapse:first')[fp + 'collapse']({
         'toggle': this.attrs['collapsed'] != 'yes',
         'parent': '#' + this.id
       });
     },
     render: function($) {
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-accordion panel-group ' +
-        this.attrs['el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+        this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       AccordionElement.baseclass.prototype.render.apply(this, arguments);
     },

@@ -14,7 +14,7 @@
     is_container: true,
     has_content: true,
     render: function($) {
-      this.dom_element = $('<div class="az-element az-html ' + this.attrs['el_class'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-html ' + this.get_el_classes() + '" style="' + this.attrs[
           'style'] + '">' + this.attrs['content'] + '</div>');
       this.dom_content_element = this.dom_element;
       this.baseclass.prototype.render.apply(this, arguments);

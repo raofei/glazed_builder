@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+// Empty CMS element output
+.empty-cms-block-placeholder {
+  min-height: 60px;
+}
+
 // Empty container placeholder and help text
 .glazed-editor {
   .az-empty {
@@ -75,7 +80,7 @@
   }
   &.az-container > .az-empty {
     position: relative;
-    min-height: 200px;
+    min-height: 250px;
   }
   .az-layers > .az-ctnr > .az-empty {
     min-height: 100%;

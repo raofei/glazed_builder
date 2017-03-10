@@ -14,7 +14,7 @@
       if ('content' in this.attrs) {
         var match = /\[[^\]]*\]([^\[]*)\[\/[^\]]*\]/.exec(this.attrs['content']);
         if (match) {
-          $(this.dom_element).append(match[1]);
+          this.dom_element.append(match[1]);
         }
       }
       UnknownElement.baseclass.prototype.render.apply(this, arguments);

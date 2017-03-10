@@ -11,12 +11,12 @@
     is_container: true,
     controls_base_position: 'top-left',
     render: function($) {
-      this.dom_element = $('<div class="az-element az-panel panel ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<div class="az-element az-panel panel ' + this.get_el_classes() + ' ' +
         this.attrs['type'] + '" style="' + this.attrs['style'] + '"></div>');
       if (this.attrs['title'] != '') {
         var heading = $('<div class="panel-heading"><h3 class="panel-title">' + this.attrs[
             'title'] + '</div></div>');
-        $(this.dom_element).append(heading);
+        this.dom_element.append(heading);
       }
       var body = $('<div class="panel-body az-ctnr"></div>').appendTo(this.dom_element);
       this.dom_content_element = body;

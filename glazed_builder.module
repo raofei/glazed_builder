@@ -178,6 +178,7 @@ function glazed_builder_permission() {
  * Implements hook_init().
  */
 function glazed_builder_init() {
+
   // Azexo Composer Legacy Mode
   if (variable_get('azexo_composer_loader_hashes')) {
     // Sitewide loading of all sidebar element assets
@@ -749,8 +750,9 @@ function glazed_builder_update_html($container, &$value, &$js, &$css) {
     );
 
     $html = glazed_builder_load_cms_element(substr($base, 3), $settings, $container, $data);
-
-    glazed_builder_append_html($node, $html);
+    if ($html) {
+      glazed_builder_append_html($node, $html);
+    }
   }
   $value = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(array(
     '<?xml encoding="UTF-8">',
@@ -1283,13 +1285,30 @@ function glazed_builder_load_cms_element($name, $settings, $container = '', $dat
   if ($n[0] == 'block') {
     $module = $n[1];
     $delta = implode('-', array_slice($n, 2));
-    $func = $module . '_block_view';
-    $block = $func($delta);
-    $output = '';
-    if ($data['display_title'] && $block['subject']) {
-      $output .= '<h2 class="block-title">' . check_plain($block['subject']) . '</h2>';
+
+    // Let's respect block visibility settings.
+    $block_info = block_load($module, $delta);
+    $block_info->status = 1;
+    $block_info->theme = $GLOBALS['theme_key'];
+    // Set empty region to prevent Dashboard module from disabling the block.
+    // @see dashboard_block_list_alter().
+    $block_info->region = BLOCK_REGION_NONE;
+    $block_list = array($block_info);
+    drupal_alter('block_list', $block_list);
+    if (count($block_list) == 0) {
+      return '';
     }
-    $output .= render($block['content']);
+
+    $func = $module . '_block_view';
+    $output = '';
+    // Prevent fatal error module is removed but block not removed from builder content
+    if (function_exists($func)) {
+      $block = $func($delta);
+      if ($data['display_title'] && $block['subject']) {
+        $output .= '<h2 class="block-title">' . check_plain($block['subject']) . '</h2>';
+      }
+      $output .= render($block['content']);
+    }
   }
   else {
     if (($n[0] == 'view') && ($view = views_get_view($n[1]))) {
@@ -1410,15 +1429,16 @@ function glazed_builder_load_cms_element($name, $settings, $container = '', $dat
       $output = module_invoke_all('glazed_cms_element', $name, $settings, $container);
     }
   }
+  if (!$output) {
+    $output = '<div class="empty-cms-block-placeholder"></div>';
+  }
   if ($ajax) {
     // Revert current path.
     $_GET['q'] = $current_path;
     $outputArray['data'] = $output;
-    return drupal_json_encode($outputArray);
+    $output = drupal_json_encode($outputArray);
   }
-  else {
-    return $output;
-  }
+  return $output;
 }
 
 /**

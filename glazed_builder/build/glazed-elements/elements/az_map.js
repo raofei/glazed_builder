@@ -27,7 +27,7 @@
     is_container: true,
     has_content: true,
     render: function($) {
-      this.dom_element = $('<div style="line-height: 0;" class="az-element az-map ' + this.attrs['el_class'] + '"></div>');
+      this.dom_element = $('<div style="line-height: 0;" class="az-element az-map ' + this.get_el_classes() + '"></div>');
       function render_map(address, style, width, height) {
         address = address.replace(' ', '+');
         if ($.isNumeric(width))

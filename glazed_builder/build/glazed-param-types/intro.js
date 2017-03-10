@@ -62,7 +62,7 @@
       });
     });
     $(select).parent().find('.chosen-container').width('100%');
-    $('<div><a class="direct-input" href="#">' + Drupal.t("Switch to custom text input") + '</a></div>').insertBefore(select).click(
+    $('<div><a class="direct-input" href="#">' + Drupal.t("Edit as text") + '</a></div>').insertBefore(select).click(
       function() {
         $(input).css('display', 'block');
         $(select).parent().find('.chosen-container').remove();
@@ -112,7 +112,7 @@
       $(input).val(selected.join(delimiter));
     });
     $(select).parent().find('.chosen-container').width('100%');
-    $('<div><a class="direct-input" href="#">' + Drupal.t("Switch to custom text input") + '</a></div>').insertBefore(select).click(
+    $('<div><a class="direct-input" href="#">' + Drupal.t("Edit as text") + '</a></div>').insertBefore(select).click(
       function() {
         $(input).css('display', 'block');
         $(select).parent().find('.chosen-container').remove();
@@ -198,7 +198,7 @@
             step: parseFloat(step),
             min: parseFloat(min),
             max: parseFloat(max),
-            tooltip: 'show',
+            tooltip: 'hide',
             value: (value == '' || isNaN(parseFloat(value)) || value == 'NaN') ? min : parseFloat(value),
             formatter: function (value) {
               return value + ' px';
@@ -209,7 +209,7 @@
             step: parseFloat(step),
             min: parseFloat(min),
             max: parseFloat(max),
-            tooltip: 'show',
+            tooltip: 'hide',
             value: (value == '' || isNaN(parseFloat(value)) || value == 'NaN') ? min : parseFloat(value),
           });
         }

@@ -2,7 +2,7 @@
     type: 'checkboxes',
       get_value: function() {
       var values = [];
-      _.each($(this.dom_element).find('input[name="' + this.param_name + '"]:checked'), function(obj) {
+      _.each(this.dom_element.find('input[name="' + this.param_name + '"]:checked'), function(obj) {
         values.push($(obj).val());
       });
       return values.join(',');
@@ -29,7 +29,7 @@
           }
         }
       }
-      this.dom_element = $('<div class="form-group">' + inputs +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '">' + inputs +
         '<p class="help-block">' + this.description + '</p>');
       initBootstrapSwitch(this.dom_element);
     }

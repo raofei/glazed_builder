@@ -88,7 +88,7 @@
           divider_style = divider_style + 'margin-left: auto;margin-right: 0;';
         }
       }
-       this.dom_element = $('<hr class="az-element az-separator ' + this.attrs['el_class'] + '" style="' + this.attrs[
+       this.dom_element = $('<hr class="az-element az-separator ' + this.get_el_classes() + '" style="' + this.attrs[
            'style'] + divider_style + '"></hr>');
       this.baseclass.prototype.render.apply(this, arguments);
     },

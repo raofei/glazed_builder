@@ -9,111 +9,111 @@
         imp = ' !important';
       }
       var style = '';
-      var margin_top = $(this.dom_element).find('[name="margin_top"]').val();
+      var margin_top = this.dom_element.find('[name="margin_top"]').val();
       if (margin_top != '') {
         if ($.isNumeric(margin_top))
           margin_top = margin_top + 'px';
         style += 'margin-top:' + margin_top + imp + ';';
       }
-      var margin_bottom = $(this.dom_element).find('[name="margin_bottom"]').val();
+      var margin_bottom = this.dom_element.find('[name="margin_bottom"]').val();
       if (margin_bottom != '') {
         if ($.isNumeric(margin_bottom))
           margin_bottom = margin_bottom + 'px';
         style += 'margin-bottom:' + margin_bottom + imp + ';';
       }
-      var margin_left = $(this.dom_element).find('[name="margin_left"]').val();
+      var margin_left = this.dom_element.find('[name="margin_left"]').val();
       if (margin_left != '') {
         if ($.isNumeric(margin_left))
           margin_left = margin_left + 'px';
         style += 'margin-left:' + margin_left + imp + ';';
       }
-      var margin_right = $(this.dom_element).find('[name="margin_right"]').val();
+      var margin_right = this.dom_element.find('[name="margin_right"]').val();
       if (margin_right != '') {
         if ($.isNumeric(margin_right))
           margin_right = margin_right + 'px';
         style += 'margin-right:' + margin_right + imp + ';';
       }
-      var border_top_width = $(this.dom_element).find('[name="border_top_width"]').val();
+      var border_top_width = this.dom_element.find('[name="border_top_width"]').val();
       if (border_top_width != '') {
         if ($.isNumeric(border_top_width))
           border_top_width = border_top_width + 'px';
         style += 'border-top-width:' + border_top_width + imp + ';';
       }
-      var border_bottom_width = $(this.dom_element).find('[name="border_bottom_width"]').val();
+      var border_bottom_width = this.dom_element.find('[name="border_bottom_width"]').val();
       if (border_bottom_width != '') {
         if ($.isNumeric(border_bottom_width))
           border_bottom_width = border_bottom_width + 'px';
         style += 'border-bottom-width:' + border_bottom_width + imp + ';';
       }
-      var border_left_width = $(this.dom_element).find('[name="border_left_width"]').val();
+      var border_left_width = this.dom_element.find('[name="border_left_width"]').val();
       if (border_left_width != '') {
         if ($.isNumeric(border_left_width))
           border_left_width = border_left_width + 'px';
         style += 'border-left-width:' + border_left_width + imp + ';';
       }
-      var border_right_width = $(this.dom_element).find('[name="border_right_width"]').val();
+      var border_right_width = this.dom_element.find('[name="border_right_width"]').val();
       if (border_right_width != '') {
         if ($.isNumeric(border_right_width))
           border_right_width = border_right_width + 'px';
         style += 'border-right-width:' + border_right_width + imp + ';';
       }
-      var padding_top = $(this.dom_element).find('[name="padding_top"]').val();
+      var padding_top = this.dom_element.find('[name="padding_top"]').val();
       if (padding_top != '') {
         if ($.isNumeric(padding_top))
           padding_top = padding_top + 'px';
         style += 'padding-top:' + padding_top + imp + ';';
       }
-      var padding_bottom = $(this.dom_element).find('[name="padding_bottom"]').val();
+      var padding_bottom = this.dom_element.find('[name="padding_bottom"]').val();
       if (padding_bottom != '') {
         if ($.isNumeric(padding_bottom))
           padding_bottom = padding_bottom + 'px';
         style += 'padding-bottom:' + padding_bottom + imp + ';';
       }
-      var padding_left = $(this.dom_element).find('[name="padding_left"]').val();
+      var padding_left = this.dom_element.find('[name="padding_left"]').val();
       if (padding_left != '') {
         if ($.isNumeric(padding_left))
           padding_left = padding_left + 'px';
         style += 'padding-left:' + padding_left + imp + ';';
       }
-      var padding_right = $(this.dom_element).find('[name="padding_right"]').val();
+      var padding_right = this.dom_element.find('[name="padding_right"]').val();
       if (padding_right != '') {
         if ($.isNumeric(padding_right))
           padding_right = padding_right + 'px';
         style += 'padding-right:' + padding_right + imp + ';';
       }
-      var color = $(this.dom_element).find('#' + this.color_id).val();
+      var color = this.dom_element.find('#' + this.color_id).val();
       if (color != '') {
         style += 'color:' + color + imp + ';';
       }
-      var fontsize = $(this.dom_element).find('[name="fontsize"]').val();
+      var fontsize = this.dom_element.find('[name="fontsize"]').val();
       if (fontsize != 0) {
         if ($.isNumeric(fontsize))
           fontsize = Math.round(fontsize) + 'px';
         style += 'font-size:' + fontsize + imp + ';';
       }
-      var border_color = $(this.dom_element).find('#' + this.border_color_id).val();
+      var border_color = this.dom_element.find('#' + this.border_color_id).val();
       if (border_color != '') {
         style += 'border-color:' + border_color + imp + ';';
       }
-      var border_radius = $(this.dom_element).find('[name="border_radius"]').val();
+      var border_radius = this.dom_element.find('[name="border_radius"]').val();
       if (border_radius != 0) {
         if ($.isNumeric(border_radius))
           border_radius = Math.round(border_radius) + 'px';
         style += 'border-radius:' + border_radius + imp + ';';
       }
-      var border_style = $(this.dom_element).find('select[name="border_style"] > option:selected').val();
+      var border_style = this.dom_element.find('select[name="border_style"] > option:selected').val();
       if (border_style != '') {
         style += 'border-style:' + border_style + imp + ';';
       }
-      var bg_color = $(this.dom_element).find('#' + this.bg_color_id).val();
+      var bg_color = this.dom_element.find('#' + this.bg_color_id).val();
       if (bg_color) {
         style += 'background-color:' + bg_color + imp + ';';
       }
-      var bg_image = $(this.dom_element).find('[name="bg_image"]').val();
+      var bg_image = this.dom_element.find('[name="bg_image"]').val();
       if (bg_image) {
         style += 'background-image: url(' + encodeURI(bg_image) + ');';
       }
-      var background_style = $(this.dom_element).find('select[name="background_style"] > option:selected').val();
+      var background_style = this.dom_element.find('select[name="background_style"] > option:selected').val();
       if (background_style.match(/repeat/)) {
         style += 'background-repeat: ' + background_style + imp + ';';
       }
@@ -121,11 +121,11 @@
         style += 'background-repeat: no-repeat;';
         style += 'background-size: ' + background_style + imp + ';';
       }
-      var background_position = $(this.dom_element).find('select[name="background_position"] > option:selected').val();
+      var background_position = this.dom_element.find('select[name="background_position"] > option:selected').val();
       if (background_position != '') {
         style += 'background-position:' + background_position + imp + ';';
       }
-      var opacity = $(this.dom_element).find('[name="opacity"]').val();
+      var opacity = this.dom_element.find('[name="opacity"]').val();
       if (opacity != 0) {
         style += 'opacity:' + opacity + imp + ';';
       }
@@ -133,10 +133,10 @@
     },
     render: function(value) {
       value = value.replace(/!important/g, '');
-      var output = '<div class="style row">';
+      var output = '<div class="style">';
       var match = null;
       var v = '';
-      output += '<div class="layout col-sm-6">';
+      output += '<div class="layout pane-1">';
       output += '<div class="margin"><label>' + Drupal.t('Margin') + '</label>';
       match = value.match(/margin-top[: ]*([\-\d\.]*)(px|%|em) *;/);
       if (match == null)
@@ -215,7 +215,7 @@
       output += '<div class="content">';
       output += '</div></div></div></div>';
       output += '</div>';
-      output += '<div class="settings col-sm-6">';
+      output += '<div class="settings pane-2">';
       output += '<div class="font form-group"><label>' + Drupal.t('Font color') + '</label>';
       this.color_id = _.uniqueId();
       match = value.match(/(^| |;)color[: ]*([#\dabcdef]*) *;/);
@@ -361,16 +361,16 @@
       this.dom_element = $(output);
     },
     opened: function() {
-      image_select($(this.dom_element).find('input[name="bg_image"]'));
+      image_select(this.dom_element.find('input[name="bg_image"]'));
       colorpicker('#' + this.color_id);
       colorpicker('#' + this.border_color_id);
       colorpicker('#' + this.bg_color_id);
-      initBootstrapSlider($(this.dom_element).find('input[name="opacity"]'), 0, 1, $(this.dom_element).find(
+      initBootstrapSlider(this.dom_element.find('input[name="opacity"]'), 0, 1, this.dom_element.find(
         'input[name="opacity"]').val(), 0.01);
 
-      initBootstrapSlider($(this.dom_element).find('input[name="fontsize"]'), 0, 100, $(this.dom_element).find(
+      initBootstrapSlider(this.dom_element.find('input[name="fontsize"]'), 0, 100, this.dom_element.find(
         'input[name="fontsize"]').val(), 1, true);
-      initBootstrapSlider($(this.dom_element).find('input[name="border_radius"]'), 0, 100, $(this.dom_element).find(
+      initBootstrapSlider(this.dom_element.find('input[name="border_radius"]'), 0, 100, this.dom_element.find(
         'input[name="border_radius"]').val(), 1);
     },
   },

@@ -8,40 +8,30 @@
     border-radius: 0;
     box-shadow: none;
     padding: 6px;
-    background: #ededed;
+    background: #f6f6fb;
     outline: none;
+    border-radius: 4px;
     &:focus {
       outline: none;
     }
   }
   .form-group {
     padding-bottom: 10px;
+    margin-bottom: 15px;
     position: relative;
+    width: 50%;
     input[type=text],
     select {
       width: auto;
-      min-width: 275px;
+      min-width: 260px;
     }
     label {
       float: left;
       clear: both;
       font-weight: normal;
       color: #888;
-      width: 20%;
-    }
-    input[type=text],
-    select,
-    option {
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-      padding: 6px;
-      background: #ededed;
-      outline: none;
-      width: auto;
-      &:focus {
-        outline: none;
-      }
+      width: 175px;
+      font-size: 15px;
     }
     .views-exposed-form .views-exposed-widget {
       float: none;
@@ -50,33 +40,27 @@
     > div,
     > p,
     > select {
-      margin-left: 20%;
+      margin-left: 175px;
       position: relative;
       label {
         width: auto;
         clear: none;
       }
     }
+    &.form-group--content,
+    &.form-group--css,
+    &.form-group--el_class,
+    &.form-group--html,
+    &.form-group--icon,
+    &.form-group--image,
+    &.form-group--images,
+    &.form-group--javascript,
+    &.form-group--rawtext,
+    &.form-group--textarea {
+      width: 100%;
+    }
     .checkbox {
       min-height: 1.8em;
-
-    }
-  }
-  .col-sm-6 {
-    .form-group {
-      label {
-        float: left;
-        width: 30%;
-        font-weight: normal;
-      }
-      > div,
-      > p,
-      > select {
-        margin-left: 30%;
-      }
-      &.background > div {
-        margin-top: 15px;
-      }
 
     }
   }

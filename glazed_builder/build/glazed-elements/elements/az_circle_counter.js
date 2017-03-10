@@ -115,8 +115,8 @@
         ],
         loaded: 'waypoint' in $.fn && 'circliful' in $.fn,
         callback: function() {
-          $(element.dom_element).waypoint(function(direction) {
-            $(element.dom_element).find('#' + element.id).once().circliful();
+          element.dom_element.waypoint(function(direction) {
+            element.dom_element.find('#' + element.id).once().circliful();
           }, {
             offset: '100%',
             handler: function(direction) {
@@ -135,7 +135,7 @@
       else {
         var circliful_icon = '';
       }
-      this.dom_element = $('<div class="az-element az-circle-counter ' + this.attrs['el_class'] + '" style="' +
+      this.dom_element = $('<div class="az-element az-circle-counter ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"><div id="' + this.id + '" data-dimension="' + this.attrs['dimension'] +
         '" data-text="' + this.attrs['text'] + '" data-info="' + this.attrs['info'] + '" data-width="' + this
           .attrs['width'] + '" data-fontsize="' + this.attrs['fontsize'] + '" data-type="' + this.attrs['type'] +

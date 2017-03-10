@@ -491,7 +491,7 @@
       });
     });
     $(select).parent().find('.chosen-container').width('100%');
-    $('<div><a class="direct-input" href="#">' + Drupal.t("Switch to custom text input") + '</a></div>').insertBefore(select).click(
+    $('<div><a class="direct-input" href="#">' + Drupal.t("Edit as text") + '</a></div>').insertBefore(select).click(
       function() {
         $(input).css('display', 'block');
         $(select).parent().find('.chosen-container').remove();
@@ -544,7 +544,7 @@
       $(input).val(selected.join(delimiter));
     });
     $(select).parent().find('.chosen-container').width('100%');
-    $('<div><a class="direct-input" href="#">' + Drupal.t("Switch to custom text input") + '</a></div>').insertBefore(select).click(
+    $('<div><a class="direct-input" href="#">' + Drupal.t("Edit as text") + '</a></div>').insertBefore(select).click(
       function() {
         $(input).css('display', 'block');
         $(select).parent().find('.chosen-container').remove();
@@ -1590,7 +1590,7 @@
   register_param_type('cms_settings', CMSSettingsParamType);
   mixin(CMSSettingsParamType.prototype, {
     get_value: function() {
-      return $(this.dom_element).find('form').serialize();
+      return this.dom_element.find('form').serialize();
     },
     render_form: function(instance) {
       var param = this;
@@ -1629,7 +1629,7 @@
   register_param_type('container', ContainerParamType);
   mixin(ContainerParamType.prototype, {
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '_type"]').val() + '/' + $(this.dom_element)
+      return this.dom_element.find('input[name="' + this.param_name + '_type"]').val() + '/' + $(this.dom_element)
         .find('input[name="' + this.param_name + '_name"]').val();
     },
     render: function(value) {
@@ -1647,13 +1647,13 @@
       var name_select = null;
       var element = this;
       glazed_get_container_types(function(data) {
-        type_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
+        type_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
           '_type"]'));
         $(type_select).chosen().change(function() {
           glazed_get_container_names($(this).val(), function(data) {
             $(name_select).parent().find('.direct-input').click();
-            $(element.dom_element).find('input[name="' + element.param_name + '_name"]').val('');
-            name_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
+            element.dom_element.find('input[name="' + element.param_name + '_name"]').val('');
+            name_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
               '_name"]'));
             //            $(name_select).empty();
             //            for (var key in data) {
@@ -1664,7 +1664,7 @@
         });
       });
       glazed_get_container_names(value.split('/')[0], function(data) {
-        name_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
+        name_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
           '_name"]'));
       });
     },
@@ -2121,7 +2121,7 @@
 
               function sortable_enable() {
                 for (var i = 0; i < element.sortable.length; i++) {
-                  $(element.dom_element).find(element.sortable[i]).each(function() {
+                  element.dom_element.find(element.sortable[i]).each(function() {
                     if ($(this).closest('[data-az-restore]').length == 0) {
                       $(this).data('sortable', true);
                       $(this).sortable({
@@ -2150,17 +2150,17 @@
 
               function able() {
                 for (var i = 0; i < element.restoreable.length; i++) {
-                  $(element.dom_element).find(element.restoreable[i]).off('mouseenter.az-restoreable').on(
+                  element.dom_element.find(element.restoreable[i]).off('mouseenter.az-restoreable').on(
                     'mouseenter.az-restoreable',
                     function() {
                       $(this).addClass('restoreable-highlight');
                     });
-                  $(element.dom_element).find(element.restoreable[i]).off('mouseleave.az-restoreable').on(
+                  element.dom_element.find(element.restoreable[i]).off('mouseleave.az-restoreable').on(
                     'mouseleave.az-restoreable',
                     function() {
                       $(this).removeClass('restoreable-highlight');
                     });
-                  $(element.dom_element).find(element.restoreable[i]).off('click.az-restoreable').on(
+                  element.dom_element.find(element.restoreable[i]).off('click.az-restoreable').on(
                     'click.az-restoreable',
                     function(e) {
                       if ($(this).is('[data-az-restore]')) {
@@ -2188,19 +2188,19 @@
                     });
                 }
                 for (var i = 0; i < element.styleable.length; i++) {
-                  $(element.dom_element).find(element.styleable[i]).off('mouseenter.az-styleable').on(
+                  element.dom_element.find(element.styleable[i]).off('mouseenter.az-styleable').on(
                     'mouseenter.az-styleable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).addClass('styleable-highlight');
                     });
-                  $(element.dom_element).find(element.styleable[i]).off('mouseleave.az-styleable').on(
+                  element.dom_element.find(element.styleable[i]).off('mouseleave.az-styleable').on(
                     'mouseleave.az-styleable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).removeClass('styleable-highlight');
                     });
-                  $(element.dom_element).find(element.styleable[i]).off('click.az-styleable').on(
+                  element.dom_element.find(element.styleable[i]).off('click.az-styleable').on(
                     'click.az-styleable',
                     function(e) {
                       if ($(this).closest('[data-az-restore]').length == 0) {
@@ -2225,19 +2225,19 @@
                     });
                 }
                 for (var i = 0; i < element.editable.length; i++) {
-                  $(element.dom_element).find(element.editable[i]).off('mouseenter.az-editable').on(
+                  element.dom_element.find(element.editable[i]).off('mouseenter.az-editable').on(
                     'mouseenter.az-editable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).addClass('editable-highlight');
                     });
-                  $(element.dom_element).find(element.editable[i]).off('mouseleave.az-editable').on(
+                  element.dom_element.find(element.editable[i]).off('mouseleave.az-editable').on(
                     'mouseleave.az-editable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).removeClass('editable-highlight');
                     });
-                  $(element.dom_element).find(element.editable[i]).off('click.az-editable').on(
+                  element.dom_element.find(element.editable[i]).off('click.az-editable').on(
                     'click.az-editable',
                     function(e) {
                       if ($(this).closest('[data-az-restore]').length == 0) {
@@ -2297,7 +2297,7 @@
                       2 + 'px');
                   }
                 }
-                $(element.dom_element).off('mousemove.az-able').on('mousemove.az-able', function() {
+                element.dom_element.off('mousemove.az-able').on('mousemove.az-able', function() {
                   if (sorted_node != null && $(sorted_node).hasClass('sortable-highlight')) {
                     clearTimeout(timeoutId);
                     timeoutId = setTimeout(function() {
@@ -2307,12 +2307,12 @@
                 });
                 for (var i = 0; i < element.sortable.length; i++) {
                   (function(i) {
-                    $(element.dom_element).find(element.sortable[i]).find('> *').off(
+                    element.dom_element.find(element.sortable[i]).find('> *').off(
                       'mouseenter.az-sortable').on('mouseenter.az-sortable', function() {
                       if ($(this).closest('[data-az-restore]').length == 0) {
                         var node = this;
-                        $(element.dom_element).find('.az-sortable-controls').remove();
-                        $(element.dom_element).find('.sortable-highlight').removeClass(
+                        element.dom_element.find('.az-sortable-controls').remove();
+                        element.dom_element.find('.sortable-highlight').removeClass(
                           'sortable-highlight');
                         if (sorted_node !== null) {
                           clearTimeout(timeoutId);
@@ -2326,12 +2326,12 @@
                         }, 1000);
                       }
                     });
-                    $(element.dom_element).find(element.sortable[i]).find('> *').off(
+                    element.dom_element.find(element.sortable[i]).find('> *').off(
                       'mouseleave.az-sortable').on('mouseleave.az-sortable', function() {
                       if ($(this).closest('[data-az-restore]').length == 0) {
                         var node = this;
-                        $(element.dom_element).find('.az-sortable-controls').remove();
-                        $(element.dom_element).find('.sortable-highlight').removeClass(
+                        element.dom_element.find('.az-sortable-controls').remove();
+                        element.dom_element.find('.sortable-highlight').removeClass(
                           'sortable-highlight');
                         if (sorted_node !== null) {
                           clearTimeout(timeoutId);
@@ -2389,10 +2389,10 @@
             BaseElement.prototype.showed.apply(this, arguments);
             var element = this;
             if (element.section) {
-              var container = $(element.dom_element).parent().closest('.container, .container-fluid');
-              var container_path = $(element.dom_element).parentsUntil('.container, .container-fluid');
-              var popup = $(element.dom_element).parent().closest('.az-popup-ctnr');
-              var popup_path = $(element.dom_element).parentsUntil('.az-popup-ctnr');
+              var container = element.dom_element.parent().closest('.container, .container-fluid');
+              var container_path = element.dom_element.parentsUntil('.container, .container-fluid');
+              var popup = element.dom_element.parent().closest('.az-popup-ctnr');
+              var popup_path = element.dom_element.parentsUntil('.az-popup-ctnr');
 
               if ((container.length > 0 && popup.length == 0) || (container.length > 0 && popup.length >
                   0 && container_path.length < popup_path.length))
@@ -2408,7 +2408,7 @@
           },
           render: function($) {
             var element = this;
-            this.dom_element = $('<div class="az-element az-template ' + this.attrs['el_class'] +
+            this.dom_element = $('<div class="az-element az-template ' + this.get_el_classes() +
               '" style="' + this.attrs['style'] + '"></div>');
             this.dom_content_element = $('<div></div>').appendTo(this.dom_element);
             var content = '<div>' + this.attrs['content'] + '</div>';
@@ -2450,13 +2450,6 @@
           }
           var panel = $('<div id="az-template-elements" class="az-left-sidebar glazed"></div>').appendTo(
             'body');
-          var welcome = $('<div id="az-template-elements-welcome" class="glazed">' + Drupal.t(
-            'Open the left panel to add Glazed drag and drop snippets.') + '</div>').appendTo(panel).hide();
-          setTimeout(function(){ $(welcome).fadeIn(); }, 500);
-          setTimeout(function(){ $(welcome).animate({height:'toggle'},600); }, 10000);
-          $(panel).hover(function() {
-            $(welcome).remove();
-          });
           $('<div class="glazed-snippets-header clearfix"><img src="'
             + window.glazed_baseurl
             + 'images/glazed-logo-white.png">'
@@ -2631,7 +2624,7 @@
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  $(element.dom_element).waypoint(function(direction) {
+                  element.dom_element.waypoint(function(direction) {
                     var container = element.parent.get_my_container();
                     var data = {
                       display_title: element.attrs['display_title'],
@@ -2659,7 +2652,7 @@
             }
           },
           render: function($) {
-            this.dom_element = $('<div class="az-element az-cms-element ' + this.attrs['el_class'] +
+            this.dom_element = $('<div class="az-element az-cms-element ' + this.get_el_classes() +
               '" style="' + this.attrs['style'] + '"></div>');
             this.dom_content_element = $('<div></div>').appendTo(this.dom_element);
             CMSElement.baseclass.prototype.render.apply(this, arguments);
@@ -2994,7 +2987,7 @@
       var i = 0;
       var menu = '<ul class="nav nav-tabs">';
       if (window.glazed_online)
-        menu += '<li><a href="#az-elements-tab-templates" data-toggle="tab">' + Drupal.t("layouts") +
+        menu += '<li><a href="#az-elements-tab-templates" data-toggle="tab">' + Drupal.t("Layouts") +
           '</a></li>';
       menu += '</ul>';
       $(elements_tabs).append(menu);
@@ -3084,10 +3077,7 @@
 
 
   function BaseElement(parent, position) {
-    if (glazed_frontend)
-      this.id = _.uniqueId('f');
-    else
-      this.id = _.uniqueId('b');
+    this.id = Math.random().toString(36).substr(2, 8);
     if (parent != null) {
       this.parent = parent;
       if (typeof position === 'boolean') {
@@ -3145,13 +3135,6 @@
       "lead": Drupal.t('Text Lead style'),
       "pull-left": Drupal.t('Pull left'),
       "pull-right": Drupal.t('Pull right'),
-      "small": Drupal.t('Text small style'),
-      "stpe-dropshadow stpe-dropshadow--curved-hz1 stpe-dropshadow--curved": Drupal.t('Curved Horiztonal Drop Shadow'),
-      "stpe-dropshadow stpe-dropshadow--curved-hz2 stpe-dropshadow--curved": Drupal.t('Curved Horizontal Double Drop Shadow'),
-      "stpe-dropshadow stpe-dropshadow--curved-vt2 stpe-dropshadow--curved": Drupal.t('Curved vertical double shadow'),
-      "stpe-dropshadow stpe-dropshadow--lifted": Drupal.t('Lifted Drop Shadow'),
-      "stpe-dropshadow stpe-dropshadow--perspective": Drupal.t('Perspective Drop Shadow'),
-      "stpe-dropshadow stpe-dropshadow--raised": Drupal.t('Raised Drop Shadow'),
       "text-center": Drupal.t('Text align center'),
       "text-default": Drupal.t('Text default style'),
       "text-justify": Drupal.t('Text align justify'),
@@ -3165,6 +3148,14 @@
       "visible-sm-block": Drupal.t('Visible on small devices, tablets (≥768px)'),
       "visible-xs-block": Drupal.t('Visible on extra small devices, phones (<768px)'),
       "well": Drupal.t('Well'),
+      "small": Drupal.t('Text small style'),
+      "optgroup-glazed-shadows": Drupal.t('Drop Shadows'),
+      "stpe-dropshadow stpe-dropshadow--curved-hz1 stpe-dropshadow--curved": Drupal.t('Curved Horiztonal Drop Shadow'),
+      "stpe-dropshadow stpe-dropshadow--curved-hz2 stpe-dropshadow--curved": Drupal.t('Curved Horizontal Double Drop Shadow'),
+      "stpe-dropshadow stpe-dropshadow--curved-vt2 stpe-dropshadow--curved": Drupal.t('Curved vertical double shadow'),
+      "stpe-dropshadow stpe-dropshadow--lifted": Drupal.t('Lifted Drop Shadow'),
+      "stpe-dropshadow stpe-dropshadow--perspective": Drupal.t('Perspective Drop Shadow'),
+      "stpe-dropshadow stpe-dropshadow--raised": Drupal.t('Raised Drop Shadow'),
     },classes),
 
     elements: {},
@@ -3188,11 +3179,27 @@
         tab: Drupal.t('Style')
       }),
       make_param_type({
+        type: 'bootstrap_slider',
+        heading: Drupal.t('Drop Shadow'),
+        param_name: 'shadow',
+        max: '5',
+        value: '0',
+        tab: Drupal.t('Style')
+      }),
+      make_param_type({
         type: 'style',
         heading: Drupal.t('Hover style'),
         param_name: 'hover_style',
         important: true,
         description: Drupal.t('Hover style options.'),
+        tab: Drupal.t('Hover style')
+      }),
+      make_param_type({
+        type: 'bootstrap_slider',
+        heading: Drupal.t('Drop Shadow'),
+        param_name: 'hover_shadow',
+        max: '5',
+        value: '0',
         tab: Drupal.t('Hover style')
       }),
       make_param_type({
@@ -3272,27 +3279,78 @@
     highlighted: true,
     style_selector: '',
     section: false,
-    controls_position: function() {
-      if (!this.is_container || this.has_content) {
-        var element_height = $(this.dom_element).height();
-        var frame_height = $(window).height();
-        if (element_height > frame_height) {
-          var window_top = $(window).scrollTop();
-          var control_top = $(this.controls).offset().top;
-          var element_position_top = $(this.dom_element).offset().top;
-          var new_position = (window_top - element_position_top) + frame_height / 2;
-          if (new_position > 40 && new_position < element_height) {
-            $(this.controls).css('top', new_position);
+    controls_position: function(wholePage) {
+      // Hit Detection
+      var elRect = this.dom_element[0].getBoundingClientRect();
+      if (wholePage || (elRect.bottom > 0) && (elRect.top < document.documentElement.clientHeight)) {
+        var controlsRect = this.controls[0].getBoundingClientRect();
+        if ((this.children.length > 0)
+            && (_.has(this.children[0].controls, '0'))
+            && !(this.children[0].show_parent_controls)) {
+          var childControlsRect = this.children[0].controls[0].getBoundingClientRect();
+          if (glazedBuilderHit(childControlsRect, controlsRect)) {
+            this.children[0].dom_element.addClass('az-element--controls-spacer');
           }
-          else if (new_position > element_height) {
-            $(this.controls).css('top', element_height - 40);
+        }
+        else if ((_.has(this, 'parent'))
+            && (_.has(this.parent.controls, '0'))
+            && !(this.show_parent_controls)) {
+          var parentControlsRect = this.parent.controls[0].getBoundingClientRect();
+          if (glazedBuilderHit(parentControlsRect, controlsRect)) {
+            this.dom_element.addClass('az-element--controls-spacer');
+          }
+          if (this.parent.show_parent_controls) {
+            var parentL2ControlsRect = this.parent.parent.controls[0].getBoundingClientRect();
+            if (glazedBuilderHit(parentL2ControlsRect, controlsRect)) {
+              this.dom_element.addClass('az-element--controls-spacer');
+            }
+          }
+        }
+        // We only consider elements within 300px to be able to collide with the navbar
+        // Scrolltop still needs jQuery for cross browser support (chrome/firefox)
+        if ((elRect.top + $(window).scrollTop()) < 300) {
+          if ($('body.body--glazed-header-navbar_pull_down #navbar').length > 0) {
+            var headerRect = $('#navbar .container-col')[0].getBoundingClientRect();
+            if (glazedBuilderHit(headerRect, controlsRect)) {
+              this.dom_element.closest('.glazed-editor').css('margin-top', headerRect.height / 2);
+            }
+          }
+          if ($('body.body--glazed-header-overlay #navbar').length > 0) {
+            var headerRect = $('#navbar')[0].getBoundingClientRect();
+            if (glazedBuilderHit(headerRect, controlsRect)) {
+              this.controls.css('margin-top', headerRect.height + 32);
+            }
+          }
+          if ($('#navbar.glazed-header--fixed').length > 0) {
+            var headerRect = $('#navbar')[0].getBoundingClientRect();
+            if (glazedBuilderHit(headerRect, controlsRect)) {
+              this.controls.css('margin-top', headerRect.height + 32);
+            }
+          }
+        }
+        // Scroll controls of tall elements
+        if (!this.is_container || this.has_content) {
+          var element_height = this.dom_element.height();
+          var frame_height = $(window).height();
+          if (element_height > frame_height) {
+            var window_top = $(window).scrollTop();
+            var control_top = this.controls.offset().top;
+            var element_position_top = this.dom_element.offset().top;
+            var new_position = (window_top - element_position_top) + frame_height / 2;
+            if (new_position > 40 && new_position < element_height) {
+              this.controls.css('top', new_position);
+            }
+            else if (new_position > element_height) {
+              this.controls.css('top', element_height - 40);
 
-          }
-          else {
-            $(this.controls).css('top', 40);
+            }
+            else {
+              this.controls.css('top', 40);
+            }
           }
         }
       }
+
     },
     update_controls_zindex: function() {
       set_highest_zindex(this.controls);
@@ -3302,10 +3360,10 @@
         var element = this;
         this.controls = $('<div class="controls btn-group btn-group-xs"></div>').prependTo(this
           .dom_element);
-        $(element.dom_element).addClass('az-element--controls-' + element.controls_base_position);
+        element.dom_element.addClass('az-element--controls-' + element.controls_base_position);
         setTimeout(function() {
           element.update_controls_zindex();
-        }, 3000);
+        }, 1000);
 
         $('<span title="' + title("Drag and drop") + '" class="control drag-and-drop btn btn-default glyphicon glyphicon-move"><span class="control-label">' + this.name + '</span></span>').appendTo(this.controls);
 
@@ -3337,98 +3395,83 @@
           }, this.click_save_template);
         this.update_empty();
 
-        setTimeout(function() {
-          element.controls_position();
-        }, 1000);
-        $(window).scroll(function() {
-          element.controls_position();
-        });
+        var inlineControlsParent = ((element.children.length > 0) && (element.children[0].show_parent_controls));
+        if (!inlineControlsParent) {
+          element.dom_element.hover(
+            function() {
+              element.controls.addClass('controls--show');
+            }, function() {
+              element.controls.removeClass('controls--show');
+            }
+          );
+        }
+        else {
 
-        $(element.dom_element).hover(
-          function() {
-            $(this).find('> .controls').addClass('controls--show');
-          }, function() {
-            $(this).find('> .controls').removeClass('controls--show');
+        }
+
+        // This has lower priority than page rendering so we try to avoid doing this at the same time
+        setTimeout(function() {
+          element.controls_position(true);
+        }, 1500);
+        $(window).scroll(_.debounce(function() {
+          if (window.pageYOffset > 30) {
+            element.controls_position(false);
           }
-        );
+        }, 500));
+        $(window).resize(_.debounce(function() {
+          element.controls_position(true);
+        }, 500));
 
         if (element.show_parent_controls) {
-          _.defer(function() {
             var parent = element.parent;
             if (_.isString(element.show_parent_controls)) {
-              parent = glazed_elements.get_element($(element.dom_element).closest(element.show_parent_controls)
+              parent = glazed_elements.get_element(element.dom_element.closest(element.show_parent_controls)
                 .attr('data-az-id'));
             }
             function update_controls(element) {
-              $(parent.controls).attr('data-az-cid', $(element.dom_element).attr('data-az-id'));
-              var offset = $(element.dom_element).offset();
-              offset.top = offset.top - parseInt($(element.dom_element).css('margin-top'));
+              element.controls_position(true)
+              $(parent.controls).attr('data-az-cid', element.dom_element.attr('data-az-id'));
+              var offset = element.dom_element.offset();
+              offset.top = offset.top - parseInt(element.dom_element.css('margin-top')) + parseInt($(parent.controls).css('margin-top'));
               $(parent.controls).offset(offset);
               offset.left = offset.left + $(parent.controls).width() - 1;
-              $(element.controls).offset(offset);
+              element.controls.offset(offset);
             }
             // Simultaneous show/hide of child and parent controls on child element hover
-            $(element.dom_element).off('mouseenter').on('mouseenter', function() {
-              $(element.dom_element).data('hover', true);
-              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
+            element.dom_element.off('mouseenter').on('mouseenter', function() {
+              element.dom_element.data('hover', true);
+              if (element.dom_element.parents('.glazed-editor').length > 0) {
                 $(parent.controls).addClass('controls--show');
-                $(element.controls).addClass('controls--show');
+                element.controls.addClass('controls--show');
                 update_controls(element);
               }
             });
-            $(element.dom_element).off('mouseleave').on('mouseleave', function() {
-              $(element.dom_element).data('hover', false);
-              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
+            element.dom_element.off('mouseleave').on('mouseleave', function() {
+              element.dom_element.data('hover', false);
+              if (element.dom_element.parents('.glazed-editor').length > 0) {
                 $(parent.controls).removeClass('controls--show');
-                $(element.controls).removeClass('controls--show');
+                element.controls.removeClass('controls--show');
               }
             });
-
-            // Showing/Hiding when mousing over element controls that are outside the element itself
-            // for example row/column controls.This uses setInterval for difficult situations, like
-            // when you hover row controls and the column controls need to show. @todo fix this mess
-            setInterval(function() {
-              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
-                if (!$(element.dom_element).data('hover') && !$(parent.controls).data('hover')) {
-                  $(element.controls).removeClass('controls--show');
-                }
-                if ($(element.dom_element).data('hover')) {
-                  update_controls(element);
-                  $(element.controls).addClass('controls--show');
-                }
-                var e = glazed_elements.get_element($(parent.controls).closest('[data-az-cid]').attr(
-                  'data-az-cid'));
-                if (!_.isUndefined(e)) {
-                  $(parent.controls).css('opacity', $(e.controls).css('opacity'));
-                  if ($(e.controls).hasClass('controls--show')) {
-                    $(parent.controls).addClass('controls--show');
-                  }
-                  else {
-                     $(parent.controls).removeClass('controls--show');
-                  }
-                }
-                if (_.isUndefined($(parent.controls).data('showparentcontrols'))) {
-                  $(parent.controls).off('mouseenter').on('mouseenter', function() {
-                    $(parent.controls).data('hover', true);
-                    var el = glazed_elements.get_element($(this).closest('[data-az-cid]').attr(
-                      'data-az-cid'));
-                    if (!_.isUndefined(el))
-                      $(el.controls).addClass('controls--show');
-                  });
-                  $(parent.controls).off('mouseleave').on('mouseleave', function() {
-                    $(parent.controls).data('hover', false);
-                  });
-                  $(parent.controls).data('showparentcontrols', true);
-                }
-              }
+            // Showing/Hiding when mousing over parent element controls that are outside the element itself
+            setTimeout(function() {
+              $(parent.controls).off('mouseenter').on('mouseenter', function() {
+                $(parent.controls).data('hover', true);
+                var column = glazed_elements.get_element($(this).closest('[data-az-cid]').attr('data-az-cid'));
+                if (!_.isUndefined(column))
+                  $(column.controls).addClass('controls--show');
+              });
+              $(parent.controls).off('mouseleave').on('mouseleave', function() {
+                $(parent.controls).data('hover', false);
+                var column = glazed_elements.get_element($(this).closest('[data-az-cid]').attr('data-az-cid'));
+                if (!_.isUndefined(column))
+                  $(column.controls).removeClass('controls--show');
+              });
             }, 100);
-          });
         }
       }
     },
     get_empty: function() {
-      //→←↑↓↖↗↘↙
-      // return '<div class="az-empty"><div class="top well"><strong>' + Drupal.t('Click to put an element here.') +
       return '<div class="az-empty"></div>';
     },
     update_empty: function() {
@@ -3523,6 +3566,16 @@
       }
       this.showed($);
     },
+    get_el_classes: function() {
+      var classes = this.attrs['el_class'];
+      if (this.attrs['shadow'] > 0) {
+        classes = classes + ' ' + 'glazed-shadow-' + this.attrs['shadow'];
+      }
+      if (this.attrs['hover_shadow'] > 0) {
+        classes = classes + ' ' + 'glazed-shadow-hover-' + this.attrs['hover_shadow'];
+      }
+      return classes;
+    },
     get_hover_style: function() {
       if ('hover_style' in this.attrs)
         return '<style><!-- .hover-style-' + this.id + ':hover ' + this.style_selector +
@@ -3539,27 +3592,27 @@
     },
     showed: function($) {
       if ('pos_left' in this.attrs && this.attrs['pos_left'] != '')
-        $(this.dom_element).css("left", this.attrs['pos_left']);
+        this.dom_element.css("left", this.attrs['pos_left']);
       if ('pos_right' in this.attrs && this.attrs['pos_right'] != '')
-        $(this.dom_element).css("right", this.attrs['pos_right']);
+        this.dom_element.css("right", this.attrs['pos_right']);
       if ('pos_top' in this.attrs && this.attrs['pos_top'] != '')
-        $(this.dom_element).css("top", this.attrs['pos_top']);
+        this.dom_element.css("top", this.attrs['pos_top']);
       if ('pos_bottom' in this.attrs && this.attrs['pos_bottom'] != '')
-        $(this.dom_element).css("bottom", this.attrs['pos_bottom']);
+        this.dom_element.css("bottom", this.attrs['pos_bottom']);
       if ('pos_width' in this.attrs && this.attrs['pos_width'] != '')
-        $(this.dom_element).css("width", this.attrs['pos_width']);
+        this.dom_element.css("width", this.attrs['pos_width']);
       if ('pos_height' in this.attrs && this.attrs['pos_height'] != '')
-        $(this.dom_element).css("height", this.attrs['pos_height']);
+        this.dom_element.css("height", this.attrs['pos_height']);
       if ('pos_zindex' in this.attrs && this.attrs['pos_zindex'] != '')
-        $(this.dom_element).css("z-index", this.attrs['pos_zindex']);
+        this.dom_element.css("z-index", this.attrs['pos_zindex']);
       if ('hover_style' in this.attrs && this.attrs['hover_style'] != '') {
         $('head').find('#hover-style-' + this.id).remove();
         $('head').append(this.get_hover_style());
-        $(this.dom_element).addClass('hover-style-' + this.id);
+        this.dom_element.addClass('hover-style-' + this.id);
       }
     },
     render: function($) {
-      $(this.dom_element).attr('data-az-id', this.id);
+      this.dom_element.attr('data-az-id', this.id);
     },
     trigger_start_in_animation: function() {
       for (var i = 0; i < this.children.length; i++) {
@@ -3576,7 +3629,7 @@
       }
     },
     update_data: function() {
-      $(this.dom_element).attr('data-azb', this.base);
+      this.dom_element.attr('data-azb', this.base);
       for (var i = 0; i < this.params.length; i++) {
         var param = this.params[i];
         if (param.param_name in this.attrs) {
@@ -3587,7 +3640,7 @@
             if (!param.safe) {
               value = encodeURIComponent(value);
             }
-            $(this.dom_element).attr('data-azat-' + param.param_name, value);
+            this.dom_element.attr('data-azat-' + param.param_name, value);
           }
         }
       }
@@ -4023,7 +4076,7 @@
       for (var i = 0; i < this.children.length; i++) {
         this.children[i].remove();
       }
-      $(this.dom_element).remove();
+      this.dom_element.remove();
       for (var i = 0; i < this.parent.children.length; i++) {
         if (this.parent.children[i].id == this.id) {
           this.parent.children.splice(i, 1);
@@ -4095,6 +4148,14 @@
         BaseElement.prototype.tags[base + '_' + i] = Element;
       }
     }
+  }
+
+// Accepts 2 getBoundingClientRect objects
+  function glazedBuilderHit(rect1, rect2) {
+    return !(rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom);
   }
 
 
@@ -4245,26 +4306,26 @@
       var element = this;
       element.in_timeout = setTimeout(function() {
         element.clear_animation();
-        $(element.dom_element).css('opacity', '');
-        $(element.dom_element).removeClass('animated');
-        $(element.dom_element).removeClass(element.attrs['an_in']);
-        $(element.dom_element).removeClass(element.attrs['an_out']);
+        element.dom_element.css('opacity', '');
+        element.dom_element.removeClass('animated');
+        element.dom_element.removeClass(element.attrs['an_in']);
+        element.dom_element.removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).addClass('animated');
+        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          $(element.dom_element).addClass('infinite');
+          element.dom_element.addClass('infinite');
         }
-        $(element.dom_element).addClass(element.attrs['an_in']);
+        element.dom_element.addClass(element.attrs['an_in']);
         element.animation_in = true;
       }, Math.round(element.attrs['an_in_delay']));
     },
     start_in_animation: function() {
       var element = this;
-      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
+      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_in'] != '') {
           if (element.animated) {
             if (element.animation_out) {
@@ -4292,26 +4353,26 @@
       var element = this;
       element.out_timeout = setTimeout(function() {
         element.clear_animation();
-        $(element.dom_element).css('opacity', '');
-        $(element.dom_element).removeClass('animated');
-        $(element.dom_element).removeClass(element.attrs['an_in']);
-        $(element.dom_element).removeClass(element.attrs['an_out']);
+        element.dom_element.css('opacity', '');
+        element.dom_element.removeClass('animated');
+        element.dom_element.removeClass(element.attrs['an_in']);
+        element.dom_element.removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).addClass('animated');
+        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          $(element.dom_element).addClass('infinite');
+          element.dom_element.addClass('infinite');
         }
-        $(element.dom_element).addClass(element.attrs['an_out']);
+        element.dom_element.addClass(element.attrs['an_out']);
         element.animation_out = true;
       }, Math.round(element.attrs['an_out_delay']));
     },
     start_out_animation: function() {
       var element = this;
-      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
+      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_out'] != '') {
           if (element.animated) {
             if (element.animation_in) {
@@ -4338,28 +4399,28 @@
     clear_animation: function() {
       if (this.animation_in) {
         if (this.hidden_before_in) {
-          $(this.dom_element).css('opacity', '1');
+          this.dom_element.css('opacity', '1');
         }
         if (this.hidden_after_in) {
-          $(this.dom_element).css('opacity', '0');
+          this.dom_element.css('opacity', '0');
         }
       }
       if (this.animation_out) {
         if (this.hidden_before_in) {
-          $(this.dom_element).css('opacity', '0');
+          this.dom_element.css('opacity', '0');
         }
         if (this.hidden_after_in) {
-          $(this.dom_element).css('opacity', '1');
+          this.dom_element.css('opacity', '1');
         }
       }
-      if ($(this.dom_element).hasClass('animated')) {
-        $(this.dom_element).css('animation-duration', '');
-        $(this.dom_element).css('-webkit-animation-duration', '');
-        $(this.dom_element).removeClass('animated');
+      if (this.dom_element.hasClass('animated')) {
+        this.dom_element.css('animation-duration', '');
+        this.dom_element.css('-webkit-animation-duration', '');
+        this.dom_element.removeClass('animated');
         this.animated = false;
-        $(this.dom_element).removeClass('infinite');
-        $(this.dom_element).removeClass(this.attrs['an_in']);
-        $(this.dom_element).removeClass(this.attrs['an_out']);
+        this.dom_element.removeClass('infinite');
+        this.dom_element.removeClass(this.attrs['an_in']);
+        this.dom_element.removeClass(this.attrs['an_out']);
         this.animation_in = false;
         this.animation_out = false;
       }
@@ -4405,10 +4466,10 @@
       element.hidden_before_in = _.indexOf(element.attrs['an_hidden'].split(','), 'before_in') >= 0;
       element.hidden_after_in = _.indexOf(element.attrs['an_hidden'].split(','), 'after_in') >= 0;
       if (element.hidden_before_in) {
-        $(element.dom_element).css('opacity', '0');
+        element.dom_element.css('opacity', '0');
       }
       if (element.hidden_after_in) {
-        $(element.dom_element).css('opacity', '1');
+        element.dom_element.css('opacity', '1');
       }
 
       var parent_number = element.attrs['an_parent'];
@@ -4445,7 +4506,7 @@
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  $(element.dom_element).waypoint(function(direction) {
+                  element.dom_element.waypoint(function(direction) {
                     if (!element.animated) {
                       element.start_in_animation();
                     }
@@ -4497,7 +4558,7 @@
     },
     render: function($) {
       if ('an_name' in this.attrs && this.attrs['an_name'] != '') {
-        $(this.dom_element).attr('data-an-name', this.attrs['an_name']);
+        this.dom_element.attr('data-an-name', this.attrs['an_name']);
       }
       AnimatedElement.baseclass.prototype.render.apply(this, arguments);
     }
@@ -4910,16 +4971,16 @@
             ],
             loaded: 'waypoint' in $.fn && 'parallax' in $.fn,
             callback: function() {
-              $(element.dom_element).waypoint(function(direction) {
-                var background_position = $(element.dom_element).css('background-position');
+              element.dom_element.waypoint(function(direction) {
+                var background_position = element.dom_element.css('background-position');
                 var match = background_position.match(/([\w%]*) [\w%]/);
                 if (match == null)
                   var v = '50%';
                 else
                   var v = match[1];
-                $(element.dom_element).css('background-attachment', element.attrs['parallax_mode']);
-                $(element.dom_element).css('background-position', v + ' 0');
-                $(element.dom_element).parallax(v, element.attrs['parallax_speed'] / 100);
+                element.dom_element.css('background-attachment', element.attrs['parallax_mode']);
+                element.dom_element.css('background-position', v + ' 0');
+                element.dom_element.parallax(v, element.attrs['parallax_speed'] / 100);
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -4931,7 +4992,7 @@
           });
           break;
         case 'fixed':
-          $(element.dom_element).css('background-attachment', 'fixed');
+          element.dom_element.css('background-attachment', 'fixed');
           break;
         case 'youtube':
           function youtube_parser(url) {
@@ -4954,14 +5015,14 @@
             ],
             loaded: 'waypoint' in $.fn && 'mb_YTPlayer' in $.fn,
             callback: function() {
-              $(element.dom_element).waypoint(function(direction) {
-                $(element.dom_element).attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
-                    'video_youtube']) + "',containment: '*[data-containment-id-" + element.ytContainmentId + "]'" +
-                  ", showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
+              element.dom_element.waypoint(function(direction) {
+                element.dom_element.attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
+                    'video_youtube']) + "',containment:'[data-az-id=" + element.id + "]" +
+                  "', showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
                   mute.toString() + ", startAt:" + element.attrs['video_start'] + ", stopAt:" +
-                  element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'default'}");
-                $(element.dom_element).mb_YTPlayer();
-                $(element.dom_element).playYTP();
+                  element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'highres'}");
+                element.dom_element.mb_YTPlayer();
+                element.dom_element.playYTP();
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -4978,8 +5039,7 @@
     },
 
     render: function($) {
-      this.ytContainmentId = Math.random().toString(36).substr(2, 5);
-      this.dom_element = $('<div data-containment-id-' + this.ytContainmentId + ' class="az-element az-section ' + this.attrs['el_class'] +
+      this.dom_element = $('<div id="' + this.id + '" class="az-element az-section ' + this.get_el_classes() +
         ' " style="' + this.attrs['style'] + '"></div>');
       if (this.attrs['fullheight'] == 'yes')
         this.dom_element.css('height', '100vh');
@@ -5037,8 +5097,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         RowElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         var element = this;
         var controls = this.controls;
         var popoverContent = '<div class="row-layouts clearfix">';
@@ -5071,21 +5131,19 @@
           popoverContent += '</div>';
         }
         popoverContent +=
-          '<small class="az-row-custom control set-columns-layout"><a href="#" class="glazed-util-text-muted text-small">Custom layout</a></small>';
+          '<small class="az-row-custom set-columns-layout"><a href="#" class="custom-row-control glazed-util-text-muted text-small">Custom layout</a></small>';
         popoverContent += '</div>';
 
         var columns = $('<span title="' + title("Set row layout") + '" class="control set-columns btn btn-default glyphicon glyphicon-th"> </span>')
           .insertAfter(this.controls.find('.drag-and-drop'))
           [fp + 'popover']({
-            animation: false,
             placement:'right',
             html: 'true',
             trigger: 'manual',
-            //container: 'body',
             content: popoverContent,
           })
           .click(function() {
-            $(columns)[fp + 'popover']('show') ;
+            $(columns)[fp + 'popover']('toggle') ;
             set_highest_zindex($(controls));
             set_highest_zindex($(controls).find('.popover'));
             $(controls).find('.popover .set-columns-layout').each(function() {
@@ -5093,7 +5151,7 @@
                 object: element
               }, element.click_set_columns);
             });
-            $(element.controls).mouseleave(function() {
+            element.controls.find('.popover').mouseleave(function() {
               $(columns)[fp + 'popover']('hide');
               $(columns).css('display', '');
             });
@@ -5208,7 +5266,7 @@
       RowElement.baseclass.prototype.showed.apply(this, arguments);
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-row row ' + this.attrs['el_class'] + '" style="' +
+      this.dom_element = $('<div class="az-element az-row row ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       this.dom_element.addClass('az-row--' + this.attrs['device']);
@@ -5252,22 +5310,22 @@
     show_controls: function() {
       if (window.glazed_editor) {
         ColumnElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.clone').remove();
-        $(this.controls).find('.copy').remove();
-        $(this.controls).find('.remove').remove();
+        this.controls.find('.clone').remove();
+        this.controls.find('.copy').remove();
+        this.controls.find('.remove').remove();
       }
     },
     get_my_shortcode: function() {
       return this.get_children_shortcode();
     },
     update_width: function(width) {
-      $(this.dom_element).removeClass(width2span(this.attrs['width'], this.parent.attrs['device']));
+      this.dom_element.removeClass(width2span(this.attrs['width'], this.parent.attrs['device']));
       this.attrs['width'] = width;
-      $(this.dom_element).addClass(width2span(this.attrs['width'], this.parent.attrs['device']));
+      this.dom_element.addClass(width2span(this.attrs['width'], this.parent.attrs['device']));
       $(document).trigger("glazed_update_element", this.id);
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-ctnr az-column ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<div class="az-element az-ctnr az-column ' + this.get_el_classes() + ' ' +
         width2span(this.attrs['width'], this.parent.attrs['device']) + '" style="' + this.attrs['style'] +
         '"></div>');
       this.dom_content_element = this.dom_element;
@@ -5312,8 +5370,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         TabsElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         $('<span title="' + title("Add tab") + '" class="control add-tab btn btn-default ' +
          'glyphicon glyphicon-plus-sign" > </span>').appendTo(this.controls).click({
           object: this
@@ -5362,14 +5420,14 @@
       var child = new TabElement(this, false);
       child.update_dom();
       this.update_dom();
-      $(this.dom_element).find('a[href="#' + child.id + '"]')[fp + 'tab']('show');
+      this.dom_element.find('a[href="#' + child.id + '"]')[fp + 'tab']('show');
     },
     showed: function($) {
       TabsElement.baseclass.prototype.showed.apply(this, arguments);
-      $(this.dom_element).find('ul.nav-tabs li:first a')[fp + 'tab']('show');
+      this.dom_element.find('ul.nav-tabs li:first a')[fp + 'tab']('show');
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.attrs['el_class'] + this.attrs['az_dirrection'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.get_el_classes() + this.attrs['az_dirrection'] + '" style="' + this.attrs[
         'style'] + '"></div>');
       var menu = '<ul class="nav nav-tabs" role="tablist">';
       for (var i = 0; i < this.children.length; i++) {
@@ -5377,7 +5435,7 @@
           i].attrs['title'] + '</a></li>';
       }
       menu += '</ul>';
-      $(this.dom_element).append(menu);
+      this.dom_element.append(menu);
       var content = '<div id="' + this.id + '" class="tab-content"></div>';
       this.dom_content_element = $(content).appendTo(this.dom_element);
       TabsElement.baseclass.prototype.render.apply(this, arguments);
@@ -5410,7 +5468,7 @@
     show_controls: function() {
       if (window.glazed_editor) {
         TabElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.drag-and-drop').remove();
+        this.controls.find('.drag-and-drop').remove();
         $('<span class="control btn btn-default glyphicon">' + this.name + '</span>')
           .prependTo(this.controls);
       }
@@ -5436,7 +5494,7 @@
     },
     render: function($) {
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-ctnr az-tab tab-pane ' +
-        this.attrs['el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+        this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       TabElement.baseclass.prototype.render.apply(this, arguments);
     },
@@ -5473,8 +5531,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         AccordionElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         $('<span title="' + title("Add toggle") + '" class="control add-toggle btn btn-default glyphicon glyphicon-plus-sign" > </span>').appendTo(this.controls)
           .click({
             object: this
@@ -5517,19 +5575,19 @@
     },
     showed: function($) {
       AccordionElement.baseclass.prototype.showed.apply(this, arguments);
-      $(this.dom_element).find('> .az-toggle > .in').removeClass(p + 'in');
-      $(this.dom_element).find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
+      this.dom_element.find('> .az-toggle > .in').removeClass(p + 'in');
+      this.dom_element.find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
         'toggle': false,
         'parent': '#' + this.id
       });
-      $(this.dom_element).find('> .az-toggle > .collapse:first')[fp + 'collapse']({
+      this.dom_element.find('> .az-toggle > .collapse:first')[fp + 'collapse']({
         'toggle': this.attrs['collapsed'] != 'yes',
         'parent': '#' + this.id
       });
     },
     render: function($) {
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-accordion panel-group ' +
-        this.attrs['el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+        this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       AccordionElement.baseclass.prototype.render.apply(this, arguments);
     },
@@ -5575,7 +5633,7 @@
           'el_class'] + '" style="' + this.attrs['style'] + '"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#' +
         this.parent.id + '" href="#' + this.id + '">' + this.attrs['title'] + '</a></h4></div><div id="' +
         this.id + '" class="panel-collapse collapse"><div class="panel-body az-ctnr"></div></div></div>');
-      this.dom_content_element = $(this.dom_element).find('.panel-body');
+      this.dom_content_element = this.dom_element.find('.panel-body');
       ToggleElement.baseclass.prototype.render.apply(this, arguments);
     },
   });
@@ -5865,8 +5923,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         CarouselElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         var element = this;
         $('<span title="' + title("Add slide") + '" class="control add-toggle btn btn-default glyphicon glyphicon-plus-sign" > </span>').appendTo(this.controls)
           .click({
@@ -5928,7 +5986,7 @@
         path: 'vendor/owl.carousel/owl-carousel/owl.carousel.js',
         loaded: 'owlCarousel' in $.fn,
         callback: function() {
-          //$(element.controls).detach();
+          //element.controls.detach();
           var owl_carousel_refresh = function(owl) {
             var userItems = null;
             if ('userItems' in owl)
@@ -6011,12 +6069,12 @@
           }
           $('head').find('#carousel-style-' + element.id).remove();
           $('head').append(get_carousel_style(element));
-          //$(element.dom_element).prepend(element.controls);
+          //element.dom_element.prepend(element.controls);
         }
       });
     },
     render: function($) {
-      this.dom_element = $('<div id="' + this.id + '" class="az-element az-carousel ' + this.attrs['el_class'] +
+      this.dom_element = $('<div id="' + this.id + '" class="az-element az-carousel ' + this.get_el_classes() +
         '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = $('<div></div>').appendTo(this.dom_element);
       CarouselElement.baseclass.prototype.render.apply(this, arguments);
@@ -6042,8 +6100,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         SlideElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.clone').remove();
-        $(this.controls).find('.drag-and-drop').remove();
+        this.controls.find('.clone').remove();
+        this.controls.find('.drag-and-drop').remove();
         $('<span class="control btn btn-default glyphicon">' + this.name + '</span>')
           .prependTo(this.controls);
       }
@@ -6059,7 +6117,7 @@
       var type = 'panel-default';
       if (this.parent.attrs['type'] != '')
         type = this.parent.attrs['type'];
-      this.dom_element = $('<div class="az-element az-slide az-ctnr ' + this.attrs['el_class'] + ' clearfix" style="' + this.attrs['style'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-slide az-ctnr ' + this.get_el_classes() + ' clearfix" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       SlideElement.baseclass.prototype.render.apply(this, arguments);
     },
@@ -6147,7 +6205,7 @@
           el.attrs['pos_height'] = parseInt($(dom_element).css("height")) / ($(element.dom_content_element).height() /
             100) + "%";
           to_percents(dom_element);
-          element.attrs['o_width'] = $(element.dom_element).width();
+          element.attrs['o_width'] = element.dom_element.width();
           $(document).trigger("glazed_update_element", id);
         }
 
@@ -6319,11 +6377,11 @@
         }
 
         $(window).on('resize.az_layers' + element.id, function() {
-          var width = $(element.dom_element).width();
+          var width = element.dom_element.width();
           if (!('o_width' in element.attrs) || element.attrs['o_width'] == '')
             element.attrs['o_width'] = width;
           var ratio = width / element.attrs['o_width'];
-          $(element.dom_element).css('font-size', ratio * 100 + '%');
+          element.dom_element.css('font-size', ratio * 100 + '%');
           $(element.dom_content_element).css('height', element.attrs['height'] * ratio + 'px');
           update_font_sizes(element, ratio);
         });
@@ -6331,9 +6389,9 @@
       }
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-layers ' + this.attrs['el_class'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-layers ' + this.get_el_classes() + '" style="' + this.attrs[
         'style'] + '"><div id="' + this.id + '" class="az-ctnr"></div></div>');
-      this.dom_content_element = $(this.dom_element).find('.az-ctnr');
+      this.dom_content_element = this.dom_element.find('.az-ctnr');
       $(this.dom_content_element).css('width', this.attrs['width']);
       $(this.dom_content_element).css('height', this.attrs['height']);
       LayersElement.baseclass.prototype.render.apply(this, arguments);
@@ -6404,7 +6462,7 @@
           $('<span title="' + title("Toggle editor") + '" class="control toggle-editor btn btn-default glyphicon glyphicon-eye-open" > </span>')
           .appendTo(this.controls)
             .click(function() {
-              $(element.dom_element).toggleClass('glazed-editor');
+              element.dom_element.toggleClass('glazed-editor');
               return false;
             });
           $('<span role="button" tabindex="0" title="' + title("Documentation and Support") + '" class="control glazed-help btn btn-default glyphicon glyphicon-question-sign glazed-builder-popover"> </span>')
@@ -6412,7 +6470,6 @@
           .popover({
             html : true,
             placement: 'left',
-            container: 'body',
             content: function() {
               return helpContent;
             },
@@ -6423,18 +6480,18 @@
           // $('<span title="' + title("Toggle animations") + '" class="control toggle-animations btn ' +
           //    'btn-default glyphicon glyphicon-play-circle" > </span>').appendTo(this.controls)
           //   .click(function() {
-          //     $(element.dom_element).toggleClass('glazed-animations-disabled');
+          //     element.dom_element.toggleClass('glazed-animations-disabled');
           //     return false;
           //   });
-          $(this.controls).removeClass(p + 'btn-group-xs');
-          $(this.controls).find('.edit').remove();
-          $(this.controls).find('.copy').remove();
-          $(this.controls).find('.clone').remove();
-          $(this.controls).find('.remove').remove();
-          $(this.controls).find('.js-animation').remove();
-          $(this.controls).find('.drag-and-drop').attr('title', '');
-          $(this.controls).find('.drag-and-drop').removeClass(p + 'glyphicon-move');
-          $(this.controls).find('.drag-and-drop').removeClass('drag-and-drop');
+          this.controls.removeClass(p + 'btn-group-xs');
+          this.controls.find('.edit').remove();
+          this.controls.find('.copy').remove();
+          this.controls.find('.clone').remove();
+          this.controls.find('.remove').remove();
+          this.controls.find('.js-animation').remove();
+          this.controls.find('.drag-and-drop').attr('title', '');
+          this.controls.find('.drag-and-drop').removeClass(p + 'glyphicon-move');
+          this.controls.find('.drag-and-drop').removeClass('drag-and-drop');
         }
         if (this.saveable)
           $('<span title="' + title("Save container") + '" class="control save-container btn btn-success glyphicon glyphicon-save" > </span>').appendTo(this.controls).click({
@@ -6925,6 +6982,8 @@
       return javascript;
     },
     get_html: function() {
+      // Cleanup on save. Removes elements and classes that aren't to be saved
+      // @todo make this extendable via api
       this.recursive_update_data();
       this.recursive_clear_animation();
       var dom = $('<div>' + $(this.dom_content_element).html() + '</div>');
@@ -6936,7 +6995,6 @@
       $(dom).find('.ui-resizable-e').remove();
       $(dom).find('.ui-resizable-s').remove();
       $(dom).find('.ui-resizable-se').remove();
-
       // Removed ckeditor-inline elements.
       $(dom).find('.az-text .ckeditor-inline').each(function() {
         var $this = $(this);
@@ -6947,6 +7005,7 @@
 
       $(dom).find('.az-element--controls-center').removeClass('az-element--controls-center');
       $(dom).find('.az-element--controls-top-left').removeClass('az-element--controls-top-left');
+      $(dom).find('.az-element--controls-spacer').removeClass('az-element--controls-spacer');
       $(dom).find('.editable-highlight').removeClass('editable-highlight');
       $(dom).find('.styleable-highlight').removeClass('styleable-highlight');
       $(dom).find('.sortable-highlight').removeClass('sortable-highlight');
@@ -7001,10 +7060,10 @@
               $(shortcode).appendTo(element.dom_content_element);
               $(element.dom_content_element).find('> script').detach().appendTo('head');
               $(element.dom_content_element).find('> link[href]').detach().appendTo('head');
-              $(element.dom_element).css('display', '');
-              $(element.dom_element).addClass('glazed');
+              element.dom_element.css('display', '');
+              element.dom_element.addClass('glazed');
               element.parse_html(element.dom_content_element);
-              $(element.dom_element).attr('data-az-id', element.id);
+              element.dom_element.attr('data-az-id', element.id);
               element.html_content = true;
               for (var i = 0; i < element.children.length; i++) {
                 element.children[i].recursive_render();
@@ -7025,7 +7084,7 @@
                 element.loaded_container = element.attrs['container'];
                 element.parse_shortcode(shortcode);
 
-                $(element.dom_element).attr('data-az-id', element.id);
+                element.dom_element.attr('data-az-id', element.id);
                 if (window.glazed_editor) {
                   element.show_controls();
                   element.update_sortable();
@@ -7088,7 +7147,7 @@
           path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
           loaded: 'waypoint' in $.fn,
           callback: function() {
-            $(element.dom_element).waypoint(function(direction) {
+            element.dom_element.waypoint(function(direction) {
               if (!element.rendered) {
                 element.rendered = true;
                 element.load_container();
@@ -7107,7 +7166,7 @@
     render: function($) {
       if (this.attrs.container != '/') {
         this.dom_element = $('<div class="az-element az-container"><div class="az-ctnr"></div></div>');
-        this.dom_content_element = $(this.dom_element).find('.az-ctnr');
+        this.dom_content_element = this.dom_element.find('.az-ctnr');
         ContainerElement.baseclass.prototype.render.apply(this, arguments);
       }
     },
@@ -7129,7 +7188,7 @@
       if ('content' in this.attrs) {
         var match = /\[[^\]]*\]([^\[]*)\[\/[^\]]*\]/.exec(this.attrs['content']);
         if (match) {
-          $(this.dom_element).append(match[1]);
+          this.dom_element.append(match[1]);
         }
       }
       UnknownElement.baseclass.prototype.render.apply(this, arguments);
@@ -7250,7 +7309,7 @@
     });
   };
 
-  $(window).load(function() {
+  $(window).on("load", function() {
 
     attachOnLoad();
 

@@ -58,7 +58,7 @@
     render: function($) {
       var id = this.id;
       var element = this;
-      this.dom_element = $('<div class="az-element az-image ' + this.attrs['el_class'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-image ' + this.get_el_classes() + '"></div>');
       function render_image(value, style, width, height, alt, title) {
         if ($.isNumeric(width))
           width = width + 'px';
@@ -82,7 +82,7 @@
         );
       $(img).appendTo(this.dom_element);
       if (this.attrs['link'] != '') {
-        $(this.dom_element).find('img').each(function() {
+        this.dom_element.find('img').each(function() {
           $(this).wrap('<a href="' + element.attrs['link'] + '" target="' + element.attrs['link_target'] +
             '"></a>');
         });
