@@ -2,7 +2,7 @@
     type: 'checkbox',
     get_value: function() {
       var values = [];
-      _.each($(this.dom_element).find('input[name="' + this.param_name + '"]:checked'), function(obj) {
+      _.each(this.dom_element.find('input[name="' + this.param_name + '"]:checked'), function(obj) {
         values.push($(obj).val());
       });
       return values.join(',');
@@ -24,7 +24,7 @@
               '" type="checkbox" value="' + name + '"></div>';
           }
         }
-        this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
+        this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
           '</div><p class="help-block">' + this.description + '</p>');
         initBootstrapSwitch(this.dom_element);
       } else {
@@ -38,7 +38,7 @@
               '" type="checkbox" value="' + name + '">' + this.value[name] + '</label></div>';
           }
         }
-        this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
+        this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
           '</div><p class="help-block">' + this.description + '</p>');
       }
     }

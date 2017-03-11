@@ -63,7 +63,7 @@
           $('<span title="' + title("Toggle editor") + '" class="control toggle-editor btn btn-default glyphicon glyphicon-eye-open" > </span>')
           .appendTo(this.controls)
             .click(function() {
-              $(element.dom_element).toggleClass('glazed-editor');
+              element.dom_element.toggleClass('glazed-editor');
               return false;
             });
           $('<span role="button" tabindex="0" title="' + title("Documentation and Support") + '" class="control glazed-help btn btn-default glyphicon glyphicon-question-sign glazed-builder-popover"> </span>')
@@ -71,7 +71,6 @@
           .popover({
             html : true,
             placement: 'left',
-            container: 'body',
             content: function() {
               return helpContent;
             },
@@ -82,18 +81,18 @@
           // $('<span title="' + title("Toggle animations") + '" class="control toggle-animations btn ' +
           //    'btn-default glyphicon glyphicon-play-circle" > </span>').appendTo(this.controls)
           //   .click(function() {
-          //     $(element.dom_element).toggleClass('glazed-animations-disabled');
+          //     element.dom_element.toggleClass('glazed-animations-disabled');
           //     return false;
           //   });
-          $(this.controls).removeClass(p + 'btn-group-xs');
-          $(this.controls).find('.edit').remove();
-          $(this.controls).find('.copy').remove();
-          $(this.controls).find('.clone').remove();
-          $(this.controls).find('.remove').remove();
-          $(this.controls).find('.js-animation').remove();
-          $(this.controls).find('.drag-and-drop').attr('title', '');
-          $(this.controls).find('.drag-and-drop').removeClass(p + 'glyphicon-move');
-          $(this.controls).find('.drag-and-drop').removeClass('drag-and-drop');
+          this.controls.removeClass(p + 'btn-group-xs');
+          this.controls.find('.edit').remove();
+          this.controls.find('.copy').remove();
+          this.controls.find('.clone').remove();
+          this.controls.find('.remove').remove();
+          this.controls.find('.js-animation').remove();
+          this.controls.find('.drag-and-drop').attr('title', '');
+          this.controls.find('.drag-and-drop').removeClass(p + 'glyphicon-move');
+          this.controls.find('.drag-and-drop').removeClass('drag-and-drop');
         }
         if (this.saveable)
           $('<span title="' + title("Save container") + '" class="control save-container btn btn-success glyphicon glyphicon-save" > </span>').appendTo(this.controls).click({
@@ -584,6 +583,8 @@
       return javascript;
     },
     get_html: function() {
+      // Cleanup on save. Removes elements and classes that aren't to be saved
+      // @todo make this extendable via api
       this.recursive_update_data();
       this.recursive_clear_animation();
       var dom = $('<div>' + $(this.dom_content_element).html() + '</div>');
@@ -595,7 +596,6 @@
       $(dom).find('.ui-resizable-e').remove();
       $(dom).find('.ui-resizable-s').remove();
       $(dom).find('.ui-resizable-se').remove();
-
       // Removed ckeditor-inline elements.
       $(dom).find('.az-text .ckeditor-inline').each(function() {
         var $this = $(this);
@@ -606,6 +606,7 @@
 
       $(dom).find('.az-element--controls-center').removeClass('az-element--controls-center');
       $(dom).find('.az-element--controls-top-left').removeClass('az-element--controls-top-left');
+      $(dom).find('.az-element--controls-spacer').removeClass('az-element--controls-spacer');
       $(dom).find('.editable-highlight').removeClass('editable-highlight');
       $(dom).find('.styleable-highlight').removeClass('styleable-highlight');
       $(dom).find('.sortable-highlight').removeClass('sortable-highlight');
@@ -660,10 +661,10 @@
               $(shortcode).appendTo(element.dom_content_element);
               $(element.dom_content_element).find('> script').detach().appendTo('head');
               $(element.dom_content_element).find('> link[href]').detach().appendTo('head');
-              $(element.dom_element).css('display', '');
-              $(element.dom_element).addClass('glazed');
+              element.dom_element.css('display', '');
+              element.dom_element.addClass('glazed');
               element.parse_html(element.dom_content_element);
-              $(element.dom_element).attr('data-az-id', element.id);
+              element.dom_element.attr('data-az-id', element.id);
               element.html_content = true;
               for (var i = 0; i < element.children.length; i++) {
                 element.children[i].recursive_render();
@@ -684,7 +685,7 @@
                 element.loaded_container = element.attrs['container'];
                 element.parse_shortcode(shortcode);
 
-                $(element.dom_element).attr('data-az-id', element.id);
+                element.dom_element.attr('data-az-id', element.id);
                 if (window.glazed_editor) {
                   element.show_controls();
                   element.update_sortable();
@@ -747,7 +748,7 @@
           path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
           loaded: 'waypoint' in $.fn,
           callback: function() {
-            $(element.dom_element).waypoint(function(direction) {
+            element.dom_element.waypoint(function(direction) {
               if (!element.rendered) {
                 element.rendered = true;
                 element.load_container();
@@ -766,7 +767,7 @@
     render: function($) {
       if (this.attrs.container != '/') {
         this.dom_element = $('<div class="az-element az-container"><div class="az-ctnr"></div></div>');
-        this.dom_content_element = $(this.dom_element).find('.az-ctnr');
+        this.dom_content_element = this.dom_element.find('.az-ctnr');
         ContainerElement.baseclass.prototype.render.apply(this, arguments);
       }
     },

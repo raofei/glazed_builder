@@ -32,8 +32,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         TabsElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         $('<span title="' + title("Add tab") + '" class="control add-tab btn btn-default ' +
          'glyphicon glyphicon-plus-sign" > </span>').appendTo(this.controls).click({
           object: this
@@ -82,14 +82,14 @@
       var child = new TabElement(this, false);
       child.update_dom();
       this.update_dom();
-      $(this.dom_element).find('a[href="#' + child.id + '"]')[fp + 'tab']('show');
+      this.dom_element.find('a[href="#' + child.id + '"]')[fp + 'tab']('show');
     },
     showed: function($) {
       TabsElement.baseclass.prototype.showed.apply(this, arguments);
-      $(this.dom_element).find('ul.nav-tabs li:first a')[fp + 'tab']('show');
+      this.dom_element.find('ul.nav-tabs li:first a')[fp + 'tab']('show');
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.attrs['el_class'] + this.attrs['az_dirrection'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.get_el_classes() + this.attrs['az_dirrection'] + '" style="' + this.attrs[
         'style'] + '"></div>');
       var menu = '<ul class="nav nav-tabs" role="tablist">';
       for (var i = 0; i < this.children.length; i++) {
@@ -97,7 +97,7 @@
           i].attrs['title'] + '</a></li>';
       }
       menu += '</ul>';
-      $(this.dom_element).append(menu);
+      this.dom_element.append(menu);
       var content = '<div id="' + this.id + '" class="tab-content"></div>';
       this.dom_content_element = $(content).appendTo(this.dom_element);
       TabsElement.baseclass.prototype.render.apply(this, arguments);

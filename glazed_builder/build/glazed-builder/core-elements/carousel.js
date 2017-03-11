@@ -284,8 +284,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         CarouselElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         var element = this;
         $('<span title="' + title("Add slide") + '" class="control add-toggle btn btn-default glyphicon glyphicon-plus-sign" > </span>').appendTo(this.controls)
           .click({
@@ -347,7 +347,7 @@
         path: 'vendor/owl.carousel/owl-carousel/owl.carousel.js',
         loaded: 'owlCarousel' in $.fn,
         callback: function() {
-          //$(element.controls).detach();
+          //element.controls.detach();
           var owl_carousel_refresh = function(owl) {
             var userItems = null;
             if ('userItems' in owl)
@@ -430,12 +430,12 @@
           }
           $('head').find('#carousel-style-' + element.id).remove();
           $('head').append(get_carousel_style(element));
-          //$(element.dom_element).prepend(element.controls);
+          //element.dom_element.prepend(element.controls);
         }
       });
     },
     render: function($) {
-      this.dom_element = $('<div id="' + this.id + '" class="az-element az-carousel ' + this.attrs['el_class'] +
+      this.dom_element = $('<div id="' + this.id + '" class="az-element az-carousel ' + this.get_el_classes() +
         '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = $('<div></div>').appendTo(this.dom_element);
       CarouselElement.baseclass.prototype.render.apply(this, arguments);

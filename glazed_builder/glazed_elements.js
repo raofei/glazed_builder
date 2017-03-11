@@ -96,7 +96,7 @@
       var reverse = this.attrs['reverse'];
       if (reverse != '')
         reverse = p + reverse;
-      this.dom_element = $('<blockquote class="az-element az-blockquote ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<blockquote class="az-element az-blockquote ' + this.get_el_classes() + ' ' +
         reverse + '" style="' + this.attrs['style'] + '">' + this.attrs['content'] + '</blockquote>');
       this.dom_content_element = this.dom_element;
 
@@ -104,7 +104,7 @@
       var str = '<footer><cite>' + this.attrs['cite'] + '</cite></footer>';
       var innerHtml = this.dom_element.html().indexOf(str);
       if (this.attrs['cite'] != '' && innerHtml < 0)
-        $(this.dom_element).append(str);
+        this.dom_element.append(str);
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },
@@ -157,12 +157,12 @@
     style_selector: '> .btn',
     render: function($) {
       if (this.attrs['link'] == '') {
-        this.dom_element = $('<div class="az-element az-button ' + this.attrs['el_class'] +
+        this.dom_element = $('<div class="az-element az-button ' + this.get_el_classes() +
           '"><button type="button" class="btn ' + this.attrs['type'] + ' ' + this.attrs['size'] + ' ' + this.attrs['block'] +
           '" style="' + this.attrs['style'] + '">' + this.attrs['title'] + '</button></div>');
       }
       else {
-        this.dom_element = $('<div class="az-element az-button ' + this.attrs['el_class'] + '"><a href="' +
+        this.dom_element = $('<div class="az-element az-button ' + this.get_el_classes() + '"><a href="' +
           this.attrs['link'] + '" type="button" class="btn ' + this.attrs['type'] + ' ' + this.attrs['size'] + ' ' + this.attrs['block'] +
           '" style="' + this.attrs['style'] + '" target="' + this.attrs['link_target'] + '">' +
           this.attrs['title'] + '</a></div>');
@@ -288,8 +288,8 @@
         ],
         loaded: 'waypoint' in $.fn && 'circliful' in $.fn,
         callback: function() {
-          $(element.dom_element).waypoint(function(direction) {
-            $(element.dom_element).find('#' + element.id).once().circliful();
+          element.dom_element.waypoint(function(direction) {
+            element.dom_element.find('#' + element.id).once().circliful();
           }, {
             offset: '100%',
             handler: function(direction) {
@@ -308,7 +308,7 @@
       else {
         var circliful_icon = '';
       }
-      this.dom_element = $('<div class="az-element az-circle-counter ' + this.attrs['el_class'] + '" style="' +
+      this.dom_element = $('<div class="az-element az-circle-counter ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"><div id="' + this.id + '" data-dimension="' + this.attrs['dimension'] +
         '" data-text="' + this.attrs['text'] + '" data-info="' + this.attrs['info'] + '" data-width="' + this
           .attrs['width'] + '" data-fontsize="' + this.attrs['fontsize'] + '" data-type="' + this.attrs['type'] +
@@ -497,7 +497,7 @@
                 secondsWrapper: '.ce-seconds .ce-flip-back',
                 wrapDigits: false,
                 onChange: function() {
-                  countEverestFlipAnimate($(element.dom_element).find('.ce-countdown .ce-col>div'),
+                  countEverestFlipAnimate(element.dom_element.find('.ce-countdown .ce-col>div'),
                     this);
                 }
               }
@@ -538,15 +538,15 @@
               options = {
                 leftHandZeros: false,
                 onChange: function() {
-                  drawCircle($(element.dom_element).find('#ce-days').get(0), this.days, 365);
-                  drawCircle($(element.dom_element).find('#ce-hours').get(0), this.hours, 24);
-                  drawCircle($(element.dom_element).find('#ce-minutes').get(0), this.minutes, 60);
-                  drawCircle($(element.dom_element).find('#ce-seconds').get(0), this.seconds, 60);
+                  drawCircle(element.dom_element.find('#ce-days').get(0), this.days, 365);
+                  drawCircle(element.dom_element.find('#ce-hours').get(0), this.hours, 24);
+                  drawCircle(element.dom_element.find('#ce-minutes').get(0), this.minutes, 60);
+                  drawCircle(element.dom_element.find('#ce-seconds').get(0), this.seconds, 60);
                 }
               }
               break;
             case 'style10':
-              var $countdown = $(element.dom_element).find('.ce-countdown');
+              var $countdown = element.dom_element.find('.ce-countdown');
               var firstCalculation = true;
               options = {
                 leftHandZeros: true,
@@ -658,7 +658,7 @@
             case 'date':
               var d = Date.parseDate(element.attrs['date'], 'd.m.Y');
               if (d != null)
-                $(element.dom_element).countEverest($.extend(options, {
+                element.dom_element.countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -667,7 +667,7 @@
             case 'date_time':
               var d = Date.parseDate(element.attrs['date_time'], 'd.m.Y H');
               if (d != null)
-                $(element.dom_element).countEverest($.extend(options, {
+                element.dom_element.countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -678,7 +678,7 @@
               var d = new Date();
               d.setHours(element.attrs['time']);
               if (d != null)
-                $(element.dom_element).countEverest($.extend(options, {
+                element.dom_element.countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -702,7 +702,7 @@
                   elapsed = elapsed - Math.floor(k) * interval;
                   var delta = interval - elapsed;
                   var d = new Date(current.getTime() + delta);
-                  $(element.dom_element).countEverest($.extend(options, {
+                  element.dom_element.countEverest($.extend(options, {
                     day: d.getDate(),
                     month: d.getMonth() + 1,
                     year: d.getFullYear(),
@@ -718,7 +718,7 @@
                 }
                 else {
                   var d = new Date(saved.getTime() + interval);
-                  $(element.dom_element).countEverest($.extend(options, {
+                  element.dom_element.countEverest($.extend(options, {
                     day: d.getDate(),
                     month: d.getMonth() + 1,
                     year: d.getFullYear(),
@@ -741,12 +741,12 @@
       });
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-countdown ' + this.attrs['el_class'] + '" style="' + this
+      this.dom_element = $('<div class="az-element az-countdown ' + this.get_el_classes() + '" style="' + this
           .attrs['style'] + '"></div>');
       var countdown = $('<div class="ce-countdown"></div>').appendTo(this.dom_element);
       switch (this.attrs['countdown_style']) {
         case 'style1':
-          $(this.dom_element).addClass('ce-countdown--theme-1');
+          this.dom_element.addClass('ce-countdown--theme-1');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col"><span class="ce-days"></span> <span class="ce-days-label"></span></div>');
@@ -763,7 +763,7 @@
             );
           break;
         case 'style6':
-          $(this.dom_element).addClass('ce-countdown--theme-6 clearfix');
+          this.dom_element.addClass('ce-countdown--theme-6 clearfix');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col col-md-3"><div class="ce-days"><div class="ce-flip-wrap"><div class="ce-flip-front bg-primary"></div><div class="ce-flip-back bg-primary"></div></div></div><span class="ce-days-label"></span></div>'
@@ -782,7 +782,7 @@
             );
           break;
         case 'style9':
-          $(this.dom_element).addClass('ce-countdown--theme-9');
+          this.dom_element.addClass('ce-countdown--theme-9');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-circle"><canvas id="ce-days" width="408" height="408"></canvas><div class="ce-circle__values"><span class="ce-digit ce-days"></span><span class="ce-label ce-days-label"></span></div></div>'
@@ -801,7 +801,7 @@
             );
           break;
         case 'style10':
-          $(this.dom_element).addClass('ce-countdown--theme-10');
+          this.dom_element.addClass('ce-countdown--theme-10');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-unit-wrap"><div class="ce-days"></div><span class="ce-days-label"></span></div>');
@@ -819,7 +819,7 @@
             );
           break;
         case 'style12':
-          $(this.dom_element).addClass('ce-countdown--theme-12');
+          this.dom_element.addClass('ce-countdown--theme-12');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col"><div class="ce-days ce-digits"></div> <span class="ce-days-label"></span></div>'
@@ -919,8 +919,8 @@
         ],
         loaded: 'waypoint' in $.fn && 'countTo' in $.fn,
         callback: function() {
-          $(element.dom_element).waypoint(function(direction) {
-            $(element.dom_element).find('#' + element.id).countTo({
+          element.dom_element.waypoint(function(direction) {
+            element.dom_element.find('#' + element.id).countTo({
               from: Math.round(element.attrs['start']),
               to: Math.round(element.attrs['end']),
               speed: Math.round(element.attrs['speed']),
@@ -938,7 +938,7 @@
             },
           });
           $(document).trigger('scroll');
-          //        $(element.dom_element).waypoint({
+          //        element.dom_element.waypoint({
           //          handler: function() {
           //          }
           //        });
@@ -948,7 +948,7 @@
     render: function($) {
       this.dom_element = $('<div class="az-element az-counter"><div id="' + this.id + '" class="' + this.attrs[
           'el_class'] + '" style="' + this.attrs['style'] + '">' + this.attrs['start'] + '</div></div>');
-      $(this.dom_element).find('#' + this.id).css('font-size', this.attrs['fontsize'] + 'px');
+      this.dom_element.find('#' + this.id).css('font-size', this.attrs['fontsize'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },
@@ -969,7 +969,7 @@
     is_container: true,
     has_content: true,
     render: function($) {
-      this.dom_element = $('<div class="az-element az-html ' + this.attrs['el_class'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-html ' + this.get_el_classes() + '" style="' + this.attrs[
           'style'] + '">' + this.attrs['content'] + '</div>');
       this.dom_content_element = this.dom_element;
       this.baseclass.prototype.render.apply(this, arguments);
@@ -1085,7 +1085,7 @@
         else
           icon_style = icon_style + 'background-color: ' + this.attrs['st_theme_bgcolor'] + ';';
       }
-      var icon_html = '<div class="az-element az-icon ' + this.attrs['el_class'] + '"><i class="' + this.attrs[
+      var icon_html = '<div class="az-element az-icon ' + this.get_el_classes() + '"><i class="' + this.attrs[
           'icon'] + ' ' + this.attrs['size'] + ' ' + this.attrs['st_style'] + ' ' + this.attrs['fw'] + ' ' +
         this.attrs['pull'] + ' ' + this.attrs['animation'] + ' ' + this.attrs['orientation'] + '" style="' +
         this.attrs['style'] + icon_style + '"></i></div>';
@@ -1096,7 +1096,7 @@
         this.dom_element = $('<a href="' + this.attrs['link'] + '" class="az-element az-icon ' + this.attrs[
             'el_class'] + '" target="' + this.attrs['link_target'] + '">' + icon_html + '</a>');
       }
-      $(this.dom_element).css('font-size', this.attrs['size'] + 'px');
+      this.dom_element.css('font-size', this.attrs['size'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },
@@ -1161,7 +1161,7 @@
     render: function($) {
       var id = this.id;
       var element = this;
-      this.dom_element = $('<div class="az-element az-image ' + this.attrs['el_class'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-image ' + this.get_el_classes() + '"></div>');
       function render_image(value, style, width, height, alt, title) {
         if ($.isNumeric(width))
           width = width + 'px';
@@ -1185,7 +1185,7 @@
         );
       $(img).appendTo(this.dom_element);
       if (this.attrs['link'] != '') {
-        $(this.dom_element).find('img').each(function() {
+        this.dom_element.find('img').each(function() {
           $(this).wrap('<a href="' + element.attrs['link'] + '" target="' + element.attrs['link_target'] +
             '"></a>');
         });
@@ -1248,7 +1248,7 @@
       var element = this;
       var images = this.attrs['images'].split(',');
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-images-carousel carousel ' +
-        'slide ' + this.attrs['el_class'] + '" data-ride="carousel" style="' + this.attrs['style'] +
+        'slide ' + this.get_el_classes() + '" data-ride="carousel" style="' + this.attrs['style'] +
         '"></div>');
       var hide = this.attrs['hide'].split(',');
       if ($.inArray('pagination_control', hide) < 0) {
@@ -1256,23 +1256,23 @@
         for (var i = 0; i < images.length; i++) {
           $(indicators).append('<li data-target="#' + this.id + '" data-slide-to="' + i + '"></li>');
         }
-        $(this.dom_element).append(indicators);
+        this.dom_element.append(indicators);
       }
 
       var inner = $('<div class="carousel-inner"></div>');
       for (var i = 0; i < images.length; i++) {
         var item = $('<img class="item" style="width:100%" src="' + images[i] + '" alt="' + this.attrs['alt'] + '" title="' + this.attrs['title'] + '">').appendTo(inner);
       }
-      $(this.dom_element).append(inner);
+      this.dom_element.append(inner);
       if ($.inArray('prev_next_buttons', hide) < 0) {
         var controls = $('<a class="left carousel-control" href="#' + this.id +
           '" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a class="right carousel-control" href="#' +
           this.id + '" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>');
-        $(this.dom_element).append(controls);
+        this.dom_element.append(controls);
       }
 
-      $(this.dom_element).find('.carousel-indicators li:first').addClass(p + 'active');
-      $(this.dom_element).find('.carousel-inner .item:first').addClass(p + 'active');
+      this.dom_element.find('.carousel-indicators li:first').addClass(p + 'active');
+      this.dom_element.find('.carousel-inner .item:first').addClass(p + 'active');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },
@@ -1326,7 +1326,7 @@
       }
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-link ' + this.attrs['el_class'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-link ' + this.get_el_classes() + '"></div>');
       this.dom_content_element = $('<a href="' + this.attrs['link'] + '" class="az-ctnr" target="' + this.attrs[
           'link_target'] + '"></a>').appendTo(this.dom_element);
       this.baseclass.prototype.render.apply(this, arguments);
@@ -1362,7 +1362,7 @@
     is_container: true,
     has_content: true,
     render: function($) {
-      this.dom_element = $('<div style="line-height: 0;" class="az-element az-map ' + this.attrs['el_class'] + '"></div>');
+      this.dom_element = $('<div style="line-height: 0;" class="az-element az-map ' + this.get_el_classes() + '"></div>');
       function render_map(address, style, width, height) {
         address = address.replace(' ', '+');
         if ($.isNumeric(width))
@@ -1397,12 +1397,12 @@
     is_container: true,
     controls_base_position: 'top-left',
     render: function($) {
-      this.dom_element = $('<div class="az-element az-panel panel ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<div class="az-element az-panel panel ' + this.get_el_classes() + ' ' +
         this.attrs['type'] + '" style="' + this.attrs['style'] + '"></div>');
       if (this.attrs['title'] != '') {
         var heading = $('<div class="panel-heading"><h3 class="panel-title">' + this.attrs[
             'title'] + '</div></div>');
-        $(this.dom_element).append(heading);
+        this.dom_element.append(heading);
       }
       var body = $('<div class="panel-body az-ctnr"></div>').appendTo(this.dom_element);
       this.dom_content_element = body;
@@ -1461,7 +1461,7 @@
         options = _.map(options.split(','), function(value) {
           return p + value;
         }).join(' ');
-      this.dom_element = $('<div class="az-element az-progress-bar progress ' + this.attrs['el_class'] +
+      this.dom_element = $('<div class="az-element az-progress-bar progress ' + this.get_el_classes() +
         ' ' + options + '" style="' + this.attrs['style'] + '"><div class="progress-bar ' + this.attrs[
           'type'] + '" role="progressbar" aria-valuenow="' + this.attrs['width'] +
         '" aria-valuemin="0" aria-valuemax="100" style="width: ' + this.attrs['width'] + '%; line-height: ' + height + ';">' + this.attrs[
@@ -1569,7 +1569,7 @@
           divider_style = divider_style + 'margin-left: auto;margin-right: 0;';
         }
       }
-       this.dom_element = $('<hr class="az-element az-separator ' + this.attrs['el_class'] + '" style="' + this.attrs[
+       this.dom_element = $('<hr class="az-element az-separator ' + this.get_el_classes() + '" style="' + this.attrs[
            'style'] + divider_style + '"></hr>');
       this.baseclass.prototype.render.apply(this, arguments);
     },
@@ -1590,7 +1590,7 @@
     is_container: true,
     has_content: true,
     render: function($) {
-      this.dom_element = $('<div class="az-element az-text ' + this.attrs['el_class'] + '" style="' + this.attrs[
+      this.dom_element = $('<div class="az-element az-text ' + this.get_el_classes() + '" style="' + this.attrs[
           'style'] + '">' + this.attrs['content'] + '</div>');
       this.dom_content_element = this.dom_element;
       this.baseclass.prototype.render.apply(this, arguments);
@@ -1653,12 +1653,12 @@
       }
       var url = youtube_parser(this.attrs['link']);
       if (url) {
-        url = 'https://www.youtube.com/embed/' + url + '?rel=0&showinfo=0';
+        url = '//www.youtube.com/embed/' + url + '?rel=0&showinfo=0';
       }
       else {
         url = vimeo_parser(this.attrs['link']);
         if (url) {
-          url = 'https://player.vimeo.com/video/' + url;
+          url = '//player.vimeo.com/video/' + url;
         }
         else {
           url = '';
@@ -1737,7 +1737,7 @@
     is_container: true,
     controls_base_position: 'top-left',
     render: function($) {
-      this.dom_element = $('<div class="az-element az-well well ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<div class="az-element az-well well ' + this.get_el_classes() + ' ' +
         this.attrs['type'] + '" style="' + this.attrs['style'] + '"></div>');
       var body = $('<div class="az-ctnr"></div>').appendTo(this.dom_element);
       this.dom_content_element = body;
@@ -1858,18 +1858,18 @@
       this.add_css('css/social.css', 'socialLink' in $.fn, function() {});
       this.add_css('css/icon-helpers.css', 'IconHelpers' in $.fn, function() {});
       this.add_css('vendor/font-awesome/css/font-awesome.min.css', 'fontAwesome' in $.fn, function() {});
-      this.dom_element = $('<ul class="az-element st-social stbe-social-links ' + this.attrs['el_class'] +
+      this.dom_element = $('<ul class="az-element st-social stbe-social-links ' + this.get_el_classes() +
         '" style="' + this.attrs['style'] + '"></ul>');
       if (this.attrs['st_theme_bgcolor'] == 'brand')
-        $(this.dom_element).addClass('stbe-social-links--bgcolor-brand');
+        this.dom_element.addClass('stbe-social-links--bgcolor-brand');
       if (this.attrs['st_hover_bgcolor'] == 'brand')
-        $(this.dom_element).addClass('stbe-social-links--hover-bgcolor-brand');
+        this.dom_element.addClass('stbe-social-links--hover-bgcolor-brand');
       if (this.attrs['st_theme_color'] == 'brand')
-        $(this.dom_element).addClass('stbe-social-links--color-brand');
+        this.dom_element.addClass('stbe-social-links--color-brand');
       if (this.attrs['st_hover_color'] == 'brand')
-        $(this.dom_element).addClass('stbe-social-links--hover-color-brand');
+        this.dom_element.addClass('stbe-social-links--hover-color-brand');
       if (this.attrs['st_type'] == 'stacked')
-        $(this.dom_element).addClass('stbe-social-links-stacked');
+        this.dom_element.addClass('stbe-social-links-stacked');
 
       var icon_style = '';
       // Foreground color
@@ -1899,9 +1899,9 @@
             icon_classes.push('stbe-util-fx-' + this.attrs['st_css3_hover_effects']);
           if (this.attrs['st_border_color'] != '' || this.attrs['st_theme_border_color'] != '')
             icon_classes.push('stbe-util-icon-border');
-          $(this.dom_element).append('<li class="stbe-social-links__item"><a href="' + url + '"><i class="' +
+          this.dom_element.append('<li class="stbe-social-links__item"><a href="' + url + '"><i class="' +
             icon_classes.join(' ') + '" style="' + icon_style +
-            '" data-toggle="tooltip" data-placement="top" title="' + name + '"></i></a></li>')
+            '" data-toggle="tooltip" data-placement="top auto" title="' + name + '"></i></a></li>')
         }
       }
       this.baseclass.prototype.render.apply(this, arguments);

@@ -54,12 +54,12 @@
       }
       var url = youtube_parser(this.attrs['link']);
       if (url) {
-        url = 'https://www.youtube.com/embed/' + url + '?rel=0&showinfo=0';
+        url = '//www.youtube.com/embed/' + url + '?rel=0&showinfo=0';
       }
       else {
         url = vimeo_parser(this.attrs['link']);
         if (url) {
-          url = 'https://player.vimeo.com/video/' + url;
+          url = '//player.vimeo.com/video/' + url;
         }
         else {
           url = '';

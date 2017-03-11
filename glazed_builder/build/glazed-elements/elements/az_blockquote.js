@@ -30,7 +30,7 @@
       var reverse = this.attrs['reverse'];
       if (reverse != '')
         reverse = p + reverse;
-      this.dom_element = $('<blockquote class="az-element az-blockquote ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<blockquote class="az-element az-blockquote ' + this.get_el_classes() + ' ' +
         reverse + '" style="' + this.attrs['style'] + '">' + this.attrs['content'] + '</blockquote>');
       this.dom_content_element = this.dom_element;
 
@@ -38,7 +38,7 @@
       var str = '<footer><cite>' + this.attrs['cite'] + '</cite></footer>';
       var innerHtml = this.dom_element.html().indexOf(str);
       if (this.attrs['cite'] != '' && innerHtml < 0)
-        $(this.dom_element).append(str);
+        this.dom_element.append(str);
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },

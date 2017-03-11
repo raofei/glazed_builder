@@ -49,7 +49,7 @@
         options = _.map(options.split(','), function(value) {
           return p + value;
         }).join(' ');
-      this.dom_element = $('<div class="az-element az-progress-bar progress ' + this.attrs['el_class'] +
+      this.dom_element = $('<div class="az-element az-progress-bar progress ' + this.get_el_classes() +
         ' ' + options + '" style="' + this.attrs['style'] + '"><div class="progress-bar ' + this.attrs[
           'type'] + '" role="progressbar" aria-valuenow="' + this.attrs['width'] +
         '" aria-valuemin="0" aria-valuemax="100" style="width: ' + this.attrs['width'] + '%; line-height: ' + height + ';">' + this.attrs[

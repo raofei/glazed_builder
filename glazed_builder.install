@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Install, update and uninstall functions for the test module.
+ * Install, update and uninstall functions for the module.
  */
 
 /**
@@ -19,39 +19,6 @@ function glazed_builder_enable() {
     ->condition('name', 'glazed_builder')
     ->execute();
 
-  $format = array(
-    'format' => 'glazed_builder',
-    'name' => 'Glazed builder',
-    'cache' => 0,
-    'status' => 1,
-    'weight' => 0,
-    'filters' => array(
-      'glazed_builder' => array(
-        'status' => 1,
-        'weight' => 0,
-        'module' => 'glazed_builder',
-        'settings' => array(),
-      ),
-    ),
-  );
-  $format = (object) $format;
-  filter_format_save($format);
-
-}
-
-/**
- * Implements hook_disable().
- */
-function glazed_builder_disable() {
-  $format = array(
-    'format' => 'glazed_builder',
-    'name' => 'Glazed builder',
-    'cache' => 0,
-    'status' => 1,
-    'weight' => 0,
-  );
-  $format = (object) $format;
-  filter_format_disable($format);
 }
 
 /**
@@ -170,4 +137,21 @@ function glazed_builder_update_7004() {
   $schema = drupal_get_schema_unprocessed('glazed_builder');
   module_load_include('inc', 'glazed_builder', 'inc/glazed_builder.templates');
   glazed_set_page_templates();
+}
+
+/**
+ * Deprecating Glazed Builder text format, updating Layout Templates
+ */
+function glazed_builder_update_7005() {
+  // Disable backend editor text format
+    $format = array(
+    'format' => 'glazed_builder',
+    'name' => 'Glazed builder',
+    'cache' => 0,
+    'status' => 1,
+    'weight' => 0,
+  );
+  $format = (object) $format;
+  filter_format_disable($format);
+  drupal_set_message(t('Glazed Builder Filter Format has been disabled, if you were using this on any fields please switch them to another format like WYSIWYG Full and use Glazed Builder as Frontend Builder. See documentation: !url', array('!url' => l(t('Glazed Builder Setup'), 'https://www.sooperthemes.com/documentation/installing-glazed-builderon-existing-website'))), 'warning');
 }

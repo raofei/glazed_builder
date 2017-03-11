@@ -9,19 +9,22 @@
 
 #### /glazed_builder/glazed_builder.js / Regenerated glazed_builder.min.js
 - decodeURI causing issues with the XPRIZE templates, comment left in code (7db0bc0:988-989)
-- Ability for content narrow in the carbide_builder (7db0bc0:7331-7336)
+- Ability for content narrow in the glazed_builder (7db0bc0:7331-7336)
 
 #### js/ac_drupal
 - Ability for content narrow in the ckeditor settings (fac3692)
 
-#### carbide_builder/build/carbide-builder/out.js
-- Ability for content narrow in the carbide_builder (b9487c1)
+#### glazed_builder/build/glazed-builder/out.js
+- Ability for content narrow in the glazed_builder (b9487c1)
 
-#### carbide_builder/build/carbide-param-types/elements/textarea.js
-- Ability for content narrow in the carbide_builder textarea (f991138)
+#### glazed_builder/build/glazed-param-types/elements/textarea.js
+- Ability for content narrow in the glazed_builder textarea (f991138)
 
-#### carbide_builder/carbide-param-types.js / Regenerated .min.js
-- Ability for content narrow in the carbide_builder textarea (0766f80)
+#### glazed_builder/glazed-param-types.js / Regenerated .min.js
+- Ability for content narrow in the glazed_builder textarea (0766f80)
 
 #### sass/social.scss / Regenerated .css
 - fa-link and fa-rss for social buttons (ce35665)
+
+#### glazed_builder/vendor/bootstrap-custom/css/bootstrap.css / Regenerated min.css
+- Removed the breadcrumb styles (f80c024)

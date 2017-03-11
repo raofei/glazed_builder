@@ -28,24 +28,25 @@
   background-color: grey;
   opacity: 0.2; Removed by Jur 14-04-2015 because it conflicts with background color overlays */
 }
-
-.az-row > .controls > .popover {
-  max-width: 500px;
-  min-width: 340px;
-}
 .az-row > .controls > .popover.right {
   margin-left: 0px;
 }
-.az-form > .controls > .popover {
-  min-width: 256px;
-}
-.popover-title {
-  text-align: center;
+.az-row > .controls > .popover {
+  min-width: 306px;
+  .popover-content {
+    padding-right: 0 !important;
+  }
 }
 .row-layouts {
   text-align: center;
   word-wrap: normal;
   white-space: nowrap;
+}
+.custom-row-control {
+  color: #555 !important;
+  text-transform: lowercase;
+  position: relative;
+  top: 2px;
 }
 .set-columns-layout:hover {
   cursor: pointer;
@@ -53,22 +54,12 @@
 
 // Row Columns Interface
 .popover .row-layouts .az-mini-container {
-  // width: 59px; // 48 px button
-  width: 47px; // 36 px button
-  /* width: 35px; */ // 24 px button
-  /* width: 23px; */ // 12 px button
+  width: 47px;
   float: left;
-  color: #555;
-  background: #fff;
+  color: #555 !important;
+  background: #fff !important;
   padding: 0 !important;
   margin: 0 !important;
-  h3.popover-title {
-    color: #555;
-  }
-  a {
-    color: #555 !important;
-    text-decoration: underline;
-  }
   .row {
     padding: 4px 2px 4px 2px;
     margin-left: 0;
@@ -78,7 +69,7 @@
     height: 28px;
     &:hover {
       background: #f3f3f3;
-      border-color: #00bb00;
+      border-color: #01b0ef;
       .content {
         // background: white;
       }
@@ -101,4 +92,12 @@
   display: block;
   clear: both;
   width: 100%;
+  a {
+    color: #01b0ef;
+    &:hover,
+    &:focus,
+    &:active {
+      color: #01b0ef;
+    }
+  }
 }

@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+body, html {
+  overflow-x: visible !important; // allow room for overflowing controls
+}
+
 // Filter views by tag
 #az-elements-tabs .filter-tags {
   padding: 5px;

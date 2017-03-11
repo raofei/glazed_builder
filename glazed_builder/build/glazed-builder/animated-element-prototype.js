@@ -146,26 +146,26 @@
       var element = this;
       element.in_timeout = setTimeout(function() {
         element.clear_animation();
-        $(element.dom_element).css('opacity', '');
-        $(element.dom_element).removeClass('animated');
-        $(element.dom_element).removeClass(element.attrs['an_in']);
-        $(element.dom_element).removeClass(element.attrs['an_out']);
+        element.dom_element.css('opacity', '');
+        element.dom_element.removeClass('animated');
+        element.dom_element.removeClass(element.attrs['an_in']);
+        element.dom_element.removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).addClass('animated');
+        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          $(element.dom_element).addClass('infinite');
+          element.dom_element.addClass('infinite');
         }
-        $(element.dom_element).addClass(element.attrs['an_in']);
+        element.dom_element.addClass(element.attrs['an_in']);
         element.animation_in = true;
       }, Math.round(element.attrs['an_in_delay']));
     },
     start_in_animation: function() {
       var element = this;
-      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
+      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_in'] != '') {
           if (element.animated) {
             if (element.animation_out) {
@@ -193,26 +193,26 @@
       var element = this;
       element.out_timeout = setTimeout(function() {
         element.clear_animation();
-        $(element.dom_element).css('opacity', '');
-        $(element.dom_element).removeClass('animated');
-        $(element.dom_element).removeClass(element.attrs['an_in']);
-        $(element.dom_element).removeClass(element.attrs['an_out']);
+        element.dom_element.css('opacity', '');
+        element.dom_element.removeClass('animated');
+        element.dom_element.removeClass(element.attrs['an_in']);
+        element.dom_element.removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        $(element.dom_element).addClass('animated');
+        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        element.dom_element.addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          $(element.dom_element).addClass('infinite');
+          element.dom_element.addClass('infinite');
         }
-        $(element.dom_element).addClass(element.attrs['an_out']);
+        element.dom_element.addClass(element.attrs['an_out']);
         element.animation_out = true;
       }, Math.round(element.attrs['an_out_delay']));
     },
     start_out_animation: function() {
       var element = this;
-      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
+      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_out'] != '') {
           if (element.animated) {
             if (element.animation_in) {
@@ -239,28 +239,28 @@
     clear_animation: function() {
       if (this.animation_in) {
         if (this.hidden_before_in) {
-          $(this.dom_element).css('opacity', '1');
+          this.dom_element.css('opacity', '1');
         }
         if (this.hidden_after_in) {
-          $(this.dom_element).css('opacity', '0');
+          this.dom_element.css('opacity', '0');
         }
       }
       if (this.animation_out) {
         if (this.hidden_before_in) {
-          $(this.dom_element).css('opacity', '0');
+          this.dom_element.css('opacity', '0');
         }
         if (this.hidden_after_in) {
-          $(this.dom_element).css('opacity', '1');
+          this.dom_element.css('opacity', '1');
         }
       }
-      if ($(this.dom_element).hasClass('animated')) {
-        $(this.dom_element).css('animation-duration', '');
-        $(this.dom_element).css('-webkit-animation-duration', '');
-        $(this.dom_element).removeClass('animated');
+      if (this.dom_element.hasClass('animated')) {
+        this.dom_element.css('animation-duration', '');
+        this.dom_element.css('-webkit-animation-duration', '');
+        this.dom_element.removeClass('animated');
         this.animated = false;
-        $(this.dom_element).removeClass('infinite');
-        $(this.dom_element).removeClass(this.attrs['an_in']);
-        $(this.dom_element).removeClass(this.attrs['an_out']);
+        this.dom_element.removeClass('infinite');
+        this.dom_element.removeClass(this.attrs['an_in']);
+        this.dom_element.removeClass(this.attrs['an_out']);
         this.animation_in = false;
         this.animation_out = false;
       }
@@ -306,10 +306,10 @@
       element.hidden_before_in = _.indexOf(element.attrs['an_hidden'].split(','), 'before_in') >= 0;
       element.hidden_after_in = _.indexOf(element.attrs['an_hidden'].split(','), 'after_in') >= 0;
       if (element.hidden_before_in) {
-        $(element.dom_element).css('opacity', '0');
+        element.dom_element.css('opacity', '0');
       }
       if (element.hidden_after_in) {
-        $(element.dom_element).css('opacity', '1');
+        element.dom_element.css('opacity', '1');
       }
 
       var parent_number = element.attrs['an_parent'];
@@ -346,7 +346,7 @@
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  $(element.dom_element).waypoint(function(direction) {
+                  element.dom_element.waypoint(function(direction) {
                     if (!element.animated) {
                       element.start_in_animation();
                     }
@@ -398,7 +398,7 @@
     },
     render: function($) {
       if ('an_name' in this.attrs && this.attrs['an_name'] != '') {
-        $(this.dom_element).attr('data-an-name', this.attrs['an_name']);
+        this.dom_element.attr('data-an-name', this.attrs['an_name']);
       }
       AnimatedElement.baseclass.prototype.render.apply(this, arguments);
     }

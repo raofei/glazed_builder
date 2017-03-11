@@ -31,12 +31,12 @@ div.modal-dialog {
     opacity: 0.1;
   }
   .btn-default {
-    background: #f0f0f0;
+    background: #f6f6fb;
     color: #555;
     &:hover,
     &:focus,
     &:active {
-      background: #f0f0f0;
+      background: #f6f6fb;
       color: #555;
     }
   }
@@ -90,6 +90,7 @@ div.modal-dialog {
   .modal-content {
     border-radius: 0;
     border: none;
+    box-shadow: $glazed-shadow-4;
   }
   .tab-content {
     padding-top: 15px;

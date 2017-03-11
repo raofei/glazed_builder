@@ -62,7 +62,7 @@
       });
     });
     $(select).parent().find('.chosen-container').width('100%');
-    $('<div><a class="direct-input" href="#">' + Drupal.t("Switch to custom text input") + '</a></div>').insertBefore(select).click(
+    $('<div><a class="direct-input" href="#">' + Drupal.t("Edit as text") + '</a></div>').insertBefore(select).click(
       function() {
         $(input).css('display', 'block');
         $(select).parent().find('.chosen-container').remove();
@@ -112,7 +112,7 @@
       $(input).val(selected.join(delimiter));
     });
     $(select).parent().find('.chosen-container').width('100%');
-    $('<div><a class="direct-input" href="#">' + Drupal.t("Switch to custom text input") + '</a></div>').insertBefore(select).click(
+    $('<div><a class="direct-input" href="#">' + Drupal.t("Edit as text") + '</a></div>').insertBefore(select).click(
       function() {
         $(input).css('display', 'block');
         $(select).parent().find('.chosen-container').remove();
@@ -198,7 +198,7 @@
             step: parseFloat(step),
             min: parseFloat(min),
             max: parseFloat(max),
-            tooltip: 'show',
+            tooltip: 'hide',
             value: (value == '' || isNaN(parseFloat(value)) || value == 'NaN') ? min : parseFloat(value),
             formatter: function (value) {
               return value + ' px';
@@ -209,7 +209,7 @@
             step: parseFloat(step),
             min: parseFloat(min),
             max: parseFloat(max),
-            tooltip: 'show',
+            tooltip: 'hide',
             value: (value == '' || isNaN(parseFloat(value)) || value == 'NaN') ? min : parseFloat(value),
           });
         }
@@ -263,17 +263,23 @@
       this.formatter = false;
     },
     get_value: function() {
-      var v = $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      var v = this.dom_element.find('input[name="' + this.param_name + '"]').val();
       return (v == '') ? NaN : parseFloat(v).toString();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><p class="help-block">' +
         this.description + '</p></div>');
     },
     opened: function() {
-      initBootstrapSlider($(this.dom_element).find('input[name="' + this.param_name + '"]'), this.min, this.max, this.get_value(), this.step,this.formatter);
+      initBootstrapSlider(
+        this.dom_element.find('input[name="' + this.param_name + '"]'),
+        this.min,
+        this.max,
+        this.get_value(),
+        this.step,
+        this.formatter);
     },
   },
 
@@ -281,7 +287,7 @@
     type: 'checkbox',
     get_value: function() {
       var values = [];
-      _.each($(this.dom_element).find('input[name="' + this.param_name + '"]:checked'), function(obj) {
+      _.each(this.dom_element.find('input[name="' + this.param_name + '"]:checked'), function(obj) {
         values.push($(obj).val());
       });
       return values.join(',');
@@ -303,7 +309,7 @@
               '" type="checkbox" value="' + name + '"></div>';
           }
         }
-        this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
+        this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
           '</div><p class="help-block">' + this.description + '</p>');
         initBootstrapSwitch(this.dom_element);
       } else {
@@ -317,7 +323,7 @@
               '" type="checkbox" value="' + name + '">' + this.value[name] + '</label></div>';
           }
         }
-        this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
+        this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div class="wrap-checkbox">' + inputs +
           '</div><p class="help-block">' + this.description + '</p>');
       }
     }
@@ -327,7 +333,7 @@
     type: 'checkboxes',
       get_value: function() {
       var values = [];
-      _.each($(this.dom_element).find('input[name="' + this.param_name + '"]:checked'), function(obj) {
+      _.each(this.dom_element.find('input[name="' + this.param_name + '"]:checked'), function(obj) {
         values.push($(obj).val());
       });
       return values.join(',');
@@ -354,7 +360,7 @@
           }
         }
       }
-      this.dom_element = $('<div class="form-group">' + inputs +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '">' + inputs +
         '<p class="help-block">' + this.description + '</p>');
       initBootstrapSwitch(this.dom_element);
     }
@@ -363,11 +369,11 @@
   {
     type: 'colorpicker',
     get_value: function() {
-      return $(this.dom_element).find('#' + this.id).val();
+      return this.dom_element.find('#' + this.id).val();
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input id="' + this.id + '" name="' + this.param_name + '" type="text" value="' + value +
         '"></div><p class="help-block">' + this.description + '</p></div>');
     },
@@ -380,7 +386,7 @@
     type: 'css',
     safe: false,
     get_value: function() {
-      return $(this.dom_element).find('#' + this.id).val();
+      return this.dom_element.find('#' + this.id).val();
     },
     opened: function() {
       var param = this;
@@ -407,7 +413,7 @@
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div id="' +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div id="' +
         this.id + '"><textarea class="form-control" rows="10" cols="45" name="' + this.param_name +
         '" ">' + value + '</textarea></div><p class="help-block">' + this.description + '</p></div>'
       );
@@ -423,10 +429,10 @@
       this.datepicker = false;
     },
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><p class="help-block">' + this.description +
         '</p></div>');
@@ -458,11 +464,11 @@
     type: 'dropdown',
     get_value: function () {
       if (Object.keys(this.value).length < 10) {
-        var val = $(this.dom_element).find('input[name="' + this.param_name + '"]:checked').val();
+        var val = this.dom_element.find('input[name="' + this.param_name + '"]:checked').val();
         if (typeof val != 'undefined')
           return val;
       } else {
-        return $(this.dom_element).find('select[name="' + this.param_name + '"] > option:selected').val();
+        return this.dom_element.find('select[name="' + this.param_name + '"] > option:selected').val();
       }
     },
     render: function (value) {
@@ -512,7 +518,7 @@
         }
         content += '/<select>';
       }
-      this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div>' + content +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div>' + content +
         '</div><p class="help-block">' + this.description + '</p></div>');
     }
   },
@@ -521,9 +527,9 @@
     type: 'google_font',
     hidden: !'glazed_google_fonts' in window,
     get_value: function() {
-      var font = $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
-      var subset = $(this.dom_element).find('input[name="' + this.param_name + '_subset"]').val();
-      var variant = $(this.dom_element).find('input[name="' + this.param_name + '_variant"]').val();
+      var font = this.dom_element.find('input[name="' + this.param_name + '"]').val();
+      var subset = this.dom_element.find('input[name="' + this.param_name + '_subset"]').val();
+      var variant = this.dom_element.find('input[name="' + this.param_name + '_variant"]').val();
       return font + '|' + subset + '|' + variant;
     },
     render: function(value) {
@@ -539,7 +545,7 @@
       var subset_input = '<div class="col-sm-4"><label>' + Drupal.t('Subset') + '</label><input class="form-control" name="' + this.param_name + '_subset" type="text" value="' + subset + '"></div>';
       var variant_input = '<div class="col-sm-4"><label>' + Drupal.t('Variant') + '</label><input class="' +
         'form-control" name="' + this.param_name + '_variant" type="text" value="' + variant + '"></div>';
-      this.dom_element = $('<div class="form-group"><div class="row">' + font_input +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><div class="row">' + font_input +
         subset_input + variant_input + '</div><p class="help-block">' + this.description +
         '</p></div>');
     },
@@ -550,7 +556,7 @@
       var font_select = null;
       var subset_select = null;
       var variant_select = null;
-      font_select = chosen_select(fonts, $(this.dom_element).find('input[name="' + this.param_name + '"]'));
+      font_select = chosen_select(fonts, this.dom_element.find('input[name="' + this.param_name + '"]'));
       $(font_select).chosen().change(function() {
         var f = Object.keys(window.glazed_google_fonts)[0];
         if ($(this).val() in window.glazed_google_fonts)
@@ -565,11 +571,11 @@
         }
 
         $(subset_select).parent().find('.direct-input').click();
-        subset_select = chosen_select(subsets, $(element.dom_element).find('input[name="' + element.param_name +
+        subset_select = chosen_select(subsets, element.dom_element.find('input[name="' + element.param_name +
           '_subset"]'));
 
         $(variant_select).parent().find('.direct-input').click();
-        variant_select = chosen_select(variants, $(element.dom_element).find('input[name="' + element.param_name +
+        variant_select = chosen_select(variants, element.dom_element.find('input[name="' + element.param_name +
           '_variant"]'));
       });
       $(font_select).chosen().trigger('change');
@@ -580,7 +586,7 @@
     type: 'html',
     safe: false,
     get_value: function() {
-      return $(this.dom_element).find('#' + this.id).val();
+      return this.dom_element.find('#' + this.id).val();
     },
     opened: function() {
       var param = this;
@@ -607,7 +613,7 @@
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div id="' +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div id="' +
         this.id + '"><textarea class="form-control" rows="10" cols="45" name="' + this.param_name +
         '" ">' + value + '</textarea></div><p class="help-block">' + this.description + '</p></div>'
       );
@@ -761,10 +767,10 @@
 
   ].concat(icons),
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><p class="help-block">' + this.description +
         '</p></div>');
@@ -819,32 +825,32 @@
   {
     type: 'image',
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><p class="help-block">' + this.description +
         '</p></div>');
     },
     opened: function() {
-      image_select($(this.dom_element).find('input[name="' + this.param_name + '"]'));
+      image_select(this.dom_element.find('input[name="' + this.param_name + '"]'));
     },
   },
 
   {
     type: 'images',
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><p class="help-block">' + this.description +
         '</p></div>');
     },
     opened: function() {
-      images_select($(this.dom_element).find('input[name="' + this.param_name + '"]'), ',');
+      images_select(this.dom_element.find('input[name="' + this.param_name + '"]'), ',');
     },
   },
 
@@ -856,17 +862,17 @@
       this.step = 1;
     },
     get_value: function() {
-      var v = $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      var v = this.dom_element.find('input[name="' + this.param_name + '"]').val();
       return (v == '') ? NaN : parseFloat(v).toString();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><div class="slider"></div><p class="help-block">' +
         this.description + '</p></div>');
     },
     opened: function() {
-      nouislider($(this.dom_element).find('.slider'), this.min, this.max, this.get_value(), this.step, $(this.dom_element)
+      nouislider(this.dom_element.find('.slider'), this.min, this.max, this.get_value(), this.step, $(this.dom_element)
         .find('input[name="' + this.param_name + '"]'));
     },
   },
@@ -875,7 +881,7 @@
     type: 'javascript',
     safe: false,
     get_value: function() {
-      return $(this.dom_element).find('#' + this.id).val();
+      return this.dom_element.find('#' + this.id).val();
     },
     opened: function() {
       var param = this;
@@ -902,7 +908,7 @@
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div id="' +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div id="' +
         this.id + '"><textarea class="form-control" rows="10" cols="45" name="' + this.param_name +
         '" ">' + value + '</textarea></div><p class="help-block">' + this.description + '</p></div>'
       );
@@ -912,10 +918,10 @@
   {
     type: 'link',
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '"></div><p class="help-block">' + this.description +
         '</p></div>');
@@ -925,11 +931,11 @@
   {
     type: 'links',
     get_value: function() {
-      return $(this.dom_element).find('#' + this.id).val();
+      return this.dom_element.find('#' + this.id).val();
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><textarea id="' + this.id + '" class="form-control" rows="10" cols="45" name="' + this.param_name + '" ">' + value +
         '</textarea></div><p class="help-block">' + this.description + '</p></div>');
     },
@@ -939,11 +945,11 @@
     type: 'rawtext',
     safe: false,
     get_value: function() {
-      return $(this.dom_element).find('#' + this.id).val();
+      return this.dom_element.find('#' + this.id).val();
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><textarea id="' + this.id + '" class="form-control" rows="10" cols="45" name="' + this.param_name + '" ">' + value +
         '</textarea></div><p class="help-block">' + this.description + '</p></div>');
     },
@@ -967,111 +973,111 @@
         imp = ' !important';
       }
       var style = '';
-      var margin_top = $(this.dom_element).find('[name="margin_top"]').val();
+      var margin_top = this.dom_element.find('[name="margin_top"]').val();
       if (margin_top != '') {
         if ($.isNumeric(margin_top))
           margin_top = margin_top + 'px';
         style += 'margin-top:' + margin_top + imp + ';';
       }
-      var margin_bottom = $(this.dom_element).find('[name="margin_bottom"]').val();
+      var margin_bottom = this.dom_element.find('[name="margin_bottom"]').val();
       if (margin_bottom != '') {
         if ($.isNumeric(margin_bottom))
           margin_bottom = margin_bottom + 'px';
         style += 'margin-bottom:' + margin_bottom + imp + ';';
       }
-      var margin_left = $(this.dom_element).find('[name="margin_left"]').val();
+      var margin_left = this.dom_element.find('[name="margin_left"]').val();
       if (margin_left != '') {
         if ($.isNumeric(margin_left))
           margin_left = margin_left + 'px';
         style += 'margin-left:' + margin_left + imp + ';';
       }
-      var margin_right = $(this.dom_element).find('[name="margin_right"]').val();
+      var margin_right = this.dom_element.find('[name="margin_right"]').val();
       if (margin_right != '') {
         if ($.isNumeric(margin_right))
           margin_right = margin_right + 'px';
         style += 'margin-right:' + margin_right + imp + ';';
       }
-      var border_top_width = $(this.dom_element).find('[name="border_top_width"]').val();
+      var border_top_width = this.dom_element.find('[name="border_top_width"]').val();
       if (border_top_width != '') {
         if ($.isNumeric(border_top_width))
           border_top_width = border_top_width + 'px';
         style += 'border-top-width:' + border_top_width + imp + ';';
       }
-      var border_bottom_width = $(this.dom_element).find('[name="border_bottom_width"]').val();
+      var border_bottom_width = this.dom_element.find('[name="border_bottom_width"]').val();
       if (border_bottom_width != '') {
         if ($.isNumeric(border_bottom_width))
           border_bottom_width = border_bottom_width + 'px';
         style += 'border-bottom-width:' + border_bottom_width + imp + ';';
       }
-      var border_left_width = $(this.dom_element).find('[name="border_left_width"]').val();
+      var border_left_width = this.dom_element.find('[name="border_left_width"]').val();
       if (border_left_width != '') {
         if ($.isNumeric(border_left_width))
           border_left_width = border_left_width + 'px';
         style += 'border-left-width:' + border_left_width + imp + ';';
       }
-      var border_right_width = $(this.dom_element).find('[name="border_right_width"]').val();
+      var border_right_width = this.dom_element.find('[name="border_right_width"]').val();
       if (border_right_width != '') {
         if ($.isNumeric(border_right_width))
           border_right_width = border_right_width + 'px';
         style += 'border-right-width:' + border_right_width + imp + ';';
       }
-      var padding_top = $(this.dom_element).find('[name="padding_top"]').val();
+      var padding_top = this.dom_element.find('[name="padding_top"]').val();
       if (padding_top != '') {
         if ($.isNumeric(padding_top))
           padding_top = padding_top + 'px';
         style += 'padding-top:' + padding_top + imp + ';';
       }
-      var padding_bottom = $(this.dom_element).find('[name="padding_bottom"]').val();
+      var padding_bottom = this.dom_element.find('[name="padding_bottom"]').val();
       if (padding_bottom != '') {
         if ($.isNumeric(padding_bottom))
           padding_bottom = padding_bottom + 'px';
         style += 'padding-bottom:' + padding_bottom + imp + ';';
       }
-      var padding_left = $(this.dom_element).find('[name="padding_left"]').val();
+      var padding_left = this.dom_element.find('[name="padding_left"]').val();
       if (padding_left != '') {
         if ($.isNumeric(padding_left))
           padding_left = padding_left + 'px';
         style += 'padding-left:' + padding_left + imp + ';';
       }
-      var padding_right = $(this.dom_element).find('[name="padding_right"]').val();
+      var padding_right = this.dom_element.find('[name="padding_right"]').val();
       if (padding_right != '') {
         if ($.isNumeric(padding_right))
           padding_right = padding_right + 'px';
         style += 'padding-right:' + padding_right + imp + ';';
       }
-      var color = $(this.dom_element).find('#' + this.color_id).val();
+      var color = this.dom_element.find('#' + this.color_id).val();
       if (color != '') {
         style += 'color:' + color + imp + ';';
       }
-      var fontsize = $(this.dom_element).find('[name="fontsize"]').val();
+      var fontsize = this.dom_element.find('[name="fontsize"]').val();
       if (fontsize != 0) {
         if ($.isNumeric(fontsize))
           fontsize = Math.round(fontsize) + 'px';
         style += 'font-size:' + fontsize + imp + ';';
       }
-      var border_color = $(this.dom_element).find('#' + this.border_color_id).val();
+      var border_color = this.dom_element.find('#' + this.border_color_id).val();
       if (border_color != '') {
         style += 'border-color:' + border_color + imp + ';';
       }
-      var border_radius = $(this.dom_element).find('[name="border_radius"]').val();
+      var border_radius = this.dom_element.find('[name="border_radius"]').val();
       if (border_radius != 0) {
         if ($.isNumeric(border_radius))
           border_radius = Math.round(border_radius) + 'px';
         style += 'border-radius:' + border_radius + imp + ';';
       }
-      var border_style = $(this.dom_element).find('select[name="border_style"] > option:selected').val();
+      var border_style = this.dom_element.find('select[name="border_style"] > option:selected').val();
       if (border_style != '') {
         style += 'border-style:' + border_style + imp + ';';
       }
-      var bg_color = $(this.dom_element).find('#' + this.bg_color_id).val();
+      var bg_color = this.dom_element.find('#' + this.bg_color_id).val();
       if (bg_color) {
         style += 'background-color:' + bg_color + imp + ';';
       }
-      var bg_image = $(this.dom_element).find('[name="bg_image"]').val();
+      var bg_image = this.dom_element.find('[name="bg_image"]').val();
       if (bg_image) {
         style += 'background-image: url(' + encodeURI(bg_image) + ');';
       }
-      var background_style = $(this.dom_element).find('select[name="background_style"] > option:selected').val();
+      var background_style = this.dom_element.find('select[name="background_style"] > option:selected').val();
       if (background_style.match(/repeat/)) {
         style += 'background-repeat: ' + background_style + imp + ';';
       }
@@ -1079,11 +1085,11 @@
         style += 'background-repeat: no-repeat;';
         style += 'background-size: ' + background_style + imp + ';';
       }
-      var background_position = $(this.dom_element).find('select[name="background_position"] > option:selected').val();
+      var background_position = this.dom_element.find('select[name="background_position"] > option:selected').val();
       if (background_position != '') {
         style += 'background-position:' + background_position + imp + ';';
       }
-      var opacity = $(this.dom_element).find('[name="opacity"]').val();
+      var opacity = this.dom_element.find('[name="opacity"]').val();
       if (opacity != 0) {
         style += 'opacity:' + opacity + imp + ';';
       }
@@ -1091,10 +1097,10 @@
     },
     render: function(value) {
       value = value.replace(/!important/g, '');
-      var output = '<div class="style row">';
+      var output = '<div class="style">';
       var match = null;
       var v = '';
-      output += '<div class="layout col-sm-6">';
+      output += '<div class="layout pane-1">';
       output += '<div class="margin"><label>' + Drupal.t('Margin') + '</label>';
       match = value.match(/margin-top[: ]*([\-\d\.]*)(px|%|em) *;/);
       if (match == null)
@@ -1173,7 +1179,7 @@
       output += '<div class="content">';
       output += '</div></div></div></div>';
       output += '</div>';
-      output += '<div class="settings col-sm-6">';
+      output += '<div class="settings pane-2">';
       output += '<div class="font form-group"><label>' + Drupal.t('Font color') + '</label>';
       this.color_id = _.uniqueId();
       match = value.match(/(^| |;)color[: ]*([#\dabcdef]*) *;/);
@@ -1319,16 +1325,16 @@
       this.dom_element = $(output);
     },
     opened: function() {
-      image_select($(this.dom_element).find('input[name="bg_image"]'));
+      image_select(this.dom_element.find('input[name="bg_image"]'));
       colorpicker('#' + this.color_id);
       colorpicker('#' + this.border_color_id);
       colorpicker('#' + this.bg_color_id);
-      initBootstrapSlider($(this.dom_element).find('input[name="opacity"]'), 0, 1, $(this.dom_element).find(
+      initBootstrapSlider(this.dom_element.find('input[name="opacity"]'), 0, 1, this.dom_element.find(
         'input[name="opacity"]').val(), 0.01);
 
-      initBootstrapSlider($(this.dom_element).find('input[name="fontsize"]'), 0, 100, $(this.dom_element).find(
+      initBootstrapSlider(this.dom_element.find('input[name="fontsize"]'), 0, 100, this.dom_element.find(
         'input[name="fontsize"]').val(), 1, true);
-      initBootstrapSlider($(this.dom_element).find('input[name="border_radius"]'), 0, 100, $(this.dom_element).find(
+      initBootstrapSlider(this.dom_element.find('input[name="border_radius"]'), 0, 100, this.dom_element.find(
         'input[name="border_radius"]').val(), 1);
     },
   },
@@ -1342,14 +1348,14 @@
     },
     render: function(value) {
       this.id = _.uniqueId();
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><textarea id="' + this.id + '" rows="10" cols="45" name="' + this.param_name + '" ">' +
         value + '</textarea></div><p class="help-block">' + this.description + '</p></div>');
     },
     opened: function() {
       var param = this;
       if ('glazed_ckeditor' in window) {
-        window.glazed_ckeditor($(this.dom_element).find('#' + param.id));
+        window.glazed_ckeditor(this.dom_element.find('#' + param.id));
       }
       else {
         function ckeditor_add_editor() {
@@ -1484,11 +1490,11 @@
   {
     type: 'textfield',
     get_value: function() {
-      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
+      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
       var required = this.required ? 'required' : '';
-      this.dom_element = $('<div class="form-group"><label>' + this.heading +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +
         '</label><div><input class="form-control" name="' + this.param_name +
         '" type="text" value="' + value + '" ' + required + '></div><p class="help-block">' + this.description +
         '</p></div>');

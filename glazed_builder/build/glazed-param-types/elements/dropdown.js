@@ -2,11 +2,11 @@
     type: 'dropdown',
     get_value: function () {
       if (Object.keys(this.value).length < 10) {
-        var val = $(this.dom_element).find('input[name="' + this.param_name + '"]:checked').val();
+        var val = this.dom_element.find('input[name="' + this.param_name + '"]:checked').val();
         if (typeof val != 'undefined')
           return val;
       } else {
-        return $(this.dom_element).find('select[name="' + this.param_name + '"] > option:selected').val();
+        return this.dom_element.find('select[name="' + this.param_name + '"] > option:selected').val();
       }
     },
     render: function (value) {
@@ -56,7 +56,7 @@
         }
         content += '/<select>';
       }
-      this.dom_element = $('<div class="form-group"><label>' + this.heading + '</label><div>' + content +
+      this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading + '</label><div>' + content +
         '</div><p class="help-block">' + this.description + '</p></div>');
     }
   },

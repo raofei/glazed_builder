@@ -14,7 +14,7 @@
     is_container: true,
     controls_base_position: 'top-left',
     render: function($) {
-      this.dom_element = $('<div class="az-element az-well well ' + this.attrs['el_class'] + ' ' +
+      this.dom_element = $('<div class="az-element az-well well ' + this.get_el_classes() + ' ' +
         this.attrs['type'] + '" style="' + this.attrs['style'] + '"></div>');
       var body = $('<div class="az-ctnr"></div>').appendTo(this.dom_element);
       this.dom_content_element = body;

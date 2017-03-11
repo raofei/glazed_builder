@@ -25,7 +25,7 @@
     show_controls: function() {
       if (window.glazed_editor) {
         TabElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.drag-and-drop').remove();
+        this.controls.find('.drag-and-drop').remove();
         $('<span class="control btn btn-default glyphicon">' + this.name + '</span>')
           .prependTo(this.controls);
       }
@@ -51,7 +51,7 @@
     },
     render: function($) {
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-ctnr az-tab tab-pane ' +
-        this.attrs['el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+        this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       TabElement.baseclass.prototype.render.apply(this, arguments);
     },

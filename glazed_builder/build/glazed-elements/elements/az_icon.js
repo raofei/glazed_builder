@@ -107,7 +107,7 @@
         else
           icon_style = icon_style + 'background-color: ' + this.attrs['st_theme_bgcolor'] + ';';
       }
-      var icon_html = '<div class="az-element az-icon ' + this.attrs['el_class'] + '"><i class="' + this.attrs[
+      var icon_html = '<div class="az-element az-icon ' + this.get_el_classes() + '"><i class="' + this.attrs[
           'icon'] + ' ' + this.attrs['size'] + ' ' + this.attrs['st_style'] + ' ' + this.attrs['fw'] + ' ' +
         this.attrs['pull'] + ' ' + this.attrs['animation'] + ' ' + this.attrs['orientation'] + '" style="' +
         this.attrs['style'] + icon_style + '"></i></div>';
@@ -118,7 +118,7 @@
         this.dom_element = $('<a href="' + this.attrs['link'] + '" class="az-element az-icon ' + this.attrs[
             'el_class'] + '" target="' + this.attrs['link_target'] + '">' + icon_html + '</a>');
       }
-      $(this.dom_element).css('font-size', this.attrs['size'] + 'px');
+      this.dom_element.css('font-size', this.attrs['size'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },

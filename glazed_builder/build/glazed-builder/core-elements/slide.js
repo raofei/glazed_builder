@@ -18,8 +18,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         SlideElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.clone').remove();
-        $(this.controls).find('.drag-and-drop').remove();
+        this.controls.find('.clone').remove();
+        this.controls.find('.drag-and-drop').remove();
         $('<span class="control btn btn-default glyphicon">' + this.name + '</span>')
           .prependTo(this.controls);
       }
@@ -35,7 +35,7 @@
       var type = 'panel-default';
       if (this.parent.attrs['type'] != '')
         type = this.parent.attrs['type'];
-      this.dom_element = $('<div class="az-element az-slide az-ctnr ' + this.attrs['el_class'] + ' clearfix" style="' + this.attrs['style'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-slide az-ctnr ' + this.get_el_classes() + ' clearfix" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       SlideElement.baseclass.prototype.render.apply(this, arguments);
     },

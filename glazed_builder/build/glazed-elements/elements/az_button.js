@@ -46,12 +46,12 @@
     style_selector: '> .btn',
     render: function($) {
       if (this.attrs['link'] == '') {
-        this.dom_element = $('<div class="az-element az-button ' + this.attrs['el_class'] +
+        this.dom_element = $('<div class="az-element az-button ' + this.get_el_classes() +
           '"><button type="button" class="btn ' + this.attrs['type'] + ' ' + this.attrs['size'] + ' ' + this.attrs['block'] +
           '" style="' + this.attrs['style'] + '">' + this.attrs['title'] + '</button></div>');
       }
       else {
-        this.dom_element = $('<div class="az-element az-button ' + this.attrs['el_class'] + '"><a href="' +
+        this.dom_element = $('<div class="az-element az-button ' + this.get_el_classes() + '"><a href="' +
           this.attrs['link'] + '" type="button" class="btn ' + this.attrs['type'] + ' ' + this.attrs['size'] + ' ' + this.attrs['block'] +
           '" style="' + this.attrs['style'] + '" target="' + this.attrs['link_target'] + '">' +
           this.attrs['title'] + '</a></div>');

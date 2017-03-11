@@ -44,8 +44,8 @@
     show_controls: function() {
       if (window.glazed_editor) {
         RowElement.baseclass.prototype.show_controls.apply(this, arguments);
-        $(this.controls).find('.add').remove();
-        $(this.controls).find('.paste').remove();
+        this.controls.find('.add').remove();
+        this.controls.find('.paste').remove();
         var element = this;
         var controls = this.controls;
         var popoverContent = '<div class="row-layouts clearfix">';
@@ -78,21 +78,19 @@
           popoverContent += '</div>';
         }
         popoverContent +=
-          '<small class="az-row-custom control set-columns-layout"><a href="#" class="glazed-util-text-muted text-small">Custom layout</a></small>';
+          '<small class="az-row-custom set-columns-layout"><a href="#" class="custom-row-control glazed-util-text-muted text-small">Custom layout</a></small>';
         popoverContent += '</div>';
 
         var columns = $('<span title="' + title("Set row layout") + '" class="control set-columns btn btn-default glyphicon glyphicon-th"> </span>')
           .insertAfter(this.controls.find('.drag-and-drop'))
           [fp + 'popover']({
-            animation: false,
             placement:'right',
             html: 'true',
             trigger: 'manual',
-            //container: 'body',
             content: popoverContent,
           })
           .click(function() {
-            $(columns)[fp + 'popover']('show') ;
+            $(columns)[fp + 'popover']('toggle') ;
             set_highest_zindex($(controls));
             set_highest_zindex($(controls).find('.popover'));
             $(controls).find('.popover .set-columns-layout').each(function() {
@@ -100,7 +98,7 @@
                 object: element
               }, element.click_set_columns);
             });
-            $(element.controls).mouseleave(function() {
+            element.controls.find('.popover').mouseleave(function() {
               $(columns)[fp + 'popover']('hide');
               $(columns).css('display', '');
             });
@@ -215,7 +213,7 @@
       RowElement.baseclass.prototype.showed.apply(this, arguments);
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-row row ' + this.attrs['el_class'] + '" style="' +
+      this.dom_element = $('<div class="az-element az-row row ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       this.dom_element.addClass('az-row--' + this.attrs['device']);
