@@ -23,7 +23,7 @@
       make_param_type({
         type: 'checkbox',
         heading: Drupal.t('Disable Auto Play'),
-        param_name: 'autoPlay',
+        param_name: 'autoplay',
         value: {
           'yes': Drupal.t('Yes'),
         },
@@ -217,7 +217,7 @@
       // make_param_type({
       //   type: 'checkbox',
       //   heading: Drupal.t('Mouse Drag'),
-      //   param_name: 'mouseDrag',
+      //   param_name: 'mouse_drag',
       //   value: {
       //     'on': Drupal.t('On'),
       //   },
@@ -225,7 +225,7 @@
       // make_param_type({
       //   type: 'checkbox',
       //   heading: Drupal.t('Touch Drag'),
-      //   param_name: 'touchDrag',
+      //   param_name: 'touch_drag',
       //   value: {
       //     'on': Drupal.t('On'),
       //   },
@@ -254,7 +254,7 @@
       make_param_type({
         type: 'checkbox',
         heading: Drupal.t('Stop on Hover'),
-        param_name: 'stopOnHover',
+        param_name: 'stoponhover',
         value: {
           'on': Drupal.t('On'),
         },
@@ -430,7 +430,7 @@
           }
           $('head').find('#carousel-style-' + element.id).remove();
           $('head').append(get_carousel_style(element));
-          //element.dom_element.prepend(element.controls);
+          //$(element.dom_element).prepend(element.controls);
         }
       });
     },

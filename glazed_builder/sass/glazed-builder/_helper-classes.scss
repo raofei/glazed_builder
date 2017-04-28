@@ -58,7 +58,7 @@
       margin:0;
       width: 100%;
     }
-    * {
+    *:not(.controls) {
       position:relative;
       z-index:6;
     }

@@ -9,7 +9,7 @@
   register_param_type('cms_settings', CMSSettingsParamType);
   mixin(CMSSettingsParamType.prototype, {
     get_value: function() {
-      return this.dom_element.find('form').serialize();
+      return $(this.dom_element).find('form').serialize();
     },
     render_form: function(instance) {
       var param = this;

@@ -2,7 +2,7 @@
     type: 'checkboxes',
       get_value: function() {
       var values = [];
-      _.each(this.dom_element.find('input[name="' + this.param_name + '"]:checked'), function(obj) {
+      _.each($(this.dom_element).find('input[name="' + this.param_name + '"]:checked'), function(obj) {
         values.push($(obj).val());
       });
       return values.join(',');

@@ -2,11 +2,11 @@
     type: 'dropdown',
     get_value: function () {
       if (Object.keys(this.value).length < 10) {
-        var val = this.dom_element.find('input[name="' + this.param_name + '"]:checked').val();
+        var val = $(this.dom_element).find('input[name="' + this.param_name + '"]:checked').val();
         if (typeof val != 'undefined')
           return val;
       } else {
-        return this.dom_element.find('select[name="' + this.param_name + '"] > option:selected').val();
+        return $(this.dom_element).find('select[name="' + this.param_name + '"] > option:selected').val();
       }
     },
     render: function (value) {

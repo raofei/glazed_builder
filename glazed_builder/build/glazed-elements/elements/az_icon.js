@@ -118,7 +118,7 @@
         this.dom_element = $('<a href="' + this.attrs['link'] + '" class="az-element az-icon ' + this.attrs[
             'el_class'] + '" target="' + this.attrs['link_target'] + '">' + icon_html + '</a>');
       }
-      this.dom_element.css('font-size', this.attrs['size'] + 'px');
+      $(this.dom_element).css('font-size', this.attrs['size'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },

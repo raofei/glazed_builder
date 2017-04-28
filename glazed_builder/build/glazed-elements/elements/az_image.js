@@ -82,7 +82,7 @@
         );
       $(img).appendTo(this.dom_element);
       if (this.attrs['link'] != '') {
-        this.dom_element.find('img').each(function() {
+        $(this.dom_element).find('img').each(function() {
           $(this).wrap('<a href="' + element.attrs['link'] + '" target="' + element.attrs['link_target'] +
             '"></a>');
         });

@@ -6,7 +6,7 @@
       this.step = 1;
     },
     get_value: function() {
-      var v = this.dom_element.find('input[name="' + this.param_name + '"]').val();
+      var v = $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
       return (v == '') ? NaN : parseFloat(v).toString();
     },
     render: function(value) {
@@ -16,7 +16,7 @@
         this.description + '</p></div>');
     },
     opened: function() {
-      nouislider(this.dom_element.find('.slider'), this.min, this.max, this.get_value(), this.step, $(this.dom_element)
+      nouislider($(this.dom_element).find('.slider'), this.min, this.max, this.get_value(), this.step, $(this.dom_element)
         .find('input[name="' + this.param_name + '"]'));
     },
   },

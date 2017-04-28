@@ -81,7 +81,7 @@
           el.attrs['pos_height'] = parseInt($(dom_element).css("height")) / ($(element.dom_content_element).height() /
             100) + "%";
           to_percents(dom_element);
-          element.attrs['o_width'] = element.dom_element.width();
+          element.attrs['o_width'] = $(element.dom_element).width();
           $(document).trigger("glazed_update_element", id);
         }
 
@@ -253,11 +253,11 @@
         }
 
         $(window).on('resize.az_layers' + element.id, function() {
-          var width = element.dom_element.width();
+          var width = $(element.dom_element).width();
           if (!('o_width' in element.attrs) || element.attrs['o_width'] == '')
             element.attrs['o_width'] = width;
           var ratio = width / element.attrs['o_width'];
-          element.dom_element.css('font-size', ratio * 100 + '%');
+          $(element.dom_element).css('font-size', ratio * 100 + '%');
           $(element.dom_content_element).css('height', element.attrs['height'] * ratio + 'px');
           update_font_sizes(element, ratio);
         });
@@ -267,7 +267,7 @@
     render: function($) {
       this.dom_element = $('<div class="az-element az-layers ' + this.get_el_classes() + '" style="' + this.attrs[
         'style'] + '"><div id="' + this.id + '" class="az-ctnr"></div></div>');
-      this.dom_content_element = this.dom_element.find('.az-ctnr');
+      this.dom_content_element = $(this.dom_element).find('.az-ctnr');
       $(this.dom_content_element).css('width', this.attrs['width']);
       $(this.dom_content_element).css('height', this.attrs['height']);
       LayersElement.baseclass.prototype.render.apply(this, arguments);

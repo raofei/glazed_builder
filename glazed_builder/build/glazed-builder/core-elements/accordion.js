@@ -74,12 +74,12 @@
     },
     showed: function($) {
       AccordionElement.baseclass.prototype.showed.apply(this, arguments);
-      this.dom_element.find('> .az-toggle > .in').removeClass(p + 'in');
-      this.dom_element.find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
+      $(this.dom_element).find('> .az-toggle > .in').removeClass(p + 'in');
+      $(this.dom_element).find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
         'toggle': false,
         'parent': '#' + this.id
       });
-      this.dom_element.find('> .az-toggle > .collapse:first')[fp + 'collapse']({
+      $(this.dom_element).find('> .az-toggle > .collapse:first')[fp + 'collapse']({
         'toggle': this.attrs['collapsed'] != 'yes',
         'parent': '#' + this.id
       });

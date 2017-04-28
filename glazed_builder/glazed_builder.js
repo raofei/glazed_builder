@@ -1035,7 +1035,7 @@
       });
     }
     else {
-      var url = window.glazed_baseurl + '../glazed_templates/' + name;
+      var url = window.glazed_baseurl + '../images/glazed_templates/' + name;
       $.ajax({
         url: url,
         cache: false,
@@ -1590,7 +1590,7 @@
   register_param_type('cms_settings', CMSSettingsParamType);
   mixin(CMSSettingsParamType.prototype, {
     get_value: function() {
-      return this.dom_element.find('form').serialize();
+      return $(this.dom_element).find('form').serialize();
     },
     render_form: function(instance) {
       var param = this;
@@ -1629,7 +1629,7 @@
   register_param_type('container', ContainerParamType);
   mixin(ContainerParamType.prototype, {
     get_value: function() {
-      return this.dom_element.find('input[name="' + this.param_name + '_type"]').val() + '/' + $(this.dom_element)
+      return $(this.dom_element).find('input[name="' + this.param_name + '_type"]').val() + '/' + $(this.dom_element)
         .find('input[name="' + this.param_name + '_name"]').val();
     },
     render: function(value) {
@@ -1647,13 +1647,13 @@
       var name_select = null;
       var element = this;
       glazed_get_container_types(function(data) {
-        type_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
+        type_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
           '_type"]'));
         $(type_select).chosen().change(function() {
           glazed_get_container_names($(this).val(), function(data) {
             $(name_select).parent().find('.direct-input').click();
-            element.dom_element.find('input[name="' + element.param_name + '_name"]').val('');
-            name_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
+            $(element.dom_element).find('input[name="' + element.param_name + '_name"]').val('');
+            name_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
               '_name"]'));
             //            $(name_select).empty();
             //            for (var key in data) {
@@ -1664,7 +1664,7 @@
         });
       });
       glazed_get_container_names(value.split('/')[0], function(data) {
-        name_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
+        name_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
           '_name"]'));
       });
     },
@@ -2121,7 +2121,7 @@
 
               function sortable_enable() {
                 for (var i = 0; i < element.sortable.length; i++) {
-                  element.dom_element.find(element.sortable[i]).each(function() {
+                  $(element.dom_element).find(element.sortable[i]).each(function() {
                     if ($(this).closest('[data-az-restore]').length == 0) {
                       $(this).data('sortable', true);
                       $(this).sortable({
@@ -2150,17 +2150,17 @@
 
               function able() {
                 for (var i = 0; i < element.restoreable.length; i++) {
-                  element.dom_element.find(element.restoreable[i]).off('mouseenter.az-restoreable').on(
+                  $(element.dom_element).find(element.restoreable[i]).off('mouseenter.az-restoreable').on(
                     'mouseenter.az-restoreable',
                     function() {
                       $(this).addClass('restoreable-highlight');
                     });
-                  element.dom_element.find(element.restoreable[i]).off('mouseleave.az-restoreable').on(
+                  $(element.dom_element).find(element.restoreable[i]).off('mouseleave.az-restoreable').on(
                     'mouseleave.az-restoreable',
                     function() {
                       $(this).removeClass('restoreable-highlight');
                     });
-                  element.dom_element.find(element.restoreable[i]).off('click.az-restoreable').on(
+                  $(element.dom_element).find(element.restoreable[i]).off('click.az-restoreable').on(
                     'click.az-restoreable',
                     function(e) {
                       if ($(this).is('[data-az-restore]')) {
@@ -2188,19 +2188,19 @@
                     });
                 }
                 for (var i = 0; i < element.styleable.length; i++) {
-                  element.dom_element.find(element.styleable[i]).off('mouseenter.az-styleable').on(
+                  $(element.dom_element).find(element.styleable[i]).off('mouseenter.az-styleable').on(
                     'mouseenter.az-styleable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).addClass('styleable-highlight');
                     });
-                  element.dom_element.find(element.styleable[i]).off('mouseleave.az-styleable').on(
+                  $(element.dom_element).find(element.styleable[i]).off('mouseleave.az-styleable').on(
                     'mouseleave.az-styleable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).removeClass('styleable-highlight');
                     });
-                  element.dom_element.find(element.styleable[i]).off('click.az-styleable').on(
+                  $(element.dom_element).find(element.styleable[i]).off('click.az-styleable').on(
                     'click.az-styleable',
                     function(e) {
                       if ($(this).closest('[data-az-restore]').length == 0) {
@@ -2225,19 +2225,19 @@
                     });
                 }
                 for (var i = 0; i < element.editable.length; i++) {
-                  element.dom_element.find(element.editable[i]).off('mouseenter.az-editable').on(
+                  $(element.dom_element).find(element.editable[i]).off('mouseenter.az-editable').on(
                     'mouseenter.az-editable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).addClass('editable-highlight');
                     });
-                  element.dom_element.find(element.editable[i]).off('mouseleave.az-editable').on(
+                  $(element.dom_element).find(element.editable[i]).off('mouseleave.az-editable').on(
                     'mouseleave.az-editable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).removeClass('editable-highlight');
                     });
-                  element.dom_element.find(element.editable[i]).off('click.az-editable').on(
+                  $(element.dom_element).find(element.editable[i]).off('click.az-editable').on(
                     'click.az-editable',
                     function(e) {
                       if ($(this).closest('[data-az-restore]').length == 0) {
@@ -2297,7 +2297,7 @@
                       2 + 'px');
                   }
                 }
-                element.dom_element.off('mousemove.az-able').on('mousemove.az-able', function() {
+                $(element.dom_element).off('mousemove.az-able').on('mousemove.az-able', function() {
                   if (sorted_node != null && $(sorted_node).hasClass('sortable-highlight')) {
                     clearTimeout(timeoutId);
                     timeoutId = setTimeout(function() {
@@ -2307,12 +2307,12 @@
                 });
                 for (var i = 0; i < element.sortable.length; i++) {
                   (function(i) {
-                    element.dom_element.find(element.sortable[i]).find('> *').off(
+                    $(element.dom_element).find(element.sortable[i]).find('> *').off(
                       'mouseenter.az-sortable').on('mouseenter.az-sortable', function() {
                       if ($(this).closest('[data-az-restore]').length == 0) {
                         var node = this;
-                        element.dom_element.find('.az-sortable-controls').remove();
-                        element.dom_element.find('.sortable-highlight').removeClass(
+                        $(element.dom_element).find('.az-sortable-controls').remove();
+                        $(element.dom_element).find('.sortable-highlight').removeClass(
                           'sortable-highlight');
                         if (sorted_node !== null) {
                           clearTimeout(timeoutId);
@@ -2326,12 +2326,12 @@
                         }, 1000);
                       }
                     });
-                    element.dom_element.find(element.sortable[i]).find('> *').off(
+                    $(element.dom_element).find(element.sortable[i]).find('> *').off(
                       'mouseleave.az-sortable').on('mouseleave.az-sortable', function() {
                       if ($(this).closest('[data-az-restore]').length == 0) {
                         var node = this;
-                        element.dom_element.find('.az-sortable-controls').remove();
-                        element.dom_element.find('.sortable-highlight').removeClass(
+                        $(element.dom_element).find('.az-sortable-controls').remove();
+                        $(element.dom_element).find('.sortable-highlight').removeClass(
                           'sortable-highlight');
                         if (sorted_node !== null) {
                           clearTimeout(timeoutId);
@@ -2389,10 +2389,10 @@
             BaseElement.prototype.showed.apply(this, arguments);
             var element = this;
             if (element.section) {
-              var container = element.dom_element.parent().closest('.container, .container-fluid');
-              var container_path = element.dom_element.parentsUntil('.container, .container-fluid');
-              var popup = element.dom_element.parent().closest('.az-popup-ctnr');
-              var popup_path = element.dom_element.parentsUntil('.az-popup-ctnr');
+              var container = $(element.dom_element).parent().closest('.container, .container-fluid');
+              var container_path = $(element.dom_element).parentsUntil('.container, .container-fluid');
+              var popup = $(element.dom_element).parent().closest('.az-popup-ctnr');
+              var popup_path = $(element.dom_element).parentsUntil('.az-popup-ctnr');
 
               if ((container.length > 0 && popup.length == 0) || (container.length > 0 && popup.length >
                   0 && container_path.length < popup_path.length))
@@ -2624,7 +2624,7 @@
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  element.dom_element.waypoint(function(direction) {
+                  $(element.dom_element).waypoint(function(direction) {
                     var container = element.parent.get_my_container();
                     var data = {
                       display_title: element.attrs['display_title'],
@@ -3281,76 +3281,77 @@
     section: false,
     controls_position: function(wholePage) {
       // Hit Detection
-      var elRect = this.dom_element[0].getBoundingClientRect();
-      if (wholePage || (elRect.bottom > 0) && (elRect.top < document.documentElement.clientHeight)) {
-        var controlsRect = this.controls[0].getBoundingClientRect();
-        if ((this.children.length > 0)
-            && (_.has(this.children[0].controls, '0'))
-            && !(this.children[0].show_parent_controls)) {
-          var childControlsRect = this.children[0].controls[0].getBoundingClientRect();
-          if (glazedBuilderHit(childControlsRect, controlsRect)) {
-            this.children[0].dom_element.addClass('az-element--controls-spacer');
-          }
-        }
-        else if ((_.has(this, 'parent'))
-            && (_.has(this.parent.controls, '0'))
-            && !(this.show_parent_controls)) {
-          var parentControlsRect = this.parent.controls[0].getBoundingClientRect();
-          if (glazedBuilderHit(parentControlsRect, controlsRect)) {
-            this.dom_element.addClass('az-element--controls-spacer');
-          }
-          if (this.parent.show_parent_controls) {
-            var parentL2ControlsRect = this.parent.parent.controls[0].getBoundingClientRect();
-            if (glazedBuilderHit(parentL2ControlsRect, controlsRect)) {
-              this.dom_element.addClass('az-element--controls-spacer');
+      if (this.dom_element) {
+        var elRect = this.dom_element[0].getBoundingClientRect();
+        if (wholePage || (elRect.bottom > 0) && (elRect.top < document.documentElement.clientHeight)) {
+          var controlsRect = this.controls[0].getBoundingClientRect();
+          if ((this.children.length > 0)
+              && (_.has(this.children[0].controls, '0'))
+              && !(this.children[0].show_parent_controls)) {
+            var childControlsRect = this.children[0].controls[0].getBoundingClientRect();
+            if (glazedBuilderHit(childControlsRect, controlsRect)) {
+              this.children[0].dom_element.addClass('az-element--controls-spacer');
             }
           }
-        }
-        // We only consider elements within 300px to be able to collide with the navbar
-        // Scrolltop still needs jQuery for cross browser support (chrome/firefox)
-        if ((elRect.top + $(window).scrollTop()) < 300) {
-          if ($('body.body--glazed-header-navbar_pull_down #navbar').length > 0) {
-            var headerRect = $('#navbar .container-col')[0].getBoundingClientRect();
-            if (glazedBuilderHit(headerRect, controlsRect)) {
-              this.dom_element.closest('.glazed-editor').css('margin-top', headerRect.height / 2);
+          else if ((_.has(this, 'parent'))
+              && (_.has(this.parent.controls, '0'))
+              && !(this.show_parent_controls)) {
+            var parentControlsRect = this.parent.controls[0].getBoundingClientRect();
+            if (glazedBuilderHit(parentControlsRect, controlsRect)) {
+              $(this.dom_element).addClass('az-element--controls-spacer');
+            }
+            if (this.parent.show_parent_controls) {
+              var parentL2ControlsRect = this.parent.parent.controls[0].getBoundingClientRect();
+              if (glazedBuilderHit(parentL2ControlsRect, controlsRect)) {
+                $(this.dom_element).addClass('az-element--controls-spacer');
+              }
             }
           }
-          if ($('body.body--glazed-header-overlay #navbar').length > 0) {
-            var headerRect = $('#navbar')[0].getBoundingClientRect();
-            if (glazedBuilderHit(headerRect, controlsRect)) {
-              this.controls.css('margin-top', headerRect.height + 32);
+          // We only consider elements within 300px to be able to collide with the navbar
+          // Scrolltop still needs jQuery for cross browser support (chrome/firefox)
+          if ((elRect.top + $(window).scrollTop()) < 300) {
+            if ($('body.body--glazed-header-navbar_pull_down #navbar').length > 0) {
+              var headerRect = $('#navbar .container-col')[0].getBoundingClientRect();
+              if (glazedBuilderHit(headerRect, controlsRect)) {
+                $(this.dom_element).closest('.glazed-editor').css('margin-top', headerRect.height / 2);
+              }
+            }
+            if ($('body.body--glazed-header-overlay #navbar').length > 0) {
+              var headerRect = $('#navbar')[0].getBoundingClientRect();
+              if (glazedBuilderHit(headerRect, controlsRect)) {
+                this.controls.css('margin-top', headerRect.height + 32);
+              }
+            }
+            if ($('#navbar.glazed-header--fixed').length > 0) {
+              var headerRect = $('#navbar')[0].getBoundingClientRect();
+              if (glazedBuilderHit(headerRect, controlsRect)) {
+                this.controls.css('margin-top', headerRect.height + 32);
+              }
             }
           }
-          if ($('#navbar.glazed-header--fixed').length > 0) {
-            var headerRect = $('#navbar')[0].getBoundingClientRect();
-            if (glazedBuilderHit(headerRect, controlsRect)) {
-              this.controls.css('margin-top', headerRect.height + 32);
-            }
-          }
-        }
-        // Scroll controls of tall elements
-        if (!this.is_container || this.has_content) {
-          var element_height = this.dom_element.height();
-          var frame_height = $(window).height();
-          if (element_height > frame_height) {
-            var window_top = $(window).scrollTop();
-            var control_top = this.controls.offset().top;
-            var element_position_top = this.dom_element.offset().top;
-            var new_position = (window_top - element_position_top) + frame_height / 2;
-            if (new_position > 40 && new_position < element_height) {
-              this.controls.css('top', new_position);
-            }
-            else if (new_position > element_height) {
-              this.controls.css('top', element_height - 40);
+          // Scroll controls of tall elements
+          if (!this.is_container || this.has_content) {
+            var element_height = $(this.dom_element).height();
+            var frame_height = $(window).height();
+            if (element_height > frame_height) {
+              var window_top = $(window).scrollTop();
+              var control_top = this.controls.offset().top;
+              var element_position_top = $(this.dom_element).offset().top;
+              var new_position = (window_top - element_position_top) + frame_height / 2;
+              if (new_position > 40 && new_position < element_height) {
+                this.controls.css('top', new_position);
+              }
+              else if (new_position > element_height) {
+                this.controls.css('top', element_height - 40);
 
-            }
-            else {
-              this.controls.css('top', 40);
+              }
+              else {
+                this.controls.css('top', 40);
+              }
             }
           }
         }
       }
-
     },
     update_controls_zindex: function() {
       set_highest_zindex(this.controls);
@@ -3360,7 +3361,7 @@
         var element = this;
         this.controls = $('<div class="controls btn-group btn-group-xs"></div>').prependTo(this
           .dom_element);
-        element.dom_element.addClass('az-element--controls-' + element.controls_base_position);
+        $(this.dom_element).addClass('az-element--controls-' + this.controls_base_position);
         setTimeout(function() {
           element.update_controls_zindex();
         }, 1000);
@@ -3397,16 +3398,13 @@
 
         var inlineControlsParent = ((element.children.length > 0) && (element.children[0].show_parent_controls));
         if (!inlineControlsParent) {
-          element.dom_element.hover(
+          $(element.dom_element).hover(
             function() {
               element.controls.addClass('controls--show');
             }, function() {
               element.controls.removeClass('controls--show');
             }
           );
-        }
-        else {
-
         }
 
         // This has lower priority than page rendering so we try to avoid doing this at the same time
@@ -3425,30 +3423,30 @@
         if (element.show_parent_controls) {
             var parent = element.parent;
             if (_.isString(element.show_parent_controls)) {
-              parent = glazed_elements.get_element(element.dom_element.closest(element.show_parent_controls)
+              parent = glazed_elements.get_element($(element.dom_element).closest(element.show_parent_controls)
                 .attr('data-az-id'));
             }
             function update_controls(element) {
               element.controls_position(true)
-              $(parent.controls).attr('data-az-cid', element.dom_element.attr('data-az-id'));
-              var offset = element.dom_element.offset();
-              offset.top = offset.top - parseInt(element.dom_element.css('margin-top')) + parseInt($(parent.controls).css('margin-top'));
+              $(parent.controls).attr('data-az-cid', $(element.dom_element).attr('data-az-id'));
+              var offset = $(element.dom_element).offset();
+              offset.top = offset.top - parseInt($(element.dom_element).css('margin-top')) + parseInt($(parent.controls).css('margin-top'));
               $(parent.controls).offset(offset);
               offset.left = offset.left + $(parent.controls).width() - 1;
               element.controls.offset(offset);
             }
             // Simultaneous show/hide of child and parent controls on child element hover
-            element.dom_element.off('mouseenter').on('mouseenter', function() {
-              element.dom_element.data('hover', true);
-              if (element.dom_element.parents('.glazed-editor').length > 0) {
+            $(element.dom_element).off('mouseenter').on('mouseenter', function() {
+              $(element.dom_element).data('hover', true);
+              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
                 $(parent.controls).addClass('controls--show');
                 element.controls.addClass('controls--show');
                 update_controls(element);
               }
             });
-            element.dom_element.off('mouseleave').on('mouseleave', function() {
-              element.dom_element.data('hover', false);
-              if (element.dom_element.parents('.glazed-editor').length > 0) {
+            $(element.dom_element).off('mouseleave').on('mouseleave', function() {
+              $(element.dom_element).data('hover', false);
+              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
                 $(parent.controls).removeClass('controls--show');
                 element.controls.removeClass('controls--show');
               }
@@ -3592,27 +3590,27 @@
     },
     showed: function($) {
       if ('pos_left' in this.attrs && this.attrs['pos_left'] != '')
-        this.dom_element.css("left", this.attrs['pos_left']);
+        $(this.dom_element).css("left", this.attrs['pos_left']);
       if ('pos_right' in this.attrs && this.attrs['pos_right'] != '')
-        this.dom_element.css("right", this.attrs['pos_right']);
+        $(this.dom_element).css("right", this.attrs['pos_right']);
       if ('pos_top' in this.attrs && this.attrs['pos_top'] != '')
-        this.dom_element.css("top", this.attrs['pos_top']);
+        $(this.dom_element).css("top", this.attrs['pos_top']);
       if ('pos_bottom' in this.attrs && this.attrs['pos_bottom'] != '')
-        this.dom_element.css("bottom", this.attrs['pos_bottom']);
+        $(this.dom_element).css("bottom", this.attrs['pos_bottom']);
       if ('pos_width' in this.attrs && this.attrs['pos_width'] != '')
-        this.dom_element.css("width", this.attrs['pos_width']);
+        $(this.dom_element).css("width", this.attrs['pos_width']);
       if ('pos_height' in this.attrs && this.attrs['pos_height'] != '')
-        this.dom_element.css("height", this.attrs['pos_height']);
+        $(this.dom_element).css("height", this.attrs['pos_height']);
       if ('pos_zindex' in this.attrs && this.attrs['pos_zindex'] != '')
-        this.dom_element.css("z-index", this.attrs['pos_zindex']);
+        $(this.dom_element).css("z-index", this.attrs['pos_zindex']);
       if ('hover_style' in this.attrs && this.attrs['hover_style'] != '') {
         $('head').find('#hover-style-' + this.id).remove();
         $('head').append(this.get_hover_style());
-        this.dom_element.addClass('hover-style-' + this.id);
+        $(this.dom_element).addClass('hover-style-' + this.id);
       }
     },
     render: function($) {
-      this.dom_element.attr('data-az-id', this.id);
+      $(this.dom_element).attr('data-az-id', this.id);
     },
     trigger_start_in_animation: function() {
       for (var i = 0; i < this.children.length; i++) {
@@ -3629,7 +3627,7 @@
       }
     },
     update_data: function() {
-      this.dom_element.attr('data-azb', this.base);
+      $(this.dom_element).attr('data-azb', this.base);
       for (var i = 0; i < this.params.length; i++) {
         var param = this.params[i];
         if (param.param_name in this.attrs) {
@@ -3640,7 +3638,7 @@
             if (!param.safe) {
               value = encodeURIComponent(value);
             }
-            this.dom_element.attr('data-azat-' + param.param_name, value);
+            $(this.dom_element).attr('data-azat-' + param.param_name, value);
           }
         }
       }
@@ -4076,7 +4074,7 @@
       for (var i = 0; i < this.children.length; i++) {
         this.children[i].remove();
       }
-      this.dom_element.remove();
+      $(this.dom_element).remove();
       for (var i = 0; i < this.parent.children.length; i++) {
         if (this.parent.children[i].id == this.id) {
           this.parent.children.splice(i, 1);
@@ -4306,26 +4304,26 @@
       var element = this;
       element.in_timeout = setTimeout(function() {
         element.clear_animation();
-        element.dom_element.css('opacity', '');
-        element.dom_element.removeClass('animated');
-        element.dom_element.removeClass(element.attrs['an_in']);
-        element.dom_element.removeClass(element.attrs['an_out']);
+        $(element.dom_element).css('opacity', '');
+        $(element.dom_element).removeClass('animated');
+        $(element.dom_element).removeClass(element.attrs['an_in']);
+        $(element.dom_element).removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
-        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        element.dom_element.addClass('animated');
+        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
+        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        $(element.dom_element).addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          element.dom_element.addClass('infinite');
+          $(element.dom_element).addClass('infinite');
         }
-        element.dom_element.addClass(element.attrs['an_in']);
+        $(element.dom_element).addClass(element.attrs['an_in']);
         element.animation_in = true;
       }, Math.round(element.attrs['an_in_delay']));
     },
     start_in_animation: function() {
       var element = this;
-      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
+      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_in'] != '') {
           if (element.animated) {
             if (element.animation_out) {
@@ -4353,26 +4351,26 @@
       var element = this;
       element.out_timeout = setTimeout(function() {
         element.clear_animation();
-        element.dom_element.css('opacity', '');
-        element.dom_element.removeClass('animated');
-        element.dom_element.removeClass(element.attrs['an_in']);
-        element.dom_element.removeClass(element.attrs['an_out']);
+        $(element.dom_element).css('opacity', '');
+        $(element.dom_element).removeClass('animated');
+        $(element.dom_element).removeClass(element.attrs['an_in']);
+        $(element.dom_element).removeClass(element.attrs['an_out']);
         element.animation_in = false;
         element.animation_out = false;
-        element.dom_element.css('animation-duration', element.attrs['an_duration'] + 'ms');
-        element.dom_element.css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
-        element.dom_element.addClass('animated');
+        $(element.dom_element).css('animation-duration', element.attrs['an_duration'] + 'ms');
+        $(element.dom_element).css('-webkit-animation-duration', element.attrs['an_duration'] + 'ms');
+        $(element.dom_element).addClass('animated');
         element.animated = true;
         if (element.attrs['an_infinite'] == 'yes') {
-          element.dom_element.addClass('infinite');
+          $(element.dom_element).addClass('infinite');
         }
-        element.dom_element.addClass(element.attrs['an_out']);
+        $(element.dom_element).addClass(element.attrs['an_out']);
         element.animation_out = true;
       }, Math.round(element.attrs['an_out_delay']));
     },
     start_out_animation: function() {
       var element = this;
-      if (element.dom_element.parents('.glazed-animations-disabled').length == 0) {
+      if ($(element.dom_element).parents('.glazed-animations-disabled').length == 0) {
         if (element.attrs['an_out'] != '') {
           if (element.animated) {
             if (element.animation_in) {
@@ -4399,28 +4397,28 @@
     clear_animation: function() {
       if (this.animation_in) {
         if (this.hidden_before_in) {
-          this.dom_element.css('opacity', '1');
+          $(this.dom_element).css('opacity', '1');
         }
         if (this.hidden_after_in) {
-          this.dom_element.css('opacity', '0');
+          $(this.dom_element).css('opacity', '0');
         }
       }
       if (this.animation_out) {
         if (this.hidden_before_in) {
-          this.dom_element.css('opacity', '0');
+          $(this.dom_element).css('opacity', '0');
         }
         if (this.hidden_after_in) {
-          this.dom_element.css('opacity', '1');
+          $(this.dom_element).css('opacity', '1');
         }
       }
-      if (this.dom_element.hasClass('animated')) {
-        this.dom_element.css('animation-duration', '');
-        this.dom_element.css('-webkit-animation-duration', '');
-        this.dom_element.removeClass('animated');
+      if ($(this.dom_element).hasClass('animated')) {
+        $(this.dom_element).css('animation-duration', '');
+        $(this.dom_element).css('-webkit-animation-duration', '');
+        $(this.dom_element).removeClass('animated');
         this.animated = false;
-        this.dom_element.removeClass('infinite');
-        this.dom_element.removeClass(this.attrs['an_in']);
-        this.dom_element.removeClass(this.attrs['an_out']);
+        $(this.dom_element).removeClass('infinite');
+        $(this.dom_element).removeClass(this.attrs['an_in']);
+        $(this.dom_element).removeClass(this.attrs['an_out']);
         this.animation_in = false;
         this.animation_out = false;
       }
@@ -4466,10 +4464,10 @@
       element.hidden_before_in = _.indexOf(element.attrs['an_hidden'].split(','), 'before_in') >= 0;
       element.hidden_after_in = _.indexOf(element.attrs['an_hidden'].split(','), 'after_in') >= 0;
       if (element.hidden_before_in) {
-        element.dom_element.css('opacity', '0');
+        $(element.dom_element).css('opacity', '0');
       }
       if (element.hidden_after_in) {
-        element.dom_element.css('opacity', '1');
+        $(element.dom_element).css('opacity', '1');
       }
 
       var parent_number = element.attrs['an_parent'];
@@ -4506,7 +4504,7 @@
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  element.dom_element.waypoint(function(direction) {
+                  $(element.dom_element).waypoint(function(direction) {
                     if (!element.animated) {
                       element.start_in_animation();
                     }
@@ -4558,7 +4556,7 @@
     },
     render: function($) {
       if ('an_name' in this.attrs && this.attrs['an_name'] != '') {
-        this.dom_element.attr('data-an-name', this.attrs['an_name']);
+        $(this.dom_element).attr('data-an-name', this.attrs['an_name']);
       }
       AnimatedElement.baseclass.prototype.render.apply(this, arguments);
     }
@@ -4971,16 +4969,16 @@
             ],
             loaded: 'waypoint' in $.fn && 'parallax' in $.fn,
             callback: function() {
-              element.dom_element.waypoint(function(direction) {
-                var background_position = element.dom_element.css('background-position');
+              $(element.dom_element).waypoint(function(direction) {
+                var background_position = $(element.dom_element).css('background-position');
                 var match = background_position.match(/([\w%]*) [\w%]/);
                 if (match == null)
                   var v = '50%';
                 else
                   var v = match[1];
-                element.dom_element.css('background-attachment', element.attrs['parallax_mode']);
-                element.dom_element.css('background-position', v + ' 0');
-                element.dom_element.parallax(v, element.attrs['parallax_speed'] / 100);
+                $(element.dom_element).css('background-attachment', element.attrs['parallax_mode']);
+                $(element.dom_element).css('background-position', v + ' 0');
+                $(element.dom_element).parallax(v, element.attrs['parallax_speed'] / 100);
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -4992,7 +4990,7 @@
           });
           break;
         case 'fixed':
-          element.dom_element.css('background-attachment', 'fixed');
+          $(element.dom_element).css('background-attachment', 'fixed');
           break;
         case 'youtube':
           function youtube_parser(url) {
@@ -5015,14 +5013,14 @@
             ],
             loaded: 'waypoint' in $.fn && 'mb_YTPlayer' in $.fn,
             callback: function() {
-              element.dom_element.waypoint(function(direction) {
-                element.dom_element.attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
+              $(element.dom_element).waypoint(function(direction) {
+                $(element.dom_element).attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
                     'video_youtube']) + "',containment:'[data-az-id=" + element.id + "]" +
                   "', showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
                   mute.toString() + ", startAt:" + element.attrs['video_start'] + ", stopAt:" +
                   element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'highres'}");
-                element.dom_element.mb_YTPlayer();
-                element.dom_element.playYTP();
+                $(element.dom_element).mb_YTPlayer();
+                $(element.dom_element).playYTP();
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -5042,7 +5040,7 @@
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-section ' + this.get_el_classes() +
         ' " style="' + this.attrs['style'] + '"></div>');
       if (this.attrs['fullheight'] == 'yes')
-        this.dom_element.css('height', '100vh');
+        $(this.dom_element).css('height', '100vh');
       if (this.attrs['fluid'] == 'yes')
         this.dom_content_element = $('<div class="az-ctnr container-fluid"></div>').appendTo(this.dom_element);
       else
@@ -5269,9 +5267,9 @@
       this.dom_element = $('<div class="az-element az-row row ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
-      this.dom_element.addClass('az-row--' + this.attrs['device']);
+      $(this.dom_element).addClass('az-row--' + this.attrs['device']);
       if (this.attrs['equal'] && this.attrs.equal === 'yes') {
-        this.dom_element.addClass('az-row--equal-height');
+        $(this.dom_element).addClass('az-row--equal-height');
       }
       RowElement.baseclass.prototype.render.apply(this, arguments);
 
@@ -5319,9 +5317,9 @@
       return this.get_children_shortcode();
     },
     update_width: function(width) {
-      this.dom_element.removeClass(width2span(this.attrs['width'], this.parent.attrs['device']));
+      $(this.dom_element).removeClass(width2span(this.attrs['width'], this.parent.attrs['device']));
       this.attrs['width'] = width;
-      this.dom_element.addClass(width2span(this.attrs['width'], this.parent.attrs['device']));
+      $(this.dom_element).addClass(width2span(this.attrs['width'], this.parent.attrs['device']));
       $(document).trigger("glazed_update_element", this.id);
     },
     render: function($) {
@@ -5330,7 +5328,7 @@
         '"></div>');
       this.dom_content_element = this.dom_element;
       if (this.attrs.vertical_centering && this.attrs.vertical_centering === 'yes') {
-        this.dom_element.addClass('az-util-vertical-centering');
+        $(this.dom_element).addClass('az-util-vertical-centering');
       }
       ColumnElement.baseclass.prototype.render.apply(this, arguments);
     },
@@ -5420,11 +5418,11 @@
       var child = new TabElement(this, false);
       child.update_dom();
       this.update_dom();
-      this.dom_element.find('a[href="#' + child.id + '"]')[fp + 'tab']('show');
+      $(this.dom_element).find('a[href="#' + child.id + '"]')[fp + 'tab']('show');
     },
     showed: function($) {
       TabsElement.baseclass.prototype.showed.apply(this, arguments);
-      this.dom_element.find('ul.nav-tabs li:first a')[fp + 'tab']('show');
+      $(this.dom_element).find('ul.nav-tabs li:first a')[fp + 'tab']('show');
     },
     render: function($) {
       this.dom_element = $('<div class="az-element az-tabs tabbable ' + this.get_el_classes() + this.attrs['az_dirrection'] + '" style="' + this.attrs[
@@ -5435,7 +5433,7 @@
           i].attrs['title'] + '</a></li>';
       }
       menu += '</ul>';
-      this.dom_element.append(menu);
+      $(this.dom_element).append(menu);
       var content = '<div id="' + this.id + '" class="tab-content"></div>';
       this.dom_content_element = $(content).appendTo(this.dom_element);
       TabsElement.baseclass.prototype.render.apply(this, arguments);
@@ -5575,12 +5573,12 @@
     },
     showed: function($) {
       AccordionElement.baseclass.prototype.showed.apply(this, arguments);
-      this.dom_element.find('> .az-toggle > .in').removeClass(p + 'in');
-      this.dom_element.find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
+      $(this.dom_element).find('> .az-toggle > .in').removeClass(p + 'in');
+      $(this.dom_element).find('> .az-toggle > .collapse:not(:first)')[fp + 'collapse']({
         'toggle': false,
         'parent': '#' + this.id
       });
-      this.dom_element.find('> .az-toggle > .collapse:first')[fp + 'collapse']({
+      $(this.dom_element).find('> .az-toggle > .collapse:first')[fp + 'collapse']({
         'toggle': this.attrs['collapsed'] != 'yes',
         'parent': '#' + this.id
       });
@@ -5633,7 +5631,7 @@
           'el_class'] + '" style="' + this.attrs['style'] + '"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#' +
         this.parent.id + '" href="#' + this.id + '">' + this.attrs['title'] + '</a></h4></div><div id="' +
         this.id + '" class="panel-collapse collapse"><div class="panel-body az-ctnr"></div></div></div>');
-      this.dom_content_element = this.dom_element.find('.panel-body');
+      this.dom_content_element = $(this.dom_element).find('.panel-body');
       ToggleElement.baseclass.prototype.render.apply(this, arguments);
     },
   });
@@ -5662,7 +5660,7 @@
       make_param_type({
         type: 'checkbox',
         heading: Drupal.t('Disable Auto Play'),
-        param_name: 'autoPlay',
+        param_name: 'autoplay',
         value: {
           'yes': Drupal.t('Yes'),
         },
@@ -5856,7 +5854,7 @@
       // make_param_type({
       //   type: 'checkbox',
       //   heading: Drupal.t('Mouse Drag'),
-      //   param_name: 'mouseDrag',
+      //   param_name: 'mouse_drag',
       //   value: {
       //     'on': Drupal.t('On'),
       //   },
@@ -5864,7 +5862,7 @@
       // make_param_type({
       //   type: 'checkbox',
       //   heading: Drupal.t('Touch Drag'),
-      //   param_name: 'touchDrag',
+      //   param_name: 'touch_drag',
       //   value: {
       //     'on': Drupal.t('On'),
       //   },
@@ -5893,7 +5891,7 @@
       make_param_type({
         type: 'checkbox',
         heading: Drupal.t('Stop on Hover'),
-        param_name: 'stopOnHover',
+        param_name: 'stoponhover',
         value: {
           'on': Drupal.t('On'),
         },
@@ -6069,7 +6067,7 @@
           }
           $('head').find('#carousel-style-' + element.id).remove();
           $('head').append(get_carousel_style(element));
-          //element.dom_element.prepend(element.controls);
+          //$(element.dom_element).prepend(element.controls);
         }
       });
     },
@@ -6205,7 +6203,7 @@
           el.attrs['pos_height'] = parseInt($(dom_element).css("height")) / ($(element.dom_content_element).height() /
             100) + "%";
           to_percents(dom_element);
-          element.attrs['o_width'] = element.dom_element.width();
+          element.attrs['o_width'] = $(element.dom_element).width();
           $(document).trigger("glazed_update_element", id);
         }
 
@@ -6377,11 +6375,11 @@
         }
 
         $(window).on('resize.az_layers' + element.id, function() {
-          var width = element.dom_element.width();
+          var width = $(element.dom_element).width();
           if (!('o_width' in element.attrs) || element.attrs['o_width'] == '')
             element.attrs['o_width'] = width;
           var ratio = width / element.attrs['o_width'];
-          element.dom_element.css('font-size', ratio * 100 + '%');
+          $(element.dom_element).css('font-size', ratio * 100 + '%');
           $(element.dom_content_element).css('height', element.attrs['height'] * ratio + 'px');
           update_font_sizes(element, ratio);
         });
@@ -6391,7 +6389,7 @@
     render: function($) {
       this.dom_element = $('<div class="az-element az-layers ' + this.get_el_classes() + '" style="' + this.attrs[
         'style'] + '"><div id="' + this.id + '" class="az-ctnr"></div></div>');
-      this.dom_content_element = this.dom_element.find('.az-ctnr');
+      this.dom_content_element = $(this.dom_element).find('.az-ctnr');
       $(this.dom_content_element).css('width', this.attrs['width']);
       $(this.dom_content_element).css('height', this.attrs['height']);
       LayersElement.baseclass.prototype.render.apply(this, arguments);
@@ -6462,7 +6460,7 @@
           $('<span title="' + title("Toggle editor") + '" class="control toggle-editor btn btn-default glyphicon glyphicon-eye-open" > </span>')
           .appendTo(this.controls)
             .click(function() {
-              element.dom_element.toggleClass('glazed-editor');
+              $(element.dom_element).toggleClass('glazed-editor');
               return false;
             });
           $('<span role="button" tabindex="0" title="' + title("Documentation and Support") + '" class="control glazed-help btn btn-default glyphicon glyphicon-question-sign glazed-builder-popover"> </span>')
@@ -6480,7 +6478,7 @@
           // $('<span title="' + title("Toggle animations") + '" class="control toggle-animations btn ' +
           //    'btn-default glyphicon glyphicon-play-circle" > </span>').appendTo(this.controls)
           //   .click(function() {
-          //     element.dom_element.toggleClass('glazed-animations-disabled');
+          //     $(element.dom_element).toggleClass('glazed-animations-disabled');
           //     return false;
           //   });
           this.controls.removeClass(p + 'btn-group-xs');
@@ -7060,10 +7058,10 @@
               $(shortcode).appendTo(element.dom_content_element);
               $(element.dom_content_element).find('> script').detach().appendTo('head');
               $(element.dom_content_element).find('> link[href]').detach().appendTo('head');
-              element.dom_element.css('display', '');
-              element.dom_element.addClass('glazed');
+              $(element.dom_element).css('display', '');
+              $(element.dom_element).addClass('glazed');
               element.parse_html(element.dom_content_element);
-              element.dom_element.attr('data-az-id', element.id);
+              $(element.dom_element).attr('data-az-id', element.id);
               element.html_content = true;
               for (var i = 0; i < element.children.length; i++) {
                 element.children[i].recursive_render();
@@ -7084,7 +7082,7 @@
                 element.loaded_container = element.attrs['container'];
                 element.parse_shortcode(shortcode);
 
-                element.dom_element.attr('data-az-id', element.id);
+                $(element.dom_element).attr('data-az-id', element.id);
                 if (window.glazed_editor) {
                   element.show_controls();
                   element.update_sortable();
@@ -7147,7 +7145,7 @@
           path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
           loaded: 'waypoint' in $.fn,
           callback: function() {
-            element.dom_element.waypoint(function(direction) {
+            $(element.dom_element).waypoint(function(direction) {
               if (!element.rendered) {
                 element.rendered = true;
                 element.load_container();
@@ -7166,7 +7164,7 @@
     render: function($) {
       if (this.attrs.container != '/') {
         this.dom_element = $('<div class="az-element az-container"><div class="az-ctnr"></div></div>');
-        this.dom_content_element = this.dom_element.find('.az-ctnr');
+        this.dom_content_element = $(this.dom_element).find('.az-ctnr');
         ContainerElement.baseclass.prototype.render.apply(this, arguments);
       }
     },
@@ -7188,7 +7186,7 @@
       if ('content' in this.attrs) {
         var match = /\[[^\]]*\]([^\[]*)\[\/[^\]]*\]/.exec(this.attrs['content']);
         if (match) {
-          this.dom_element.append(match[1]);
+          $(this.dom_element).append(match[1]);
         }
       }
       UnknownElement.baseclass.prototype.render.apply(this, arguments);
@@ -7350,7 +7348,7 @@
           CKEDITOR.config.autoParagraph = false;
 
           // Theme integration
-          CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css'];
+          CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css'];
           if (typeof window.Drupal.settings.glazed != "undefined" && typeof window.Drupal.settings.glazed.glazedPath.length != "undefined") {
             CKEDITOR.config.contentsCss.push(Drupal.settings.basePath + window.Drupal.settings.glazed.glazedPath +
               'css/glazed.css');

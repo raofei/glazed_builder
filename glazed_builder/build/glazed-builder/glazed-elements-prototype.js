@@ -449,7 +449,7 @@
 
               function sortable_enable() {
                 for (var i = 0; i < element.sortable.length; i++) {
-                  element.dom_element.find(element.sortable[i]).each(function() {
+                  $(element.dom_element).find(element.sortable[i]).each(function() {
                     if ($(this).closest('[data-az-restore]').length == 0) {
                       $(this).data('sortable', true);
                       $(this).sortable({
@@ -478,17 +478,17 @@
 
               function able() {
                 for (var i = 0; i < element.restoreable.length; i++) {
-                  element.dom_element.find(element.restoreable[i]).off('mouseenter.az-restoreable').on(
+                  $(element.dom_element).find(element.restoreable[i]).off('mouseenter.az-restoreable').on(
                     'mouseenter.az-restoreable',
                     function() {
                       $(this).addClass('restoreable-highlight');
                     });
-                  element.dom_element.find(element.restoreable[i]).off('mouseleave.az-restoreable').on(
+                  $(element.dom_element).find(element.restoreable[i]).off('mouseleave.az-restoreable').on(
                     'mouseleave.az-restoreable',
                     function() {
                       $(this).removeClass('restoreable-highlight');
                     });
-                  element.dom_element.find(element.restoreable[i]).off('click.az-restoreable').on(
+                  $(element.dom_element).find(element.restoreable[i]).off('click.az-restoreable').on(
                     'click.az-restoreable',
                     function(e) {
                       if ($(this).is('[data-az-restore]')) {
@@ -516,19 +516,19 @@
                     });
                 }
                 for (var i = 0; i < element.styleable.length; i++) {
-                  element.dom_element.find(element.styleable[i]).off('mouseenter.az-styleable').on(
+                  $(element.dom_element).find(element.styleable[i]).off('mouseenter.az-styleable').on(
                     'mouseenter.az-styleable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).addClass('styleable-highlight');
                     });
-                  element.dom_element.find(element.styleable[i]).off('mouseleave.az-styleable').on(
+                  $(element.dom_element).find(element.styleable[i]).off('mouseleave.az-styleable').on(
                     'mouseleave.az-styleable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).removeClass('styleable-highlight');
                     });
-                  element.dom_element.find(element.styleable[i]).off('click.az-styleable').on(
+                  $(element.dom_element).find(element.styleable[i]).off('click.az-styleable').on(
                     'click.az-styleable',
                     function(e) {
                       if ($(this).closest('[data-az-restore]').length == 0) {
@@ -553,19 +553,19 @@
                     });
                 }
                 for (var i = 0; i < element.editable.length; i++) {
-                  element.dom_element.find(element.editable[i]).off('mouseenter.az-editable').on(
+                  $(element.dom_element).find(element.editable[i]).off('mouseenter.az-editable').on(
                     'mouseenter.az-editable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).addClass('editable-highlight');
                     });
-                  element.dom_element.find(element.editable[i]).off('mouseleave.az-editable').on(
+                  $(element.dom_element).find(element.editable[i]).off('mouseleave.az-editable').on(
                     'mouseleave.az-editable',
                     function() {
                       if ($(this).closest('[data-az-restore]').length == 0)
                         $(this).removeClass('editable-highlight');
                     });
-                  element.dom_element.find(element.editable[i]).off('click.az-editable').on(
+                  $(element.dom_element).find(element.editable[i]).off('click.az-editable').on(
                     'click.az-editable',
                     function(e) {
                       if ($(this).closest('[data-az-restore]').length == 0) {
@@ -625,7 +625,7 @@
                       2 + 'px');
                   }
                 }
-                element.dom_element.off('mousemove.az-able').on('mousemove.az-able', function() {
+                $(element.dom_element).off('mousemove.az-able').on('mousemove.az-able', function() {
                   if (sorted_node != null && $(sorted_node).hasClass('sortable-highlight')) {
                     clearTimeout(timeoutId);
                     timeoutId = setTimeout(function() {
@@ -635,12 +635,12 @@
                 });
                 for (var i = 0; i < element.sortable.length; i++) {
                   (function(i) {
-                    element.dom_element.find(element.sortable[i]).find('> *').off(
+                    $(element.dom_element).find(element.sortable[i]).find('> *').off(
                       'mouseenter.az-sortable').on('mouseenter.az-sortable', function() {
                       if ($(this).closest('[data-az-restore]').length == 0) {
                         var node = this;
-                        element.dom_element.find('.az-sortable-controls').remove();
-                        element.dom_element.find('.sortable-highlight').removeClass(
+                        $(element.dom_element).find('.az-sortable-controls').remove();
+                        $(element.dom_element).find('.sortable-highlight').removeClass(
                           'sortable-highlight');
                         if (sorted_node !== null) {
                           clearTimeout(timeoutId);
@@ -654,12 +654,12 @@
                         }, 1000);
                       }
                     });
-                    element.dom_element.find(element.sortable[i]).find('> *').off(
+                    $(element.dom_element).find(element.sortable[i]).find('> *').off(
                       'mouseleave.az-sortable').on('mouseleave.az-sortable', function() {
                       if ($(this).closest('[data-az-restore]').length == 0) {
                         var node = this;
-                        element.dom_element.find('.az-sortable-controls').remove();
-                        element.dom_element.find('.sortable-highlight').removeClass(
+                        $(element.dom_element).find('.az-sortable-controls').remove();
+                        $(element.dom_element).find('.sortable-highlight').removeClass(
                           'sortable-highlight');
                         if (sorted_node !== null) {
                           clearTimeout(timeoutId);
@@ -717,10 +717,10 @@
             BaseElement.prototype.showed.apply(this, arguments);
             var element = this;
             if (element.section) {
-              var container = element.dom_element.parent().closest('.container, .container-fluid');
-              var container_path = element.dom_element.parentsUntil('.container, .container-fluid');
-              var popup = element.dom_element.parent().closest('.az-popup-ctnr');
-              var popup_path = element.dom_element.parentsUntil('.az-popup-ctnr');
+              var container = $(element.dom_element).parent().closest('.container, .container-fluid');
+              var container_path = $(element.dom_element).parentsUntil('.container, .container-fluid');
+              var popup = $(element.dom_element).parent().closest('.az-popup-ctnr');
+              var popup_path = $(element.dom_element).parentsUntil('.az-popup-ctnr');
 
               if ((container.length > 0 && popup.length == 0) || (container.length > 0 && popup.length >
                   0 && container_path.length < popup_path.length))
@@ -952,7 +952,7 @@
                 path: 'vendor/jquery.waypoints/lib/jquery.waypoints.min.js',
                 loaded: 'waypoint' in $.fn,
                 callback: function() {
-                  element.dom_element.waypoint(function(direction) {
+                  $(element.dom_element).waypoint(function(direction) {
                     var container = element.parent.get_my_container();
                     var data = {
                       display_title: element.attrs['display_title'],

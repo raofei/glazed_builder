@@ -114,15 +114,15 @@
       this.dom_element = $('<ul class="az-element st-social stbe-social-links ' + this.get_el_classes() +
         '" style="' + this.attrs['style'] + '"></ul>');
       if (this.attrs['st_theme_bgcolor'] == 'brand')
-        this.dom_element.addClass('stbe-social-links--bgcolor-brand');
+        $(this.dom_element).addClass('stbe-social-links--bgcolor-brand');
       if (this.attrs['st_hover_bgcolor'] == 'brand')
-        this.dom_element.addClass('stbe-social-links--hover-bgcolor-brand');
+        $(this.dom_element).addClass('stbe-social-links--hover-bgcolor-brand');
       if (this.attrs['st_theme_color'] == 'brand')
-        this.dom_element.addClass('stbe-social-links--color-brand');
+        $(this.dom_element).addClass('stbe-social-links--color-brand');
       if (this.attrs['st_hover_color'] == 'brand')
-        this.dom_element.addClass('stbe-social-links--hover-color-brand');
+        $(this.dom_element).addClass('stbe-social-links--hover-color-brand');
       if (this.attrs['st_type'] == 'stacked')
-        this.dom_element.addClass('stbe-social-links-stacked');
+        $(this.dom_element).addClass('stbe-social-links-stacked');
 
       var icon_style = '';
       // Foreground color
@@ -152,7 +152,7 @@
             icon_classes.push('stbe-util-fx-' + this.attrs['st_css3_hover_effects']);
           if (this.attrs['st_border_color'] != '' || this.attrs['st_theme_border_color'] != '')
             icon_classes.push('stbe-util-icon-border');
-          this.dom_element.append('<li class="stbe-social-links__item"><a href="' + url + '"><i class="' +
+          $(this.dom_element).append('<li class="stbe-social-links__item"><a href="' + url + '"><i class="' +
             icon_classes.join(' ') + '" style="' + icon_style +
             '" data-toggle="tooltip" data-placement="top auto" title="' + name + '"></i></a></li>')
         }

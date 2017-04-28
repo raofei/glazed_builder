@@ -39,9 +39,9 @@
       return this.get_children_shortcode();
     },
     update_width: function(width) {
-      this.dom_element.removeClass(width2span(this.attrs['width'], this.parent.attrs['device']));
+      $(this.dom_element).removeClass(width2span(this.attrs['width'], this.parent.attrs['device']));
       this.attrs['width'] = width;
-      this.dom_element.addClass(width2span(this.attrs['width'], this.parent.attrs['device']));
+      $(this.dom_element).addClass(width2span(this.attrs['width'], this.parent.attrs['device']));
       $(document).trigger("glazed_update_element", this.id);
     },
     render: function($) {
@@ -50,7 +50,7 @@
         '"></div>');
       this.dom_content_element = this.dom_element;
       if (this.attrs.vertical_centering && this.attrs.vertical_centering === 'yes') {
-        this.dom_element.addClass('az-util-vertical-centering');
+        $(this.dom_element).addClass('az-util-vertical-centering');
       }
       ColumnElement.baseclass.prototype.render.apply(this, arguments);
     },
