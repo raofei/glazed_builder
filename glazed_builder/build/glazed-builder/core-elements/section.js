@@ -133,16 +133,16 @@
             ],
             loaded: 'waypoint' in $.fn && 'parallax' in $.fn,
             callback: function() {
-              element.dom_element.waypoint(function(direction) {
-                var background_position = element.dom_element.css('background-position');
+              $(element.dom_element).waypoint(function(direction) {
+                var background_position = $(element.dom_element).css('background-position');
                 var match = background_position.match(/([\w%]*) [\w%]/);
                 if (match == null)
                   var v = '50%';
                 else
                   var v = match[1];
-                element.dom_element.css('background-attachment', element.attrs['parallax_mode']);
-                element.dom_element.css('background-position', v + ' 0');
-                element.dom_element.parallax(v, element.attrs['parallax_speed'] / 100);
+                $(element.dom_element).css('background-attachment', element.attrs['parallax_mode']);
+                $(element.dom_element).css('background-position', v + ' 0');
+                $(element.dom_element).parallax(v, element.attrs['parallax_speed'] / 100);
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -154,7 +154,7 @@
           });
           break;
         case 'fixed':
-          element.dom_element.css('background-attachment', 'fixed');
+          $(element.dom_element).css('background-attachment', 'fixed');
           break;
         case 'youtube':
           function youtube_parser(url) {
@@ -177,14 +177,14 @@
             ],
             loaded: 'waypoint' in $.fn && 'mb_YTPlayer' in $.fn,
             callback: function() {
-              element.dom_element.waypoint(function(direction) {
-                element.dom_element.attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
+              $(element.dom_element).waypoint(function(direction) {
+                $(element.dom_element).attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
                     'video_youtube']) + "',containment:'[data-az-id=" + element.id + "]" +
                   "', showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
                   mute.toString() + ", startAt:" + element.attrs['video_start'] + ", stopAt:" +
                   element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'highres'}");
-                element.dom_element.mb_YTPlayer();
-                element.dom_element.playYTP();
+                $(element.dom_element).mb_YTPlayer();
+                $(element.dom_element).playYTP();
               }, {
                 offset: '100%',
                 handler: function(direction) {
@@ -204,7 +204,7 @@
       this.dom_element = $('<div id="' + this.id + '" class="az-element az-section ' + this.get_el_classes() +
         ' " style="' + this.attrs['style'] + '"></div>');
       if (this.attrs['fullheight'] == 'yes')
-        this.dom_element.css('height', '100vh');
+        $(this.dom_element).css('height', '100vh');
       if (this.attrs['fluid'] == 'yes')
         this.dom_content_element = $('<div class="az-ctnr container-fluid"></div>').appendTo(this.dom_element);
       else

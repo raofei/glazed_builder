@@ -7,7 +7,7 @@
       this.formatter = false;
     },
     get_value: function() {
-      var v = this.dom_element.find('input[name="' + this.param_name + '"]').val();
+      var v = $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
       return (v == '') ? NaN : parseFloat(v).toString();
     },
     render: function(value) {
@@ -18,7 +18,7 @@
     },
     opened: function() {
       initBootstrapSlider(
-        this.dom_element.find('input[name="' + this.param_name + '"]'),
+        $(this.dom_element).find('input[name="' + this.param_name + '"]'),
         this.min,
         this.max,
         this.get_value(),

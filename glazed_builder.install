@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Install, update and uninstall functions for the module.
@@ -27,7 +28,7 @@ function glazed_builder_enable() {
 function glazed_builder_install() {
   variable_set('image_allow_insecure_derivatives', TRUE);
   // Install page templates
-  module_load_include('inc', 'glazed_builder', 'inc/glazed_builder.templates');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
   glazed_set_page_templates();
 }
 
@@ -115,7 +116,7 @@ function glazed_builder_update_7002() {
   if (!empty($schema[$table_name])) {
     db_create_table($table_name, $schema[$table_name]);
   }
-  module_load_include('inc', 'glazed_builder', 'inc/glazed_builder.templates');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
   glazed_set_page_templates();
 }
 
@@ -125,7 +126,7 @@ function glazed_builder_update_7002() {
 function glazed_builder_update_7003() {
   // Update page templates
   $schema = drupal_get_schema_unprocessed('glazed_builder');
-  module_load_include('inc', 'glazed_builder', 'inc/glazed_builder.templates');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
   glazed_set_page_templates();
 }
 
@@ -135,7 +136,7 @@ function glazed_builder_update_7003() {
 function glazed_builder_update_7004() {
   // Fix about me template
   $schema = drupal_get_schema_unprocessed('glazed_builder');
-  module_load_include('inc', 'glazed_builder', 'inc/glazed_builder.templates');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
   glazed_set_page_templates();
 }
 
@@ -154,4 +155,24 @@ function glazed_builder_update_7005() {
   $format = (object) $format;
   filter_format_disable($format);
   drupal_set_message(t('Glazed Builder Filter Format has been disabled, if you were using this on any fields please switch them to another format like WYSIWYG Full and use Glazed Builder as Frontend Builder. See documentation: !url', array('!url' => l(t('Glazed Builder Setup'), 'https://www.sooperthemes.com/documentation/installing-glazed-builderon-existing-website'))), 'warning');
+}
+
+/**
+ * Update glazed builder page templates
+ */
+function glazed_builder_update_7007() {
+  // Update page templates
+  $schema = drupal_get_schema_unprocessed('glazed_builder');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
+  glazed_set_page_templates();
+}
+
+/**
+ * Update glazed builder page templates
+ */
+function glazed_builder_update_7006() {
+  // Update page templates
+  $schema = drupal_get_schema_unprocessed('glazed_builder');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
+  glazed_set_page_templates();
 }

@@ -1,7 +1,7 @@
   {
     type: 'textfield',
     get_value: function() {
-      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
+      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
       var required = this.required ? 'required' : '';

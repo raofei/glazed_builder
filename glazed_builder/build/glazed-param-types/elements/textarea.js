@@ -14,7 +14,7 @@
     opened: function() {
       var param = this;
       if ('glazed_ckeditor' in window) {
-        window.glazed_ckeditor(this.dom_element.find('#' + param.id));
+        window.glazed_ckeditor($(this.dom_element).find('#' + param.id));
       }
       else {
         function ckeditor_add_editor() {
@@ -27,7 +27,7 @@
           CKEDITOR.config.autoParagraph = false;
 
           // Theme integration
-          CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css'];
+          CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css'];
           if (typeof window.Drupal.settings.glazed.glazedPath.length != "undefined") {
             CKEDITOR.config.contentsCss.push(Drupal.settings.basePath + window.Drupal.settings.glazed.glazedPath +
               'css/glazed.css');

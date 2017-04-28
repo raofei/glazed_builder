@@ -61,9 +61,6 @@
           modal: true,
           draggable: true,
           resizable: true,
-          minWidth: 1200,
-          width: 1200,
-          height: 1000,
           position: 'center',
           overlay: {
             backgroundColor: '#000000',
@@ -289,7 +286,7 @@
       CKEDITOR.config.autoParagraph = false;
 
       // Theme integration
-      CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css'];
+      CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css'];
       if ((typeof window.Drupal.settings != "undefined")
             && (typeof window.Drupal.settings.glazed != "undefined")
             && (typeof window.Drupal.settings.glazed.glazedPath != "undefined")) {

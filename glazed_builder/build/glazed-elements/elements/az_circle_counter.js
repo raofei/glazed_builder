@@ -115,8 +115,8 @@
         ],
         loaded: 'waypoint' in $.fn && 'circliful' in $.fn,
         callback: function() {
-          element.dom_element.waypoint(function(direction) {
-            element.dom_element.find('#' + element.id).once().circliful();
+          $(element.dom_element).waypoint(function(direction) {
+            $(element.dom_element).find('#' + element.id).once().circliful();
           }, {
             offset: '100%',
             handler: function(direction) {

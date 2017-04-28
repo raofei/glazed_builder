@@ -36,9 +36,9 @@
 
       // Condition to check existing item.
       var str = '<footer><cite>' + this.attrs['cite'] + '</cite></footer>';
-      var innerHtml = this.dom_element.html().indexOf(str);
+      var innerHtml = $(this.dom_element).html().indexOf(str);
       if (this.attrs['cite'] != '' && innerHtml < 0)
-        this.dom_element.append(str);
+        $(this.dom_element).append(str);
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },

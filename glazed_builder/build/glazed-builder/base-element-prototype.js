@@ -204,76 +204,77 @@
     section: false,
     controls_position: function(wholePage) {
       // Hit Detection
-      var elRect = this.dom_element[0].getBoundingClientRect();
-      if (wholePage || (elRect.bottom > 0) && (elRect.top < document.documentElement.clientHeight)) {
-        var controlsRect = this.controls[0].getBoundingClientRect();
-        if ((this.children.length > 0)
-            && (_.has(this.children[0].controls, '0'))
-            && !(this.children[0].show_parent_controls)) {
-          var childControlsRect = this.children[0].controls[0].getBoundingClientRect();
-          if (glazedBuilderHit(childControlsRect, controlsRect)) {
-            this.children[0].dom_element.addClass('az-element--controls-spacer');
-          }
-        }
-        else if ((_.has(this, 'parent'))
-            && (_.has(this.parent.controls, '0'))
-            && !(this.show_parent_controls)) {
-          var parentControlsRect = this.parent.controls[0].getBoundingClientRect();
-          if (glazedBuilderHit(parentControlsRect, controlsRect)) {
-            this.dom_element.addClass('az-element--controls-spacer');
-          }
-          if (this.parent.show_parent_controls) {
-            var parentL2ControlsRect = this.parent.parent.controls[0].getBoundingClientRect();
-            if (glazedBuilderHit(parentL2ControlsRect, controlsRect)) {
-              this.dom_element.addClass('az-element--controls-spacer');
+      if (this.dom_element) {
+        var elRect = this.dom_element[0].getBoundingClientRect();
+        if (wholePage || (elRect.bottom > 0) && (elRect.top < document.documentElement.clientHeight)) {
+          var controlsRect = this.controls[0].getBoundingClientRect();
+          if ((this.children.length > 0)
+              && (_.has(this.children[0].controls, '0'))
+              && !(this.children[0].show_parent_controls)) {
+            var childControlsRect = this.children[0].controls[0].getBoundingClientRect();
+            if (glazedBuilderHit(childControlsRect, controlsRect)) {
+              this.children[0].dom_element.addClass('az-element--controls-spacer');
             }
           }
-        }
-        // We only consider elements within 300px to be able to collide with the navbar
-        // Scrolltop still needs jQuery for cross browser support (chrome/firefox)
-        if ((elRect.top + $(window).scrollTop()) < 300) {
-          if ($('body.body--glazed-header-navbar_pull_down #navbar').length > 0) {
-            var headerRect = $('#navbar .container-col')[0].getBoundingClientRect();
-            if (glazedBuilderHit(headerRect, controlsRect)) {
-              this.dom_element.closest('.glazed-editor').css('margin-top', headerRect.height / 2);
+          else if ((_.has(this, 'parent'))
+              && (_.has(this.parent.controls, '0'))
+              && !(this.show_parent_controls)) {
+            var parentControlsRect = this.parent.controls[0].getBoundingClientRect();
+            if (glazedBuilderHit(parentControlsRect, controlsRect)) {
+              $(this.dom_element).addClass('az-element--controls-spacer');
+            }
+            if (this.parent.show_parent_controls) {
+              var parentL2ControlsRect = this.parent.parent.controls[0].getBoundingClientRect();
+              if (glazedBuilderHit(parentL2ControlsRect, controlsRect)) {
+                $(this.dom_element).addClass('az-element--controls-spacer');
+              }
             }
           }
-          if ($('body.body--glazed-header-overlay #navbar').length > 0) {
-            var headerRect = $('#navbar')[0].getBoundingClientRect();
-            if (glazedBuilderHit(headerRect, controlsRect)) {
-              this.controls.css('margin-top', headerRect.height + 32);
+          // We only consider elements within 300px to be able to collide with the navbar
+          // Scrolltop still needs jQuery for cross browser support (chrome/firefox)
+          if ((elRect.top + $(window).scrollTop()) < 300) {
+            if ($('body.body--glazed-header-navbar_pull_down #navbar').length > 0) {
+              var headerRect = $('#navbar .container-col')[0].getBoundingClientRect();
+              if (glazedBuilderHit(headerRect, controlsRect)) {
+                $(this.dom_element).closest('.glazed-editor').css('margin-top', headerRect.height / 2);
+              }
+            }
+            if ($('body.body--glazed-header-overlay #navbar').length > 0) {
+              var headerRect = $('#navbar')[0].getBoundingClientRect();
+              if (glazedBuilderHit(headerRect, controlsRect)) {
+                this.controls.css('margin-top', headerRect.height + 32);
+              }
+            }
+            if ($('#navbar.glazed-header--fixed').length > 0) {
+              var headerRect = $('#navbar')[0].getBoundingClientRect();
+              if (glazedBuilderHit(headerRect, controlsRect)) {
+                this.controls.css('margin-top', headerRect.height + 32);
+              }
             }
           }
-          if ($('#navbar.glazed-header--fixed').length > 0) {
-            var headerRect = $('#navbar')[0].getBoundingClientRect();
-            if (glazedBuilderHit(headerRect, controlsRect)) {
-              this.controls.css('margin-top', headerRect.height + 32);
-            }
-          }
-        }
-        // Scroll controls of tall elements
-        if (!this.is_container || this.has_content) {
-          var element_height = this.dom_element.height();
-          var frame_height = $(window).height();
-          if (element_height > frame_height) {
-            var window_top = $(window).scrollTop();
-            var control_top = this.controls.offset().top;
-            var element_position_top = this.dom_element.offset().top;
-            var new_position = (window_top - element_position_top) + frame_height / 2;
-            if (new_position > 40 && new_position < element_height) {
-              this.controls.css('top', new_position);
-            }
-            else if (new_position > element_height) {
-              this.controls.css('top', element_height - 40);
+          // Scroll controls of tall elements
+          if (!this.is_container || this.has_content) {
+            var element_height = $(this.dom_element).height();
+            var frame_height = $(window).height();
+            if (element_height > frame_height) {
+              var window_top = $(window).scrollTop();
+              var control_top = this.controls.offset().top;
+              var element_position_top = $(this.dom_element).offset().top;
+              var new_position = (window_top - element_position_top) + frame_height / 2;
+              if (new_position > 40 && new_position < element_height) {
+                this.controls.css('top', new_position);
+              }
+              else if (new_position > element_height) {
+                this.controls.css('top', element_height - 40);
 
-            }
-            else {
-              this.controls.css('top', 40);
+              }
+              else {
+                this.controls.css('top', 40);
+              }
             }
           }
         }
       }
-
     },
     update_controls_zindex: function() {
       set_highest_zindex(this.controls);
@@ -283,7 +284,7 @@
         var element = this;
         this.controls = $('<div class="controls btn-group btn-group-xs"></div>').prependTo(this
           .dom_element);
-        element.dom_element.addClass('az-element--controls-' + element.controls_base_position);
+        $(this.dom_element).addClass('az-element--controls-' + this.controls_base_position);
         setTimeout(function() {
           element.update_controls_zindex();
         }, 1000);
@@ -320,16 +321,13 @@
 
         var inlineControlsParent = ((element.children.length > 0) && (element.children[0].show_parent_controls));
         if (!inlineControlsParent) {
-          element.dom_element.hover(
+          $(element.dom_element).hover(
             function() {
               element.controls.addClass('controls--show');
             }, function() {
               element.controls.removeClass('controls--show');
             }
           );
-        }
-        else {
-
         }
 
         // This has lower priority than page rendering so we try to avoid doing this at the same time
@@ -348,30 +346,30 @@
         if (element.show_parent_controls) {
             var parent = element.parent;
             if (_.isString(element.show_parent_controls)) {
-              parent = glazed_elements.get_element(element.dom_element.closest(element.show_parent_controls)
+              parent = glazed_elements.get_element($(element.dom_element).closest(element.show_parent_controls)
                 .attr('data-az-id'));
             }
             function update_controls(element) {
               element.controls_position(true)
-              $(parent.controls).attr('data-az-cid', element.dom_element.attr('data-az-id'));
-              var offset = element.dom_element.offset();
-              offset.top = offset.top - parseInt(element.dom_element.css('margin-top')) + parseInt($(parent.controls).css('margin-top'));
+              $(parent.controls).attr('data-az-cid', $(element.dom_element).attr('data-az-id'));
+              var offset = $(element.dom_element).offset();
+              offset.top = offset.top - parseInt($(element.dom_element).css('margin-top')) + parseInt($(parent.controls).css('margin-top'));
               $(parent.controls).offset(offset);
               offset.left = offset.left + $(parent.controls).width() - 1;
               element.controls.offset(offset);
             }
             // Simultaneous show/hide of child and parent controls on child element hover
-            element.dom_element.off('mouseenter').on('mouseenter', function() {
-              element.dom_element.data('hover', true);
-              if (element.dom_element.parents('.glazed-editor').length > 0) {
+            $(element.dom_element).off('mouseenter').on('mouseenter', function() {
+              $(element.dom_element).data('hover', true);
+              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
                 $(parent.controls).addClass('controls--show');
                 element.controls.addClass('controls--show');
                 update_controls(element);
               }
             });
-            element.dom_element.off('mouseleave').on('mouseleave', function() {
-              element.dom_element.data('hover', false);
-              if (element.dom_element.parents('.glazed-editor').length > 0) {
+            $(element.dom_element).off('mouseleave').on('mouseleave', function() {
+              $(element.dom_element).data('hover', false);
+              if ($(element.dom_element).parents('.glazed-editor').length > 0) {
                 $(parent.controls).removeClass('controls--show');
                 element.controls.removeClass('controls--show');
               }
@@ -515,27 +513,27 @@
     },
     showed: function($) {
       if ('pos_left' in this.attrs && this.attrs['pos_left'] != '')
-        this.dom_element.css("left", this.attrs['pos_left']);
+        $(this.dom_element).css("left", this.attrs['pos_left']);
       if ('pos_right' in this.attrs && this.attrs['pos_right'] != '')
-        this.dom_element.css("right", this.attrs['pos_right']);
+        $(this.dom_element).css("right", this.attrs['pos_right']);
       if ('pos_top' in this.attrs && this.attrs['pos_top'] != '')
-        this.dom_element.css("top", this.attrs['pos_top']);
+        $(this.dom_element).css("top", this.attrs['pos_top']);
       if ('pos_bottom' in this.attrs && this.attrs['pos_bottom'] != '')
-        this.dom_element.css("bottom", this.attrs['pos_bottom']);
+        $(this.dom_element).css("bottom", this.attrs['pos_bottom']);
       if ('pos_width' in this.attrs && this.attrs['pos_width'] != '')
-        this.dom_element.css("width", this.attrs['pos_width']);
+        $(this.dom_element).css("width", this.attrs['pos_width']);
       if ('pos_height' in this.attrs && this.attrs['pos_height'] != '')
-        this.dom_element.css("height", this.attrs['pos_height']);
+        $(this.dom_element).css("height", this.attrs['pos_height']);
       if ('pos_zindex' in this.attrs && this.attrs['pos_zindex'] != '')
-        this.dom_element.css("z-index", this.attrs['pos_zindex']);
+        $(this.dom_element).css("z-index", this.attrs['pos_zindex']);
       if ('hover_style' in this.attrs && this.attrs['hover_style'] != '') {
         $('head').find('#hover-style-' + this.id).remove();
         $('head').append(this.get_hover_style());
-        this.dom_element.addClass('hover-style-' + this.id);
+        $(this.dom_element).addClass('hover-style-' + this.id);
       }
     },
     render: function($) {
-      this.dom_element.attr('data-az-id', this.id);
+      $(this.dom_element).attr('data-az-id', this.id);
     },
     trigger_start_in_animation: function() {
       for (var i = 0; i < this.children.length; i++) {
@@ -552,7 +550,7 @@
       }
     },
     update_data: function() {
-      this.dom_element.attr('data-azb', this.base);
+      $(this.dom_element).attr('data-azb', this.base);
       for (var i = 0; i < this.params.length; i++) {
         var param = this.params[i];
         if (param.param_name in this.attrs) {
@@ -563,7 +561,7 @@
             if (!param.safe) {
               value = encodeURIComponent(value);
             }
-            this.dom_element.attr('data-azat-' + param.param_name, value);
+            $(this.dom_element).attr('data-azat-' + param.param_name, value);
           }
         }
       }
@@ -999,7 +997,7 @@
       for (var i = 0; i < this.children.length; i++) {
         this.children[i].remove();
       }
-      this.dom_element.remove();
+      $(this.dom_element).remove();
       for (var i = 0; i < this.parent.children.length; i++) {
         if (this.parent.children[i].id == this.id) {
           this.parent.children.splice(i, 1);

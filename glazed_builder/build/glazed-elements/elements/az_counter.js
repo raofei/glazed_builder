@@ -62,8 +62,8 @@
         ],
         loaded: 'waypoint' in $.fn && 'countTo' in $.fn,
         callback: function() {
-          element.dom_element.waypoint(function(direction) {
-            element.dom_element.find('#' + element.id).countTo({
+          $(element.dom_element).waypoint(function(direction) {
+            $(element.dom_element).find('#' + element.id).countTo({
               from: Math.round(element.attrs['start']),
               to: Math.round(element.attrs['end']),
               speed: Math.round(element.attrs['speed']),
@@ -81,7 +81,7 @@
             },
           });
           $(document).trigger('scroll');
-          //        element.dom_element.waypoint({
+          //        $(element.dom_element).waypoint({
           //          handler: function() {
           //          }
           //        });
@@ -91,7 +91,7 @@
     render: function($) {
       this.dom_element = $('<div class="az-element az-counter"><div id="' + this.id + '" class="' + this.attrs[
           'el_class'] + '" style="' + this.attrs['style'] + '">' + this.attrs['start'] + '</div></div>');
-      this.dom_element.find('#' + this.id).css('font-size', this.attrs['fontsize'] + 'px');
+      $(this.dom_element).find('#' + this.id).css('font-size', this.attrs['fontsize'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },

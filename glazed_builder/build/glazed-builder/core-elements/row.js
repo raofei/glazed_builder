@@ -216,9 +216,9 @@
       this.dom_element = $('<div class="az-element az-row row ' + this.get_el_classes() + '" style="' +
         this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
-      this.dom_element.addClass('az-row--' + this.attrs['device']);
+      $(this.dom_element).addClass('az-row--' + this.attrs['device']);
       if (this.attrs['equal'] && this.attrs.equal === 'yes') {
-        this.dom_element.addClass('az-row--equal-height');
+        $(this.dom_element).addClass('az-row--equal-height');
       }
       RowElement.baseclass.prototype.render.apply(this, arguments);
 

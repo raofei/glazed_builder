@@ -111,7 +111,7 @@
           CKEDITOR.config.autoParagraph = false;
 
           // Theme integration
-          CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css'];
+          CKEDITOR.config.contentsCss = ['//cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css'];
           if (typeof window.Drupal.settings.glazed != "undefined" && typeof window.Drupal.settings.glazed.glazedPath.length != "undefined") {
             CKEDITOR.config.contentsCss.push(Drupal.settings.basePath + window.Drupal.settings.glazed.glazedPath +
               'css/glazed.css');

@@ -279,7 +279,7 @@
       });
     }
     else {
-      var url = window.glazed_baseurl + '../glazed_templates/' + name;
+      var url = window.glazed_baseurl + '../images/glazed_templates/' + name;
       $.ajax({
         url: url,
         cache: false,

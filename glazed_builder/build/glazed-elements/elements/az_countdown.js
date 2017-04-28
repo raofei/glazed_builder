@@ -175,7 +175,7 @@
                 secondsWrapper: '.ce-seconds .ce-flip-back',
                 wrapDigits: false,
                 onChange: function() {
-                  countEverestFlipAnimate(element.dom_element.find('.ce-countdown .ce-col>div'),
+                  countEverestFlipAnimate($(element.dom_element).find('.ce-countdown .ce-col>div'),
                     this);
                 }
               }
@@ -216,15 +216,15 @@
               options = {
                 leftHandZeros: false,
                 onChange: function() {
-                  drawCircle(element.dom_element.find('#ce-days').get(0), this.days, 365);
-                  drawCircle(element.dom_element.find('#ce-hours').get(0), this.hours, 24);
-                  drawCircle(element.dom_element.find('#ce-minutes').get(0), this.minutes, 60);
-                  drawCircle(element.dom_element.find('#ce-seconds').get(0), this.seconds, 60);
+                  drawCircle($(element.dom_element).find('#ce-days').get(0), this.days, 365);
+                  drawCircle($(element.dom_element).find('#ce-hours').get(0), this.hours, 24);
+                  drawCircle($(element.dom_element).find('#ce-minutes').get(0), this.minutes, 60);
+                  drawCircle($(element.dom_element).find('#ce-seconds').get(0), this.seconds, 60);
                 }
               }
               break;
             case 'style10':
-              var $countdown = element.dom_element.find('.ce-countdown');
+              var $countdown = $(element.dom_element).find('.ce-countdown');
               var firstCalculation = true;
               options = {
                 leftHandZeros: true,
@@ -336,7 +336,7 @@
             case 'date':
               var d = Date.parseDate(element.attrs['date'], 'd.m.Y');
               if (d != null)
-                element.dom_element.countEverest($.extend(options, {
+                $(element.dom_element).countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -345,7 +345,7 @@
             case 'date_time':
               var d = Date.parseDate(element.attrs['date_time'], 'd.m.Y H');
               if (d != null)
-                element.dom_element.countEverest($.extend(options, {
+                $(element.dom_element).countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -356,7 +356,7 @@
               var d = new Date();
               d.setHours(element.attrs['time']);
               if (d != null)
-                element.dom_element.countEverest($.extend(options, {
+                $(element.dom_element).countEverest($.extend(options, {
                   day: d.getDate(),
                   month: d.getMonth() + 1,
                   year: d.getFullYear(),
@@ -380,7 +380,7 @@
                   elapsed = elapsed - Math.floor(k) * interval;
                   var delta = interval - elapsed;
                   var d = new Date(current.getTime() + delta);
-                  element.dom_element.countEverest($.extend(options, {
+                  $(element.dom_element).countEverest($.extend(options, {
                     day: d.getDate(),
                     month: d.getMonth() + 1,
                     year: d.getFullYear(),
@@ -396,7 +396,7 @@
                 }
                 else {
                   var d = new Date(saved.getTime() + interval);
-                  element.dom_element.countEverest($.extend(options, {
+                  $(element.dom_element).countEverest($.extend(options, {
                     day: d.getDate(),
                     month: d.getMonth() + 1,
                     year: d.getFullYear(),
@@ -424,7 +424,7 @@
       var countdown = $('<div class="ce-countdown"></div>').appendTo(this.dom_element);
       switch (this.attrs['countdown_style']) {
         case 'style1':
-          this.dom_element.addClass('ce-countdown--theme-1');
+          $(this.dom_element).addClass('ce-countdown--theme-1');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col"><span class="ce-days"></span> <span class="ce-days-label"></span></div>');
@@ -441,7 +441,7 @@
             );
           break;
         case 'style6':
-          this.dom_element.addClass('ce-countdown--theme-6 clearfix');
+          $(this.dom_element).addClass('ce-countdown--theme-6 clearfix');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col col-md-3"><div class="ce-days"><div class="ce-flip-wrap"><div class="ce-flip-front bg-primary"></div><div class="ce-flip-back bg-primary"></div></div></div><span class="ce-days-label"></span></div>'
@@ -460,7 +460,7 @@
             );
           break;
         case 'style9':
-          this.dom_element.addClass('ce-countdown--theme-9');
+          $(this.dom_element).addClass('ce-countdown--theme-9');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-circle"><canvas id="ce-days" width="408" height="408"></canvas><div class="ce-circle__values"><span class="ce-digit ce-days"></span><span class="ce-label ce-days-label"></span></div></div>'
@@ -479,7 +479,7 @@
             );
           break;
         case 'style10':
-          this.dom_element.addClass('ce-countdown--theme-10');
+          $(this.dom_element).addClass('ce-countdown--theme-10');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-unit-wrap"><div class="ce-days"></div><span class="ce-days-label"></span></div>');
@@ -497,7 +497,7 @@
             );
           break;
         case 'style12':
-          this.dom_element.addClass('ce-countdown--theme-12');
+          $(this.dom_element).addClass('ce-countdown--theme-12');
           if (_.indexOf(this.attrs['display'].split(','), 'days') >= 0)
             $(countdown).append(
               '<div class="ce-col"><div class="ce-days ce-digits"></div> <span class="ce-days-label"></span></div>'

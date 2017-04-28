@@ -145,7 +145,7 @@
 
   ].concat(icons),
     get_value: function() {
-      return this.dom_element.find('input[name="' + this.param_name + '"]').val();
+      return $(this.dom_element).find('input[name="' + this.param_name + '"]').val();
     },
     render: function(value) {
       this.dom_element = $('<div class="form-group form-group--' + this.param_name + '"><label>' + this.heading +

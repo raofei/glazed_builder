@@ -54,14 +54,14 @@
           'type'] + '" role="progressbar" aria-valuenow="' + this.attrs['width'] +
         '" aria-valuemin="0" aria-valuemax="100" style="width: ' + this.attrs['width'] + '%; line-height: ' + height + ';">' + this.attrs[
           'label'] + '</div></div>');
-      this.dom_element.css('height', height).css('min-height', height).css('line-height', height);
+      $(this.dom_element).css('height', height).css('min-height', height).css('line-height', height);
       // Back Color
       if (this.attrs['bgcolor']) {
-        this.dom_element.css('background-color', this.attrs['bgcolor']);
+        $(this.dom_element).css('background-color', this.attrs['bgcolor']);
       }
       // Front Color
       if (this.attrs['fcolor']) {
-        this.dom_element.find('.progress-bar').css('background-color', this.attrs['fcolor']);
+        $(this.dom_element).find('.progress-bar').css('background-color', this.attrs['fcolor']);
       }
       this.baseclass.prototype.render.apply(this, arguments);
     },

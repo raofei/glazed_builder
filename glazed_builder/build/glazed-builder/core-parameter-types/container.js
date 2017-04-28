@@ -8,7 +8,7 @@
   register_param_type('container', ContainerParamType);
   mixin(ContainerParamType.prototype, {
     get_value: function() {
-      return this.dom_element.find('input[name="' + this.param_name + '_type"]').val() + '/' + $(this.dom_element)
+      return $(this.dom_element).find('input[name="' + this.param_name + '_type"]').val() + '/' + $(this.dom_element)
         .find('input[name="' + this.param_name + '_name"]').val();
     },
     render: function(value) {
@@ -26,13 +26,13 @@
       var name_select = null;
       var element = this;
       glazed_get_container_types(function(data) {
-        type_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
+        type_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
           '_type"]'));
         $(type_select).chosen().change(function() {
           glazed_get_container_names($(this).val(), function(data) {
             $(name_select).parent().find('.direct-input').click();
-            element.dom_element.find('input[name="' + element.param_name + '_name"]').val('');
-            name_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
+            $(element.dom_element).find('input[name="' + element.param_name + '_name"]').val('');
+            name_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
               '_name"]'));
             //            $(name_select).empty();
             //            for (var key in data) {
@@ -43,7 +43,7 @@
         });
       });
       glazed_get_container_names(value.split('/')[0], function(data) {
-        name_select = chosen_select(data, element.dom_element.find('input[name="' + element.param_name +
+        name_select = chosen_select(data, $(element.dom_element).find('input[name="' + element.param_name +
           '_name"]'));
       });
     },

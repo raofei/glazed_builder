@@ -1,7 +1,7 @@
   {
     type: 'colorpicker',
     get_value: function() {
-      return this.dom_element.find('#' + this.id).val();
+      return $(this.dom_element).find('#' + this.id).val();
     },
     render: function(value) {
       this.id = _.uniqueId();
