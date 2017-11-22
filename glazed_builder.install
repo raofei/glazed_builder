@@ -160,7 +160,7 @@ function glazed_builder_update_7005() {
 /**
  * Update glazed builder page templates
  */
-function glazed_builder_update_7007() {
+function glazed_builder_update_7006() {
   // Update page templates
   $schema = drupal_get_schema_unprocessed('glazed_builder');
   module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
@@ -170,7 +170,17 @@ function glazed_builder_update_7007() {
 /**
  * Update glazed builder page templates
  */
-function glazed_builder_update_7006() {
+function glazed_builder_update_7007() {
+  // Update page templates
+  $schema = drupal_get_schema_unprocessed('glazed_builder');
+  module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');
+  glazed_set_page_templates();
+}
+
+/**
+ * Update glazed builder page templates with imgur https links
+ */
+function glazed_builder_update_7008() {
   // Update page templates
   $schema = drupal_get_schema_unprocessed('glazed_builder');
   module_load_include('inc', 'glazed_builder', 'glazed_builder.templates');

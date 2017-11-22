@@ -2269,7 +2269,7 @@
                   if ($(node).hasClass('sortable-highlight')) {
                     $(node).find('.az-sortable-controls').remove();
                     var controls = $('<div class="az-sortable-controls"></div>').appendTo(node);
-                    var clone = $('<div class="az-sortable-clone glyphicon glyphicon-repeat" title="' + Drupal.t('Clone') + '"></div>').appendTo(controls).click(
+                    var clone = $('<div class="az-sortable-clone glyphicon glyphicon-duplicate" title="' + Drupal.t('Clone') + '"></div>').appendTo(controls).click(
                       function() {
                         sortable_disable();
                         $(node).removeClass('sortable-highlight').find('.az-sortable-controls').remove();
@@ -2452,7 +2452,7 @@
             'body');
           $('<div class="glazed-snippets-header clearfix"><img src="'
             + window.glazed_baseurl
-            + 'images/glazed-logo-white.png">'
+            + 'images/glazed-logo-white.svg">'
             + '<h3>' + Drupal.t('Glazed Snippets') + '</h3>'
             + '</div>')
             .appendTo(panel);
@@ -2478,10 +2478,6 @@
                       for (var name in item) {
                         if (name == '_') {
                           for (var i = 0; i < item[name].length; i++) {
-                            // $('<div class="az-thumbnail" data-az-base="' + item[name][i].name +
-                            //   '" style="background-image: url(' + encodeURI(item[name][i].thumbnail) +
-                            //   '); background-position: center center; background-size: cover;"></div>'
-                            // ).appendTo(thumbnails);
                             $('<img class="az-thumbnail" data-az-base="' + item[name][i].name +
                               '" src="' + encodeURI(item[name][i].thumbnail) +
                               '">'
@@ -2813,7 +2809,7 @@
           if ((BaseElement.prototype.elements[id].prototype.category == 'CMS')) {
             var itemName = BaseElement.prototype.elements[id].prototype.name.match(/^Block/) ? 'Blocks' :
               'Views';
-            var blockViews = 'az_block-views-cms';
+            var blockViews = 'block-views';
             if (BaseElement.prototype.elements[id].prototype.base.indexOf(blockViews) < 0) {
               if (!(itemName in tabs)) {
                 tabs[itemName] = [];
@@ -2839,7 +2835,7 @@
         menu += '<li><a href="#az-elements-tab-' + i + '" data-toggle="tab">' + title + '</a></li>';
       }
       if (window.glazed_online)
-        menu += '<li><a href="#az-elements-tab-templates" data-toggle="tab">' + Drupal.t("Saved templates") +
+        menu += '<li><a href="#az-elements-tab-templates" data-toggle="tab">' + Drupal.t("Saved Templates") +
         '</a></li>';
       menu += '</ul>';
       $(elements_tabs).append(menu);
@@ -2913,8 +2909,8 @@
       $(elements_tabs).append(tabs_content);
 
       $('#az-elements-modal').remove();
-      var header = '<div class="modal-header"><span class="close" data-dismiss="modal" aria-hidden="true">&times;</span><h4 class="modal-title text-center">' + '<img src="' + window.glazed_baseurl +
-        'images/glazed-logo-white.png">' + '</h4></div>';
+      var header = '<div class="modal-header"><span class="close" data-dismiss="modal" aria-hidden="true">&times;</span><h4 class="modal-title">' + '<img src="' + window.glazed_baseurl +
+        'images/glazed-logo-white.svg">' + '</h4></div>';
       var elements_modal = $('<div id="az-elements-modal" class="modal glazed" style="display:none"><div class="modal-dialog modal-lg"><div class="modal-content">' + header + '<div class="modal-body"></div></div></div></div>');
       $('body').prepend(elements_modal);
       $(elements_modal).find('.modal-body').append(elements_tabs);
@@ -3000,8 +2996,8 @@
       $(elements_tabs).append(tabs_content);
 
       $('#az-elements-modal').remove();
-      var header = '<div class="modal-header"><span class="close" data-dismiss="modal" aria-hidden="true">&times;</span><h4 class="modal-title text-center">' + '<img src="' + window.glazed_baseurl +
-        'images/glazed-logo-white.png">' + '</h4></div>';
+      var header = '<div class="modal-header"><span class="close" data-dismiss="modal" aria-hidden="true">&times;</span><h4 class="modal-title">' + '<img src="' + window.glazed_baseurl +
+        'images/glazed-logo-white.svg">' + '</h4></div>';
       var elements_modal = $('<div id="az-elements-modal" class="modal glazed" style="display:none"><div class="modal-dialog modal-lg"><div class="modal-content">' + header + '<div class="modal-body"></div></div></div></div>');
       $('body').prepend(elements_modal);
       $(elements_modal).find('.modal-body').append(elements_tabs);
@@ -3180,7 +3176,7 @@
       }),
       make_param_type({
         type: 'bootstrap_slider',
-        heading: Drupal.t('Drop Shadow'),
+        heading: Drupal.t('Drop shadow'),
         param_name: 'shadow',
         max: '5',
         value: '0',
@@ -3196,7 +3192,7 @@
       }),
       make_param_type({
         type: 'bootstrap_slider',
-        heading: Drupal.t('Drop Shadow'),
+        heading: Drupal.t('Drop shadow'),
         param_name: 'hover_shadow',
         max: '5',
         value: '0',
@@ -3383,7 +3379,7 @@
         $('<span title="' + title("Copy") + '" class="control copy btn btn-default glyphicon glyphicon-briefcase"> </span>').appendTo(this.controls).click({
           object: this
         }, this.click_copy);
-        $('<span title="' + title("Clone") + '" class="control clone btn btn-default glyphicon glyphicon-repeat"> </span>').appendTo(this.controls).click({
+        $('<span title="' + title("Clone") + '" class="control clone btn btn-default glyphicon glyphicon-duplicate"> </span>').appendTo(this.controls).click({
           object: this
         }, this.click_clone);
         $('<span title="' + title("Remove") + '" class="control remove btn btn-default glyphicon glyphicon-trash"> </span>').appendTo(this.controls).click({
@@ -3940,7 +3936,6 @@
             child.id = $(this).attr('data-az-id');
             glazed_elements.elements_instances[child.id] = child;
           }
-
           child.dom_element = $(this);
           var attrs = {};
           $($(this)[0].attributes).each(function() {
@@ -4862,6 +4857,14 @@
         },
       }),
       make_param_type({
+        type: 'checkbox',
+        heading: Drupal.t('Vertical Centering'),
+        param_name: 'vertical_centering',
+        value: {
+          'yes': Drupal.t('Yes')
+        },
+      }),
+      make_param_type({
         type: 'dropdown',
         heading: Drupal.t('Background Effect'),
         param_name: 'effect',
@@ -4870,9 +4873,9 @@
           '': Drupal.t('Simple Image'),
           'fixed': Drupal.t('Fixed Image'),
           'parallax': Drupal.t('Parallax Image'),
+          'gradient': Drupal.t('Gradient'),
           'youtube': Drupal.t('YouTube Video'),
         },
-        description: Drupal.t('Select the effect you want to apply to the section background.')
       }),
       make_param_type({
         type: 'bootstrap_slider',
@@ -4897,6 +4900,61 @@
         dependency: {
           'element': 'effect',
           'value': ['parallax']
+        },
+      }),
+      make_param_type({
+        type: 'colorpicker',
+        heading: Drupal.t('Start Color'),
+        param_name: 'gradient_start_color',
+        tab: Drupal.t('Background Effects'),
+        dependency: {
+          'element': 'effect',
+          'value': ['gradient']
+        },
+      }),
+      make_param_type({
+        type: 'colorpicker',
+        heading: Drupal.t('End Color'),
+        param_name: 'gradient_end_color',
+        tab: Drupal.t('Background Effects'),
+        dependency: {
+          'element': 'effect',
+          'value': ['gradient']
+        },
+      }),
+      make_param_type({
+        type: 'bootstrap_slider',
+        heading: Drupal.t('Gradient Direction'),
+        param_name: 'gradient_direction',
+        tab: Drupal.t('Background Effects'),
+        value: '180',
+        min: '1',
+        max: '360',
+        dependency: {
+          'element': 'effect',
+          'value': ['gradient']
+        },
+      }),
+      make_param_type({
+        type: 'bootstrap_slider',
+        heading: Drupal.t('Start Position'),
+        param_name: 'gradient_start',
+        tab: Drupal.t('Background Effects'),
+        value: '0',
+        dependency: {
+          'element': 'effect',
+          'value': ['gradient']
+        },
+      }),
+      make_param_type({
+        type: 'bootstrap_slider',
+        heading: Drupal.t('End Position'),
+        param_name: 'gradient_end',
+        tab: Drupal.t('Background Effects'),
+        value: '100',
+        dependency: {
+          'element': 'effect',
+          'value': ['gradient']
         },
       }),
       make_param_type({
@@ -4958,6 +5016,21 @@
       return '<div class="well text-center text-overflow" data-az-element="' + this.base +
         '"><i class="' + this.icon + '"></i><div>' + this.name + '</div><div class="text-muted small">' + this.description + '</div></div>';
     },
+    show_controls: function() {
+      if (window.glazed_editor) {
+        SectionElement.baseclass.prototype.show_controls.apply(this, arguments);
+        if (this.parent instanceof ContainerElement) {
+          var element = this;
+          $('<div title="' + title("Add Section Below") + '" class="control add-section btn btn-default glyphicon glyphicon-plus-sign" > </div>').appendTo(this.dom_element)
+            .click(function() {
+              var constructor = BaseElement.prototype.elements['az_section'];
+              var child = new constructor(element.parent, element.dom_element.index());
+              child.update_dom();
+              element.parent.update_empty();
+            });
+        }
+      }
+    },
     showed: function($) {
       SectionElement.baseclass.prototype.showed.apply(this, arguments);
       var element = this;
@@ -5016,13 +5089,13 @@
               $(element.dom_element).waypoint(function(direction) {
                 $(element.dom_element).attr('data-property', "{videoURL:'" + youtube_parser(element.attrs[
                     'video_youtube']) + "',containment:'[data-az-id=" + element.id + "]" +
-                  "', showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
+                  "', showControls:false, autoPlay:true, stopMovieOnBlur:false, loop:" + loop.toString() + ", mute:" +
                   mute.toString() + ", startAt:" + element.attrs['video_start'] + ", stopAt:" +
-                  element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'highres'}");
+                  element.attrs['video_stop'] + ", opacity:1, addRaster:false}");
                 $(element.dom_element).mb_YTPlayer();
                 $(element.dom_element).playYTP();
               }, {
-                offset: '100%',
+                offset: '300%',
                 handler: function(direction) {
                   this.destroy()
                 },
@@ -5045,6 +5118,20 @@
         this.dom_content_element = $('<div class="az-ctnr container-fluid"></div>').appendTo(this.dom_element);
       else
         this.dom_content_element = $('<div class="az-ctnr container"></div>').appendTo(this.dom_element);
+      if (this.attrs['effect'] == 'gradient') {
+        var background_css = null;
+        var gradient_css = 'linear-gradient('
+          + this.attrs['gradient_direction'] + 'deg, '
+          + this.attrs['gradient_start_color'] + ' ' + this.attrs['gradient_start'] + '%, '
+          + this.attrs['gradient_end_color'] + ' ' + this.attrs['gradient_end'] + '%)';
+        if (background_css = $(this.dom_element).css('background-image'))
+          $(this.dom_element).css('background-image', gradient_css + ',' + $(this.dom_element).css('background-image'));
+        else
+          $(this.dom_element).css('background-image', gradient_css);
+      }
+      if (this.attrs.vertical_centering && this.attrs.vertical_centering === 'yes') {
+        $(this.dom_element).addClass('az-util-vertical-centering');
+      }
       SectionElement.baseclass.prototype.render.apply(this, arguments);
     },
   });
@@ -5135,6 +5222,8 @@
         var columns = $('<span title="' + title("Set row layout") + '" class="control set-columns btn btn-default glyphicon glyphicon-th"> </span>')
           .insertAfter(this.controls.find('.drag-and-drop'))
           [fp + 'popover']({
+            container: false,
+            selector: false,
             placement:'right',
             html: 'true',
             trigger: 'manual',
@@ -5627,8 +5716,7 @@
       var type ='panel-default';
       if (this.parent.attrs['type'] != '')
         type = this.parent.attrs['type'];
-      this.dom_element = $('<div class="az-element az-toggle panel ' + type + ' ' + this.attrs[
-          'el_class'] + '" style="' + this.attrs['style'] + '"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#' +
+      this.dom_element = $('<div class="az-element az-toggle panel ' + type + ' ' + this.get_el_classes() + '" style="' + this.attrs['style'] + '"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#' +
         this.parent.id + '" href="#' + this.id + '">' + this.attrs['title'] + '</a></h4></div><div id="' +
         this.id + '" class="panel-collapse collapse"><div class="panel-body az-ctnr"></div></div></div>');
       this.dom_content_element = $(this.dom_element).find('.panel-body');
@@ -6037,7 +6125,7 @@
               owlClasses += ' st-owl-navigation-' + element.attrs['navigation_position'];
           }
           var autoPlay = false;
-          if (!Boolean(element.attrs['autoPlay']) && (element.attrs['interval'] > 0)) {
+          if (!Boolean(element.attrs['autoplay']) && (element.attrs['interval'] > 0)) {
             autoPlay = element.attrs['interval'];
           }
           $(element.dom_content_element).owlCarousel({
@@ -6987,6 +7075,7 @@
       var dom = $('<div>' + $(this.dom_content_element).html() + '</div>');
       this.recursive_restore(dom);
       $(dom).find('.az-element > .controls').remove();
+      $(dom).find('.az-section > .add-section').remove();
       $(dom).find('> .controls').remove();
       $(dom).find('.az-sortable-controls').remove();
       $(dom).find('.az-empty').remove();
@@ -7000,6 +7089,7 @@
         $this.replaceWith(content);
       });
       $(dom).find('.az-text').removeClass('cke_editable cke_editable_inline cke_contents_ltr cke_show_borders');
+      $(dom).find('.init-colorbox-processed').removeClass('init-colorbox-processed');
 
       $(dom).find('.az-element--controls-center').removeClass('az-element--controls-center');
       $(dom).find('.az-element--controls-top-left').removeClass('az-element--controls-top-left');
@@ -7013,8 +7103,8 @@
       $(dom).find('.az-element.az-container > .az-ctnr').empty();
       $(dom).find('.az-element.az-cms-element').empty();
 
-      // Remove iframe.
-      $(dom).find('iframe.playerBox').remove();
+      // Remove mb Youtube Player Elements.
+      $(dom).find('.mbYTP_wrapper').remove();
 
       //$(dom).find('[data-az-id]').removeAttr('data-az-id');
       return $(dom).html();
@@ -7049,6 +7139,12 @@
     },
     load_container: function() {
       var element = this;
+      // Avoid repetitive loading.
+      window.loadedContainers = window.loadedContainers || {}
+      if (window.loadedContainers[element.id]) {
+        return;
+      }
+      window.loadedContainers[element.id] = true;
       if (this.attrs['container'] != '') {
         glazed_load_container(this.attrs['container'].split('/')[0], this.attrs['container'].split('/')[1],
           function(shortcode) {
@@ -7071,6 +7167,7 @@
                 element.show_controls();
                 element.update_sortable();
               }
+              element.parent.attach_children();
               element.attach_children();
               for (var i = 0; i < element.children.length; i++) {
                 element.children[i].recursive_showed();
@@ -7178,10 +7275,8 @@
   mixin(UnknownElement.prototype, {
     has_content: true,
     hidden: true,
-    show_controls: function() {},
-    update_empty: function() {},
     render: function($) {
-      this.dom_element = $('<div class = "az-element"></div>');
+      this.dom_element = $('<div class = "az-element az-unknown">' + Drupal.t('Element Not Found.') + '</div>');
       this.dom_content_element = this.dom_element;
       if ('content' in this.attrs) {
         var match = /\[[^\]]*\]([^\[]*)\[\/[^\]]*\]/.exec(this.attrs['content']);
@@ -7192,6 +7287,7 @@
       UnknownElement.baseclass.prototype.render.apply(this, arguments);
     },
   });
+
 
   function create_glazed_elements() {
     if ('glazed_elements' in window) {
@@ -7268,7 +7364,7 @@
     // Search all text elements.
     var domContent = [];
 
-    $(document).find('.az-element.az-text, .az-element.az_blockquote').each(function() {
+    $(document).find('.az-element.az-text, .az-element.az-blockquote').each(function() {
       var $this = $(this);
       if ($this.children('.ckeditor-inline').length > 0) {
         domContent[$this.attr('data-az-id')] = $this.children('.ckeditor-inline').html();
@@ -7331,14 +7427,27 @@
   Drupal.behaviors.CKinlineAttach = {
     attach: function() {
       // Elements for add ckeditor-inline.
-      var items = '.az-element.az-text, .az-element.az_blockquote';
+      var items = '.az-element.az-text, .az-element.az-blockquote';
+
 
       // Attach window function for load ckeditor-inline.
       $(window).bind('CKinlineAttach', function() {
         function ckeditor_add_inline_editor() {
+          CKEDITOR.on('instanceCreated', function( evt ) {
+            var editor = evt.editor;
+            editor.on('focus', function() {
+              $(editor.element.$).parents('.az-element').addClass('az-element--hide-controls');
+            });
+            editor.on('blur', function() {
+              $(editor.element.$).parents('.az-element').removeClass('az-element--hide-controls');
+            });
+          });
 
-          // Turn off automatic editor creation first.
-          CKEDITOR.disableAutoInline = true;
+          // Turn off automatic editor creation on admin pages to avoid max input vars
+          // error on Drupal FAPI Ajax buttons. (CKE creates a lot of IDs)
+          if (window.location.href.indexOf('/admin/') > 0) {
+            CKEDITOR.disableAutoInline = true;
+          }
 
           // Don't add spaces to empty blocks
           CKEDITOR.config.fillEmptyBlocks = false;
@@ -7400,7 +7509,7 @@
 
           // Only once apply this settings
           var palletsString = palette.join(',') + ',';
-          if (CKEDITOR.config.colorButton_colors.indexOf(palletsString) < 0) {
+          if ((CKEDITOR.config.hasOwnProperty('colorButton_colors')) && (CKEDITOR.config.colorButton_colors.indexOf(palletsString)) < 0) {
             CKEDITOR.config.colorButton_colors = palletsString + CKEDITOR.config.colorButton_colors;
           }
 
@@ -7429,6 +7538,7 @@
             name: 'clipboard',
             items: ['Undo', 'Redo']
           }, ];
+          CKEDITOR.config.toolbar = toolbar;
 
           CKEDITOR.config.fontSize_sizes = '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;60/60px;72/72px;90/90px;117/117px;144/144px';
 
@@ -7447,14 +7557,16 @@
                   $text.wrapInner("<div class='ckeditor-inline' contenteditable='true' />");
                   $text.prepend($controls);
 
-                  // Initialized editor.
+                  // Initialize new editor.
                   var editor = $text.find('.ckeditor-inline')[0];
                   if (typeof editor != "undefined") {
                     $(editor).bind('click', function (event) {
                       // Make sure the toolbar is not overridden after editing
                       // text in modal window.
                       CKEDITOR.config.toolbar = toolbar;
-                      CKEDITOR.inline(editor);
+                      if ($(editor).hasClass('cke_focus') == false) {
+                        CKEDITOR.inline(editor);
+                      }
                       $(this).off(event);
                     });
                   }
@@ -7496,7 +7608,7 @@
         $(container).each(function() {
           var $this = $(this);
           if ($this.hasClass('glazed-editor')) {
-            $this.find('.az-element.az-text .ckeditor-inline, .az-element.az_blockquote .ckeditor-inline').each(function () {
+            $this.find('.az-element.az-text .ckeditor-inline, .az-element.az-blockquote .ckeditor-inline').each(function () {
               var $this = $(this);
               $this.attr('contenteditable', true);
 
@@ -7511,7 +7623,7 @@
             });
           }
           else {
-            $(this).find('.az-element.az-text .ckeditor-inline, .az-element.az_blockquote .ckeditor-inline').each(function () {
+            $(this).find('.az-element.az-text .ckeditor-inline, .az-element.az-blockquote .ckeditor-inline').each(function () {
               var $this = $(this);
               $this.attr('contenteditable', false);
               $this.off('click');

@@ -899,7 +899,7 @@ SectionElement.prototype.showed=function ($) {
                 $(element.dom_element).css('background-position', v + ' 0');
                 $(element.dom_element).parallax(v, element.attrs['parallax_speed'] / 100);
               }, {
-                offset: '100%',
+                offset: '300%',
                 handler: function(direction) {
                   this.destroy()
                 },
@@ -937,11 +937,12 @@ SectionElement.prototype.showed=function ($) {
                     'video_youtube']) + "',containment:'[data-az-id=" + element.id + "]" +
                   "', showControls:false, autoPlay:true, loop:" + loop.toString() + ", mute:" +
                   mute.toString() + ", startAt:" + element.attrs['video_start'] + ", stopAt:" +
-                  element.attrs['video_stop'] + ", opacity:1, addRaster:false, quality:'highres'}");
+                  element.attrs['video_stop'] + ", opacity:1, addRaster:false}");
+                console.log('go!');
                 $(element.dom_element).mb_YTPlayer();
                 $(element.dom_element).playYTP();
               }, {
-                offset: '100%',
+                offset: '300%',
                 handler: function(direction) {
                   this.destroy()
                 },
@@ -1335,7 +1336,7 @@ CarouselElement.prototype.showed=function ($) {
               owlClasses += ' st-owl-navigation-' + element.attrs['navigation_position'];
           }
           var autoPlay = false;
-          if (!Boolean(element.attrs['autoPlay']) && (element.attrs['interval'] > 0)) {
+          if (!Boolean(element.attrs['autoplay']) && (element.attrs['interval'] > 0)) {
             autoPlay = element.attrs['interval'];
           }
           $(element.dom_content_element).owlCarousel({
@@ -1663,6 +1664,22 @@ showed: function ($) {
               }
               break;
           }
+
+          $.extend(options, {
+            daysLabel: Drupal.t('Days'),
+            dayLabel: Drupal.t('Day'),
+            hoursLabel: Drupal.t('Hours'),
+            hourLabel: Drupal.t('Hour'),
+            minutesLabel: Drupal.t('Minutes'),
+            minuteLabel: Drupal.t('Minute'),
+            secondsLabel: Drupal.t('Seconds'),
+            secondLabel: Drupal.t('Second'),
+            decisecondsLabel: Drupal.t('Deciseconds'),
+            decisecondLabel: Drupal.t('Decisecon'),
+            millisecondsLabel: Drupal.t('Milliseconds'),
+            millisecondLabel: Drupal.t('Millisecond')
+          });
+
           switch (element.attrs['counter_scope']) {
             case 'date':
               var d = Date.parseDate(element.attrs['date'], 'd.m.Y');

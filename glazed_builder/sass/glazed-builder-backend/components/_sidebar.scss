@@ -46,13 +46,12 @@
   height: 50px;
   display: block;
   border-radius: 0 4px 4px 0;
-  background: #01b0ef url('../images/glazed-logo-white.png') no-repeat center center;
-  background-size: 25px;
+  background: #01b0ef url('../images/glazed-logo-white.svg') no-repeat center center;
+  background-size: 50px;
 }
 .glazed-snippets-header {
   background: #01b0ef;
   pointer-events: none;
-  padding: 10px;
   h3 {
     display: inline-block;
     color: #fff;
@@ -63,8 +62,8 @@
   }
   img {
     display: inline-block;
-    width: 20%;
     padding-right: 10px;
+    width: 50px;
   }
 
 }

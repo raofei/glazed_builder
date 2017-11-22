@@ -157,7 +157,7 @@
         path: 'vendor/jquery.iris/dist/iris.min.js?v1',
         callback: function() {
           glazed_add_js({
-            path: 'js/glazed.iris.min.js',
+            path: 'js/glazed.iris.js',
             callback: function() {
               glazed_add_css('css/color-picker.min.css', function() {
                 $(input).wpColorPicker();
@@ -1182,7 +1182,7 @@
       output += '<div class="settings pane-2">';
       output += '<div class="font form-group"><label>' + Drupal.t('Font color') + '</label>';
       this.color_id = _.uniqueId();
-      match = value.match(/(^| |;)color[: ]*([#\dabcdef]*) *;/);
+      match = value.match(/(^| |;)color[: ]*\s?([^;]{4,}) *;/);
       if (match == null)
         v = '';
       else
@@ -1190,7 +1190,7 @@
       output += '<div><input id="' + this.color_id + '" name="color" type="text" value="' + v + '"></div></div>';
       output += '<div class="border form-group"><label>' + Drupal.t('Border color') + '</label>';
       this.border_color_id = _.uniqueId();
-      match = value.match(/border-color[: ]*([#\dabcdef]*) *;/);
+      match = value.match(/border-color[: ]*\s?([^;]{4,}) *;/);
       if (match == null)
         v = '';
       else
@@ -1199,7 +1199,7 @@
         '"></div></div>';
       output += '<div class="background form-group"><label>' + Drupal.t('Background') + '</label>';
       this.bg_color_id = _.uniqueId();
-      match = value.match(/background-color[: ]*([#\dabcdef]*) *;/);
+      match = value.match(/background-color[: ]*\s?([^;]{4,}) *;/);
       if (match == null)
         v = '';
       else
@@ -1269,6 +1269,7 @@
         'right center': Drupal.t("Right Center"),
         'right bottom': Drupal.t("Right Bottom"),
         'center bottom': Drupal.t("Center Bottom"),
+        'center top': Drupal.t("Center Top"),
       };
       for (var key in background_position) {
         if (key == v)
@@ -1408,10 +1409,10 @@
           }, {
             name: 'Content Narrow',
             element: 'div',
-            attributes: {
+            attributs: {
               'class': 'content-narrow'
             }
-          }, ];
+          } ];
 
           var palette = [];
           for (var name in window.sooperthemes_theme_palette) {
@@ -1420,7 +1421,7 @@
 
           // Only once apply this settings
           var palletsString = palette.join(',') + ',';
-          if (CKEDITOR.config.colorButton_colors.indexOf(palletsString) < 0) {
+          if ((CKEDITOR.config.hasOwnProperty('colorButton_colors')) && (CKEDITOR.config.colorButton_colors.indexOf(palletsString)) < 0) {
             CKEDITOR.config.colorButton_colors = palletsString + CKEDITOR.config.colorButton_colors;
           }
 

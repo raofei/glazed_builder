@@ -10,7 +10,20 @@
  * @ingroup editor
  */
 
-
+/**
+ * Attaches js and css assets to field render array. Also adds some libraries
+ * to page output using drupal_add_library(). Adds several settings to inline JS
+ * output for the builder UI to use. If the default theme implements the color
+ * modulew e also provide a subset of it's colors to be used as default colors
+ * in color pickers.
+ *
+ * @param integer $start_js_weight
+ *   Offset on the weight of attached assets.
+ * @param array $element
+ *   A renderable array for the $items, as an array of child elements keyed by numeric indexes starting from 0.
+ *   @see https://api.drupal.org/api/drupal/modules!field!field.api.php/function/hook_field_formatter_view/7.x
+ *
+ */
 function glazed_builder_editor_attach(&$start_js_weight, &$element) {
   $themes = list_themes();
   $cms_elements = glazed_builder_get_cms_element_names();
@@ -158,6 +171,13 @@ function glazed_builder_editor_attach(&$start_js_weight, &$element) {
  * Checks for sidebar elements in glazed_elements folder, in active themes, and
  * in modules implementing hook_glazed_builder_elements_folders.
  *
+ * @param array themes
+ *   List of themes
+ *
+ * @return string $template_elements
+ *   JSON encoded list of sidebar elements including the full HTML of the element
+ *   and the path and url of element thumbnails.
+ *
  * @ingroup editor
  */
 function glazed_builder_get_template_elements($themes) {
@@ -187,7 +207,6 @@ function glazed_builder_get_template_elements($themes) {
         }
       }
       drupal_alter('glazed_builder_elements_folders', $glazed_elements_folders);
-
       $elements = array();
       foreach ($glazed_elements_folders as $glazed_elements_folder) {
         $src = $glazed_elements_folder['folder'];
@@ -195,6 +214,7 @@ function glazed_builder_get_template_elements($themes) {
         if (is_dir($src)) {
           $files = file_scan_directory($src, '/./');
           foreach ($files as $path => $file) {
+            $path = realpath($path);
             $info = pathinfo($path);
             if ($info['extension'] == 'html') {
               $p = str_replace(DIRECTORY_SEPARATOR, '|', str_replace('.html', '', substr(str_replace($src, '', $path), 1)));
@@ -225,8 +245,11 @@ function glazed_builder_get_template_elements($themes) {
  * Discovers CSS classes used for (bootstrap) buttons
  *
  * Checks for button classes in glazed_elements/Buttons and
- * in modules implementing hook_glazed_builder_element_button_folder.
+ * in modules implementing hook_glazed_builder_element_buttons_folders.
  * These classes are used in the button modal element settings.
+ *
+ * @return array $button_styles
+ *   Array of button style classes, keyed by an identifier for the button style
  *
  * @ingroup editor
  */
@@ -239,17 +262,19 @@ function glazed_builder_get_button_styles() {
     else {
       $button_styles = array();
 
-      $glazed_element_button_folder = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'glazed_elements/Buttons';
-      drupal_alter('glazed_builder_element_button_folder', $glazed_element_button_folder);
+      $glazed_element_buttons_folders = array(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'glazed_elements/Buttons');
+      drupal_alter('glazed_builder_element_buttons_folders', $glazed_element_buttons_folders);
 
       $elements = array();
-      $src = $glazed_element_button_folder;
-      if (is_dir($src)) {
-        $files =  file_scan_directory($src, '/\.html/');
-        foreach ($files as $path => $file) {
-          $info = pathinfo($path);
-          if ($info['extension'] == 'html') {
-            $elements[$info['filename']] = file_get_contents($path);
+      foreach($glazed_element_buttons_folders as $src) {
+        if (is_dir($src)) {
+          $files =  file_scan_directory($src, '/\.html/');
+          foreach ($files as $path => $file) {
+            $path = realpath($path);
+            $info = pathinfo($path);
+            if ($info['extension'] == 'html') {
+              $elements[$info['filename']] = file_get_contents($path);
+            }
           }
         }
       }
@@ -272,7 +297,12 @@ function glazed_builder_get_button_styles() {
 }
 
 /**
- * Retrieves and caches listof CMS elements (blocks and views) for Builder interface.
+ * Retrieves and caches list of CMS elements (blocks and views) for Builder interface.
+ *
+ * @return array $cms_elements
+ *   Array of Drupal blocks and views displays. Blocks are keyed by an identifier
+ *   consisting of "block"-module-delta and view displays are keyed by
+ *   "view"-module-display.
  */
 function glazed_builder_get_cms_element_names() {
   $cms_elements = &drupal_static(__FUNCTION__);
@@ -316,7 +346,11 @@ function glazed_builder_get_cms_element_names() {
 }
 
 /**
- * Set drupal cache cms_views_tags.
+ * Retrieves and caches list of Views tags to help organize and filter the interface
+ * where you can select views displays in the Glazed Builder modal.
+ *
+ * @return array $cms_views_tags
+ *   Array of views tags keyed by an identifier with the view and display name
  */
 function glazed_builder_get_cms_views_tags() {
   $cms_views_tags = &drupal_static(__FUNCTION__);
@@ -347,8 +381,12 @@ function glazed_builder_get_cms_views_tags() {
 }
 
 /**
- * Set drupal cache cms_view_elements_settings.
- *  return array list with additional views display settings.
+ * Retrieves and caches list of views displays and their settings and fields.
+ *
+ * @return array $cms_view_elements_settings
+ *   Array of views displayscontaining all metadata that the Glazed Builder
+ *   interface uses for modifying the display using various settings. Keyed by
+ *   an identifier with the view and display name.
  */
 function glazed_builder_get_cms_view_element_settings() {
   $cms_view_elements_settings = &drupal_static(__FUNCTION__);
@@ -411,7 +449,7 @@ function glazed_builder_get_cms_view_element_settings() {
               $cms_view_elements_settings[$key]['pager'] = $cms_view_elements_settings['az_view-' . $view->name . '-default']['pager'];
             }
             else {
-              $cms_view_elements_settings[$key] = array(
+              $cms_view_elements_settings[$key]['pager'] = array(
                 'items_per_page' => NULL,
                 'offset' => NULL,
               );

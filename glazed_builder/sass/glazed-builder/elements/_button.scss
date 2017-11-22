@@ -1,13 +1,6 @@
 @charset "UTF-8";
 
 body {
-  .btn {
-    text-decoration: none;
-    &:hover,
-    &:focus {
-      text-decoration: none;
-    }
-  }
   .stpe-flatbutton {
     border-width: 0;
   }

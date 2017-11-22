@@ -75,6 +75,7 @@ div.modal-dialog {
     color: #fff;
     font-size: 14px;
     padding: 13px 20px;
+    position: relative;
     .modal-title {
       font-size: 16px;
       color: #fff;
@@ -84,7 +85,10 @@ div.modal-dialog {
       opacity: 0.3;
     }
     img {
-      width: 25px;
+      width: 56px;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   }
   .modal-content {

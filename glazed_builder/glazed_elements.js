@@ -58,8 +58,7 @@
     },],
     show_settings_on_create: true,
     render: function($) {
-      this.dom_element = $('<div class="az-element az-alert alert ' + this.attrs['type'] + ' ' + this.attrs[
-          'el_class'] + '" style="' + this.attrs['style'] + '">' + this.attrs['message'] + '</div>');
+      this.dom_element = $('<div class="az-element az-alert alert ' + this.attrs['type'] + ' ' + this.get_el_classes() + '" style="' + this.attrs['style'] + '">' + this.attrs['message'] + '</div>');
       this.baseclass.prototype.render.apply(this, arguments);
     },
   },
@@ -654,6 +653,22 @@
               }
               break;
           }
+
+          $.extend(options, {
+            daysLabel: Drupal.t('Days'),
+            dayLabel: Drupal.t('Day'),
+            hoursLabel: Drupal.t('Hours'),
+            hourLabel: Drupal.t('Hour'),
+            minutesLabel: Drupal.t('Minutes'),
+            minuteLabel: Drupal.t('Minute'),
+            secondsLabel: Drupal.t('Seconds'),
+            secondLabel: Drupal.t('Second'),
+            decisecondsLabel: Drupal.t('Deciseconds'),
+            decisecondLabel: Drupal.t('Decisecon'),
+            millisecondsLabel: Drupal.t('Milliseconds'),
+            millisecondLabel: Drupal.t('Millisecond')
+          });
+
           switch (element.attrs['counter_scope']) {
             case 'date':
               var d = Date.parseDate(element.attrs['date'], 'd.m.Y');
@@ -946,8 +961,7 @@
       });
     },
     render: function($) {
-      this.dom_element = $('<div class="az-element az-counter"><div id="' + this.id + '" class="' + this.attrs[
-          'el_class'] + '" style="' + this.attrs['style'] + '">' + this.attrs['start'] + '</div></div>');
+      this.dom_element = $('<div class="az-element az-counter"><div id="' + this.id + '" class="' + this.get_el_classes() + '" style="' + this.attrs['style'] + '">' + this.attrs['start'] + '</div></div>');
       $(this.dom_element).find('#' + this.id).css('font-size', this.attrs['fontsize'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
     },
@@ -1093,8 +1107,8 @@
         this.dom_element = $(icon_html);
       }
       else {
-        this.dom_element = $('<a href="' + this.attrs['link'] + '" class="az-element az-icon ' + this.attrs[
-            'el_class'] + '" target="' + this.attrs['link_target'] + '">' + icon_html + '</a>');
+        this.dom_element = $('<a href="' + this.attrs['link'] + '" class="az-element az-icon ' + this.get_el_classes() +
+        '" target="' + this.attrs['link_target'] + '">' + icon_html + '</a>');
       }
       $(this.dom_element).css('font-size', this.attrs['size'] + 'px');
       this.baseclass.prototype.render.apply(this, arguments);
@@ -1286,8 +1300,7 @@
     is_container: true,
     controls_base_position: 'top-left',
     render: function($) {
-      this.dom_element = $('<div class="az-element az-ctnr az-jumbotron jumbotron ' + this.attrs[
-          'el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-ctnr az-jumbotron jumbotron ' + this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
       this.dom_content_element = this.dom_element;
       this.baseclass.prototype.render.apply(this, arguments);
     },
@@ -1664,8 +1677,7 @@
           url = '';
         }
       }
-      this.dom_element = $('<div class="az-element az-video embed-responsive embed-responsive-16by9 ' + this.attrs[
-          'el_class'] + '" style="' + this.attrs['style'] + '"></div>');
+      this.dom_element = $('<div class="az-element az-video embed-responsive embed-responsive-16by9 ' + this.get_el_classes() + '" style="' + this.attrs['style'] + '"></div>');
 
       function renderVideo(url, style, width, height, image) {
         if ($.isNumeric(width))

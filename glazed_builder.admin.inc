@@ -116,7 +116,7 @@ function glazed_builder_remove_tokens_form_submit($form, &$form_state) {
 }
 
 /**
- * Batch 'process' callback.
+ * Batch process callback.
  */
 function glazed_builder_remove_tokens_process($records, &$context) {
   foreach ($records as $record) {

@@ -3,10 +3,26 @@
 // Empty CMS element output
 .empty-cms-block-placeholder {
   min-height: 60px;
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 10px,
+    #f6f6f6 10px,
+    #f6f6f6 20px
+  );
 }
 
 // Empty container placeholder and help text
+.az-unknown {
+  display: none;
+}
 .glazed-editor {
+  .az-unknown {
+    display: block;
+    color: #ff0000;
+    font-style: italic;
+    outline: 2px dashed #EBEBEB;
+  }
   .az-empty {
     display: block;
     text-align: center;
@@ -68,6 +84,7 @@
   .az-empty::after {
     content: " +";
     color: black;
+    text-shadow: 0 0 7px white;
     font-family: 'Glyphicons Halflings';
     font-weight: 400;
     font-size: 3em;

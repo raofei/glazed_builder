@@ -1,7 +1,9 @@
 {
-"version": 3,
-"mappings": "AAGE,gCAA4B,CAC1B,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CACb,SAAS,CAAE,WAAW,CAExB,iCAA6B,CAC3B,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CACb,SAAS,CAAE,YAAY",
-"sources": ["../../sass/elements/separator.scss"],
-"names": [],
-"file": "separator.css"
+	"version": 3,
+	"file": "separator.css",
+	"sources": [
+		"../../sass/elements/separator.scss"
+	],
+	"names": [],
+	"mappings": "AAEA,AACE,IADE,CACF,2BAA2B,AAAC,CAC1B,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CACb,SAAS,CAAE,WAAW,CACvB,AALH,AAME,IANE,CAMF,4BAA4B,AAAC,CAC3B,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CACb,SAAS,CAAE,YAAY,CACxB"
 }
